@@ -1,0 +1,31 @@
+zeus-account-processor:
+  api:
+    version: 1.0.0
+server:
+  port: 8099
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  profiles:
+    active: clean, local
+  datasource:
+    url: jdbc:mysql://localhost:3306/accountprocessordb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: accountprocessorapp
+    password: password
+  flyway:
+    user: accountprocessoradmin
+    password: password
+logging:
+  file:
+    name: logs/local/account-processor.log
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
