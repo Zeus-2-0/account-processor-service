@@ -1,0 +1,35 @@
+openapi: 3.0.1
+info:
+  title: Zeus Rules Service API
+  contact:
+    name: Balaji Varadharajan
+    url: http://www.zeus.com
+    email: vbalaji215@outlook.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/License-2.0.html
+  version: 1.0.0
+servers:
+- url: http://localhost:8098
+  description: Development Server
+paths:
+  /api/v1/zeus/account-processor/welcome:
+    get:
+      tags:
+      - welcome
+      description: Get the welcome message
+      operationId: Welcome API
+      responses:
+        "200":
+          description: Successfully retrieved the Welcome message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WelcomeDto'
+components:
+  schemas:
+    WelcomeDto:
+      type: object
+      properties:
+        welcomeMessage:
+          type: string
