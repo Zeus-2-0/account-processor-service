@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -97,6 +98,18 @@ public class MemberAddress {
      */
     @Column(name = "county_code", columnDefinition = "varchar", length = 20, nullable = true)
     private String countyCode;
+
+    /**
+     * Start date of the address
+     */
+    @Column(name = "start_date", columnDefinition = "datetime", nullable = false)
+    private LocalDate startDate;
+
+    /**
+     * End date of the address
+     */
+    @Column(name = "end_date", columnDefinition = "datetime", nullable = true)
+    private LocalDate endDate;
 
     /**
      * Date when the record was created

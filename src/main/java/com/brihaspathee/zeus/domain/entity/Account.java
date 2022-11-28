@@ -83,6 +83,24 @@ public class Account {
     private List<Member> members;
 
     /**
+     * The list of brokers that are associated with the account
+     */
+    @OneToMany(mappedBy = "account")
+    private List<Broker> brokers;
+
+    /**
+     * The list of payers that are associated with the account
+     */
+    @OneToMany(mappedBy = "account")
+    private List<Payer> payers;
+
+    /**
+     * The list of sponsors that are associated with the account
+     */
+    @OneToMany(mappedBy = "account")
+    private List<Sponsor> sponsors;
+
+    /**
      * The date when the record was created
      */
     @CreationTimestamp

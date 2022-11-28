@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -41,9 +42,9 @@ public class Member {
     private UUID memberSK;
 
     /**
-     * The key that is assigned to the member
+     * The key that is assigned to the member in MMS
      */
-    @Column(name = "acct_member_sk", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
+    @Column(name = "acct_member_sk", length = 36, columnDefinition = "varchar", updatable = true, nullable = true)
     private UUID acctMemberSK;
 
     /**
@@ -52,6 +53,12 @@ public class Member {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_sk")
     private Account account;
+
+    /**
+     * The unique code for the member by Transaction manager
+     */
+    @Column(name = "trans_member_code", nullable = false, columnDefinition = "varchar", length = 50)
+    private String transactionMemberCode;
 
     /**
      * The unique code for the member
@@ -100,6 +107,48 @@ public class Member {
      */
     @Column(name = "tobacco_ind")
     private boolean tobaccoInd;
+
+    /**
+     * List of member address associated with the member
+     */
+    @OneToMany(mappedBy = "member")
+    private List<MemberAddress> memberAddresses;
+
+    /**
+     * List of member emails associated with the member
+     */
+    @OneToMany(mappedBy = "member")
+    private List<MemberEmail> memberEmails;
+
+    /**
+     * List of member languages associated with the member
+     */
+    @OneToMany(mappedBy = "member")
+    private List<MemberLanguage> memberLanguages;
+
+    /**
+     * List of member identifiers associated with the member
+     */
+    @OneToMany(mappedBy = "member")
+    private List<MemberIdentifier> memberIdentifiers;
+
+    /**
+     * List of member phone numbers associated with the member
+     */
+    @OneToMany(mappedBy = "member")
+    private List<MemberPhone> memberPhones;
+
+    /**
+     * List of alternate contacts associated with the member
+     */
+    @OneToMany(mappedBy = "member")
+    private List<AlternateContact> alternateContacts;
+
+    /**
+     * List pf memmber premiums
+     */
+    @OneToMany(mappedBy = "member")
+    private List<MemberPremium> memberPremiums;
 
     /**
      * The date when the record was created

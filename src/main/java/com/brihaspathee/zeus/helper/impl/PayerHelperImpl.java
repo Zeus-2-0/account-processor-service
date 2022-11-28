@@ -1,0 +1,60 @@
+package com.brihaspathee.zeus.helper.impl;
+
+import com.brihaspathee.zeus.domain.entity.Account;
+import com.brihaspathee.zeus.domain.entity.Payer;
+import com.brihaspathee.zeus.domain.entity.Sponsor;
+import com.brihaspathee.zeus.domain.repository.PayerRepository;
+import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.helper.interfaces.PayerHelper;
+import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created in Intellij IDEA
+ * User: Balaji Varadharajan
+ * Date: 27, November 2022
+ * Time: 4:48 PM
+ * Project: Zeus
+ * Package Name: com.brihaspathee.zeus.helper.impl
+ * To change this template use File | Settings | File and Code Template
+ */
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class PayerHelperImpl implements PayerHelper {
+
+    /**
+     * Payer repository instance to perform CRUD operations
+     */
+    private final PayerRepository payerRepository;
+
+    /**
+     * Create a payer
+     * @param transactionDto
+     * @param account
+     */
+    @Override
+    public void createPayer(TransactionDto transactionDto, Account account) {
+        if(transactionDto.getPayer() != null){
+            List<Payer> payers = new ArrayList<>();
+            Payer payer = Payer.builder()
+                    .acctPayerSK(null)
+                    .account(account)
+                    .payerCode(ZeusRandomStringGenerator.randomString(15))
+                    .payerName(transactionDto.getPayer().getPayerName())
+                    .payerId(transactionDto.getPayer().getPayerId())
+                    .startDate(transactionDto.getBroker().getReceivedDate().toLocalDate())
+                    .endDate(null)
+                    .build();
+            payer = payerRepository.save(payer);
+            payers.add(payer);
+            account.setPayers(payers);
+        }
+
+    }
+}

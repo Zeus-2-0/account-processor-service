@@ -52,6 +52,12 @@ public class MemberIdentifier {
     private Member member;
 
     /**
+     * The unqiue code that is assigned to the member
+     */
+    @Column(name = "member_identifier_code", length = 50, columnDefinition = "varchar", nullable = false, updatable = false)
+    private String memberIdentifierCode;
+
+    /**
      * The type of identifier
      */
     @Column(name = "identifier_type_code", length = 50, columnDefinition = "varchar", nullable = false)
