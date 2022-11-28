@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -86,7 +87,7 @@ public class PremiumSpan {
     /**
      * The total responsible amount for the premium span
      */
-    @Column(name = "total_resp_amount", nullable = false)
+    @Column(name = "total_resp_amt", nullable = false)
     private BigDecimal totalResponsibleAmount;
 
     /**
@@ -106,6 +107,12 @@ public class PremiumSpan {
      */
     @Column(name = "csr_amt", nullable = false)
     private BigDecimal csrAmount;
+
+    /**
+     * List of members associated with the premium span
+     */
+    @OneToMany(mappedBy = "premiumSpan")
+    List<MemberPremium> memberPremiums;
 
     /**
      * The date when the record was created

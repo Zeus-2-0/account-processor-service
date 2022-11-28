@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -142,10 +143,16 @@ public class AlternateContact {
     private String zipCode;
 
     /**
-     * The date when the alternate contact was received on the transaction
+     * Start date of the alternate contact
      */
-    @Column(name = "received_date")
-    private LocalDateTime receivedDate;
+    @Column(name = "start_date", columnDefinition = "datetime", nullable = false)
+    private LocalDate startDate;
+
+    /**
+     * End date of the alternate contact
+     */
+    @Column(name = "end_date", columnDefinition = "datetime", nullable = true)
+    private LocalDate endDate;
 
     /**
      * The date when the record was created
