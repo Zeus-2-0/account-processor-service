@@ -3,9 +3,11 @@ package com.brihaspathee.zeus.helper.impl;
 import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.entity.MemberIdentifier;
 import com.brihaspathee.zeus.domain.repository.MemberIdentifierRepository;
+import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberIdentifierDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberIdentifierHelper;
+import com.brihaspathee.zeus.mapper.interfaces.MemberIdentifierMapper;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,11 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
+
+    /**
+     * Member identifier mapper instance
+     */
+    private final MemberIdentifierMapper identifierMapper;
 
     /**
      * Member identifier repository to perform CRUD operations
@@ -56,6 +63,24 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
             });
 
             member.setMemberIdentifiers(identifiers);
+        }
+    }
+
+    /**
+     * Set the member identifier dto to  send to MMS
+     * @param memberDto
+     * @param member
+     */
+    @Override
+    public void setMemberIdentifier(MemberDto memberDto, Member member) {
+        if(member.getMemberIdentifiers() != null && member.getMemberIdentifiers().size() >0){
+            memberDto.setMemberIdentifiers(
+                    identifierMapper
+                            .identifiersToIdentifierDtos(
+                                    member.getMemberIdentifiers())
+                            .stream()
+                            .collect(Collectors.toSet())
+            );
         }
     }
 }

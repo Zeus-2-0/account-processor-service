@@ -3,13 +3,17 @@ package com.brihaspathee.zeus.helper.impl;
 import com.brihaspathee.zeus.constants.EnrollmentSpanStatus;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
+import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.repository.EnrollmentSpanRepository;
+import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberIdentifierDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionRateDto;
 import com.brihaspathee.zeus.helper.interfaces.EnrollmentSpanHelper;
 import com.brihaspathee.zeus.helper.interfaces.PremiumSpanHelper;
+import com.brihaspathee.zeus.mapper.interfaces.EnrollmentSpanMapper;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +21,10 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created in Intellij IDEA
@@ -32,6 +39,11 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
+
+    /**
+     * Enrollment span mapper instance
+     */
+    private final EnrollmentSpanMapper enrollmentSpanMapper;
 
     /**
      * Enrollment span repository instance to perform CRUD operations
@@ -86,6 +98,29 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                 enrollmentSpan,
                 account);
         return enrollmentSpan;
+    }
+
+    /**
+     * Set the enrollment span to send to MMS
+     * @param accountDto
+     * @param account
+     * @param ztcn
+     */
+    @Override
+    public void setEnrollmentSpan(AccountDto accountDto,
+                                  Account account,
+                                  String ztcn) {
+        if(account.getEnrollmentSpan() != null && account.getEnrollmentSpan().size() > 0){
+            List<EnrollmentSpanDto> enrollmentSpanDtos = new ArrayList<>();
+            account.getEnrollmentSpan().stream().forEach(enrollmentSpan -> {
+                EnrollmentSpanDto enrollmentSpanDto = enrollmentSpanMapper.enrollmentSpanToEnrollmentSpanDto(enrollmentSpan);
+                enrollmentSpanDto.setZtcn(ztcn);
+                premiumSpanHelper.setPremiumSpan(enrollmentSpanDto, enrollmentSpan, ztcn);
+                enrollmentSpanDtos.add(enrollmentSpanDto);
+            });
+            accountDto.setEnrollmentSpans(enrollmentSpanDtos.stream().collect(Collectors.toSet()));
+        }
+
     }
 
     /**

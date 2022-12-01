@@ -2,7 +2,12 @@ package com.brihaspathee.zeus.helper.interfaces;
 
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
+import com.brihaspathee.zeus.domain.entity.Member;
+import com.brihaspathee.zeus.domain.repository.MemberEmailRepository;
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+
+import java.util.List;
 
 /**
  * Created in Intellij IDEA
@@ -22,4 +27,11 @@ public interface EnrollmentSpanHelper {
      * @return
      */
     EnrollmentSpan createEnrollmentSpan(TransactionDto transactionDto, Account account);
+
+    /**
+     * Set the enrollment span in the account dto to send to MMS
+     * @param accountDto
+     * @param account
+     */
+    void setEnrollmentSpan(AccountDto accountDto, Account account, String ztcn);
 }

@@ -3,6 +3,7 @@ package com.brihaspathee.zeus.helper.interfaces;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
 import com.brihaspathee.zeus.domain.entity.PremiumSpan;
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 
 import java.util.List;
@@ -27,4 +28,13 @@ public interface PremiumSpanHelper {
     List<PremiumSpan> createPremiumSpans(TransactionDto transactionDto,
                                          EnrollmentSpan enrollmentSpan,
                                          Account account);
+
+    /**
+     * Set the premium span to send to MMS
+     * @param enrollmentSpanDto
+     * @param enrollmentSpan
+     */
+    void setPremiumSpan(EnrollmentSpanDto enrollmentSpanDto,
+                        EnrollmentSpan enrollmentSpan,
+                        String ztcn);
 }

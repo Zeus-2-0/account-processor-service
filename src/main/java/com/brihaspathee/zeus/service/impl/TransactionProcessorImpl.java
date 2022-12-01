@@ -6,6 +6,7 @@ import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.mapper.interfaces.TransactionMapper;
 import com.brihaspathee.zeus.service.interfaces.AccountService;
 import com.brihaspathee.zeus.service.interfaces.TransactionProcessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,7 @@ public class TransactionProcessorImpl implements TransactionProcessor {
      * @param accountNumber
      */
     @Override
-    public void processTransaction(TransactionDto transactionDto, String accountNumber) {
+    public void processTransaction(TransactionDto transactionDto, String accountNumber) throws JsonProcessingException {
         Transaction transaction = transactionMapper.transactionDtoToTransaction(transactionDto);
         transaction = transactionRepository.save(transaction);
         if(accountNumber == null){

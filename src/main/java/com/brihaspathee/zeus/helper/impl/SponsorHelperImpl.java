@@ -4,8 +4,10 @@ import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.Broker;
 import com.brihaspathee.zeus.domain.entity.Sponsor;
 import com.brihaspathee.zeus.domain.repository.SponsorRepository;
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.SponsorHelper;
+import com.brihaspathee.zeus.mapper.interfaces.SponsorMapper;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created in Intellij IDEA
@@ -27,6 +30,11 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class SponsorHelperImpl implements SponsorHelper {
+
+    /**
+     * Sponsor mapper instance
+     */
+    private final SponsorMapper sponsorMapper;
 
     /**
      * Sponsor Repository instance to perform CRUD operations
@@ -56,5 +64,21 @@ public class SponsorHelperImpl implements SponsorHelper {
             account.setSponsors(sponsors);
         }
 
+    }
+
+    /**
+     * Set the sponsor to dto to send to MMS
+     * @param accountDto
+     * @param account
+     */
+    @Override
+    public void setSponsor(AccountDto accountDto, Account account) {
+        if(account.getSponsors() != null && account.getSponsors().size() > 0){
+            accountDto.setSponsors(
+                    sponsorMapper.sponsorsToSponsorDtos(
+                                    account.getSponsors())
+                            .stream()
+                            .collect(Collectors.toSet()));
+        }
     }
 }

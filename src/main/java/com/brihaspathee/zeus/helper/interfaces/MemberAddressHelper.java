@@ -1,6 +1,9 @@
 package com.brihaspathee.zeus.helper.interfaces;
 
+import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.Member;
+import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 
 /**
@@ -20,4 +23,11 @@ public interface MemberAddressHelper {
      * @param transactionMemberDto
      */
     void createMemberAddress(Member member, TransactionMemberDto transactionMemberDto);
+
+    /**
+     * Set the member address dto to  send to MMS
+     * @param memberDto
+     * @param member
+     */
+    void setMemberAddress(MemberDto memberDto, Member member);
 }

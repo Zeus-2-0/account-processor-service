@@ -3,11 +3,15 @@ package com.brihaspathee.zeus.helper.impl;
 import com.brihaspathee.zeus.domain.entity.*;
 import com.brihaspathee.zeus.domain.repository.MemberPremiumRepository;
 import com.brihaspathee.zeus.domain.repository.PremiumSpanRepository;
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
+import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberIdentifierDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionRateDto;
+import com.brihaspathee.zeus.helper.interfaces.MemberPremiumHelper;
 import com.brihaspathee.zeus.helper.interfaces.PremiumSpanHelper;
+import com.brihaspathee.zeus.mapper.interfaces.PremiumSpanMapper;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +22,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created in Intellij IDEA
@@ -34,14 +39,19 @@ import java.util.Optional;
 public class PremiumSpanHelperImpl implements PremiumSpanHelper {
 
     /**
+     * Premium span mapper instance
+     */
+    private final PremiumSpanMapper premiumSpanMapper;
+
+    /**
      * Repository instance to perform CRUD operations
      */
     private final PremiumSpanRepository premiumSpanRepository;
 
     /**
-     * Member premium repository instance to perform CRUD operations
+     * Member premium helper instance to perform operations
      */
-    private final MemberPremiumRepository memberPremiumRepository;
+    private final MemberPremiumHelper memberPremiumHelper;
 
     /**
      * Create the premium spans for the enrollment span
@@ -64,12 +74,33 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
                 .build();
         populatePremiumAmounts(premiumSpan, transactionDto);
         premiumSpan = premiumSpanRepository.save(premiumSpan);
-        createMemberPremiums(transactionDto.getMembers(),
+        memberPremiumHelper.createMemberPremiums(transactionDto.getMembers(),
                 premiumSpan,
                 account.getMembers());
         premiumSpans.add(premiumSpan);
         enrollmentSpan.setPremiumSpans(premiumSpans);
         return premiumSpans;
+    }
+
+    /**
+     * Set the premium span in DTO to send to MMS
+     * @param enrollmentSpanDto
+     * @param enrollmentSpan
+     */
+    @Override
+    public void setPremiumSpan(EnrollmentSpanDto enrollmentSpanDto,
+                               EnrollmentSpan enrollmentSpan,
+                               String ztcn) {
+        if(enrollmentSpan.getPremiumSpans() !=null && enrollmentSpan.getPremiumSpans().size() > 0){
+            List<PremiumSpanDto> premiumSpanDtos = new ArrayList<>();
+            enrollmentSpan.getPremiumSpans().stream().forEach(premiumSpan -> {
+                PremiumSpanDto premiumSpanDto = premiumSpanMapper.premiumSpanToPremiumSpanDto(premiumSpan);
+                premiumSpanDto.setZtcn(ztcn);
+                memberPremiumHelper.setMemberPremiums(premiumSpanDto, premiumSpan);
+                premiumSpanDtos.add(premiumSpanDto);
+            });
+            enrollmentSpanDto.setPremiumSpans(premiumSpanDtos.stream().collect(Collectors.toSet()));
+        }
     }
 
     /**
@@ -173,51 +204,4 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
         }
         premiumSpan.setOtherPayAmount(otherPayAmt);
     }
-
-    /**
-     * Create the member premium span
-     * @param transactionMemberDtos
-     * @param premiumSpan
-     * @param members
-     */
-    private void createMemberPremiums(List<TransactionMemberDto> transactionMemberDtos,
-                                      PremiumSpan premiumSpan,
-                                      List<Member> members){
-        List<MemberPremium> memberPremiums = new ArrayList<>();
-        members.stream().forEach(member -> {
-            TransactionMemberDto transactionMemberDto = transactionMemberDtos.stream().filter(memberDto -> {
-                return memberDto.getTransactionMemberCode().equals(member.getTransactionMemberCode());
-            }).findFirst().get();
-            MemberPremium memberPremium = MemberPremium.builder()
-                    .acctMemberSK(null)
-                    .acctMemPremSK(null)
-                    .acctMemberSK(null)
-                    .premiumSpan(premiumSpan)
-                    .member(member)
-                    .exchangeMemberId(getExchangeMemberId(transactionMemberDto))
-                    .individualRateAmount(transactionMemberDto.getMemberRate())
-                    .build();
-            memberPremium = memberPremiumRepository.save(memberPremium);
-            memberPremiums.add(memberPremium);
-        });
-        premiumSpan.setMemberPremiums(memberPremiums);
-
-    }
-
-    /**
-     * Get the exchange member id of the member from the transaction
-     * @param transactionMemberDto
-     * @return
-     */
-    private String getExchangeMemberId(TransactionMemberDto transactionMemberDto){
-        Optional<TransactionMemberIdentifierDto> optionalMemberIdentifier= transactionMemberDto.getIdentifiers().stream().filter(memberIdentifierDto -> {
-            return memberIdentifierDto.getIdentifierTypeCode().equals("EXCHMEMID");
-        }).findFirst();
-        if(optionalMemberIdentifier.isPresent()){
-            return optionalMemberIdentifier.get().getIdentifierValue();
-        }else {
-            return null;
-        }
-    }
-
 }

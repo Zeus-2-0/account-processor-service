@@ -5,12 +5,17 @@ import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
 import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.entity.Transaction;
 import com.brihaspathee.zeus.domain.repository.AccountRepository;
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.*;
+import com.brihaspathee.zeus.mapper.interfaces.AccountMapper;
 import com.brihaspathee.zeus.service.interfaces.AccountService;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -35,6 +40,11 @@ public class AccountServiceImpl implements AccountService {
      * Account Repository instance to perform CRUD operations
      */
     private final AccountRepository accountRepository;
+
+    /**
+     * Account mapper instance for mapping the account
+     */
+    private final AccountMapper accountMapper;
 
     /**
      * The member helper instance
@@ -67,7 +77,7 @@ public class AccountServiceImpl implements AccountService {
      * @param transaction
      */
     @Override
-    public void createAccount(TransactionDto transactionDto, Transaction transaction) {
+    public void createAccount(TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
         // Create the account
         Account account = Account.builder()
                 .transaction(transaction)
@@ -91,5 +101,27 @@ public class AccountServiceImpl implements AccountService {
         brokerHelper.createBroker(transactionDto, account);
         // Create the payers from the transaction
         payerHelper.createPayer(transactionDto, account);
+        AccountDto accountDto = createAccountDto(account, transaction.getZtcn());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+        log.info("Account to be set to MMS:{}", objectMapper.writeValueAsString(accountDto));
+    }
+
+    /**
+     * Create the account dto to send to MMS
+     * @param account
+     */
+    private AccountDto createAccountDto(Account account, String ztcn){
+
+        AccountDto accountDto = accountMapper.accountToAccountDto(account);
+        brokerHelper.setBroker(accountDto, account);
+        payerHelper.setPayer(accountDto, account);
+        sponsorHelper.setSponsor(accountDto, account);
+        memberHelper.setMember(accountDto, account);
+        enrollmentSpanHelper.setEnrollmentSpan(accountDto,
+                account,
+                ztcn);
+        return accountDto;
+
     }
 }

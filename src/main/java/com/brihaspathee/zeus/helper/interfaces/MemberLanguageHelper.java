@@ -1,6 +1,7 @@
 package com.brihaspathee.zeus.helper.interfaces;
 
 import com.brihaspathee.zeus.domain.entity.Member;
+import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 
 /**
@@ -20,4 +21,11 @@ public interface MemberLanguageHelper {
      * @param transactionMemberDto
      */
     void createMemberLanguage(Member member, TransactionMemberDto transactionMemberDto);
+
+    /**
+     * Set the member language dto to  send to MMS
+     * @param memberDto
+     * @param member
+     */
+    void setMemberLanguage(MemberDto memberDto, Member member);
 }

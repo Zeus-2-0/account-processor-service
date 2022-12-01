@@ -3,8 +3,11 @@ package com.brihaspathee.zeus.helper.impl;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.repository.MemberRepository;
+import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.helper.interfaces.*;
+import com.brihaspathee.zeus.mapper.interfaces.MemberMapper;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created in Intellij IDEA
@@ -31,6 +35,11 @@ public class MemberHelperImpl implements MemberHelper {
      * Member repository instance to perform CRUD operations
      */
     private final MemberRepository memberRepository;
+
+    /**
+     * Member mapper instance
+     */
+    private final MemberMapper memberMapper;
 
     /**
      * Member email helper instance
@@ -99,6 +108,28 @@ public class MemberHelperImpl implements MemberHelper {
             savedMembers.add(member);
         });
         return savedMembers;
+    }
 
+    /**
+     * Set the member information in the account to send to MMS
+     * @param accountDto
+     * @param account
+     */
+    @Override
+    public void setMember(AccountDto accountDto, Account account) {
+        if(account.getMembers() != null && account.getSponsors().size() > 0){
+            List<MemberDto> memberDtos = new ArrayList<>();
+            account.getMembers().stream().forEach(member -> {
+                MemberDto memberDto = memberMapper.memberToMemberDto(member);
+                alternateContactHelper.setAlternateContact(memberDto, member);
+                memberAddressHelper.setMemberAddress(memberDto, member);
+                memberPhoneHelper.setMemberPhone(memberDto, member);
+                memberLanguageHelper.setMemberLanguage(memberDto, member);
+                memberEmailHelper.setMemberEmail(memberDto, member);
+                memberIdentifierHelper.setMemberIdentifier(memberDto,member);
+                memberDtos.add(memberDto);
+            });
+            accountDto.setMembers(memberDtos.stream().collect(Collectors.toSet()));
+        }
     }
 }
