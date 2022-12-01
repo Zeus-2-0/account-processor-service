@@ -2,6 +2,7 @@ package com.brihaspathee.zeus.service.interfaces;
 
 import com.brihaspathee.zeus.domain.entity.Transaction;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.UUID;
 
@@ -21,5 +22,5 @@ public interface AccountService {
      * @param transactionDto
      * @param transaction
      */
-    void createAccount(TransactionDto transactionDto, Transaction transaction);
+    void createAccount(TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException;
 }

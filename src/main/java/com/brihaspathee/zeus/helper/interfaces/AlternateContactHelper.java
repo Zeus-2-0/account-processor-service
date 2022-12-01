@@ -1,6 +1,7 @@
 package com.brihaspathee.zeus.helper.interfaces;
 
 import com.brihaspathee.zeus.domain.entity.Member;
+import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 
 /**
@@ -20,4 +21,11 @@ public interface AlternateContactHelper {
      * @param transactionMemberDto
      */
     void createAlternateContact(Member member, TransactionMemberDto transactionMemberDto);
+
+    /**
+     * Set the alternate contact dto to  send to MMS
+     * @param memberDto
+     * @param member
+     */
+    void setAlternateContact(MemberDto memberDto, Member member);
 }

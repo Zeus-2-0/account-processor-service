@@ -1,0 +1,63 @@
+package com.brihaspathee.zeus.mapper.impl;
+
+import com.brihaspathee.zeus.domain.entity.PremiumSpan;
+import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
+import com.brihaspathee.zeus.mapper.interfaces.PremiumSpanMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Created in Intellij IDEA
+ * User: Balaji Varadharajan
+ * Date: 01, December 2022
+ * Time: 12:08 PM
+ * Project: Zeus
+ * Package Name: com.brihaspathee.zeus.mapper.impl
+ * To change this template use File | Settings | File and Code Template
+ */
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class PremiumSpanMapperImpl implements PremiumSpanMapper {
+
+    /**
+     * Convert Premium span entity to premium span dto
+     * @param premiumSpan
+     * @return
+     */
+    @Override
+    public PremiumSpanDto premiumSpanToPremiumSpanDto(PremiumSpan premiumSpan) {
+        if(premiumSpan == null){
+            return null;
+        }
+        PremiumSpanDto premiumSpanDto = PremiumSpanDto.builder()
+                .premiumSpanSK(premiumSpan.getAcctPremiumSpanSK())
+                .premiumSpanCode(premiumSpan.getPremiumSpanCode())
+                .startDate(premiumSpan.getStartDate())
+                .endDate(premiumSpan.getEndDate())
+                .csrVariant(premiumSpan.getCsrVariant())
+                .totalPremiumAmount(premiumSpan.getTotalPremAmount())
+                .totalResponsibleAmount(premiumSpan.getTotalResponsibleAmount())
+                .aptcAmount(premiumSpan.getAptcAmount())
+                .otherPayAmount(premiumSpan.getOtherPayAmount())
+                .csrAmount(premiumSpan.getCsrAmount())
+                .createdDate(premiumSpan.getCreatedDate())
+                .updatedDate(premiumSpan.getUpdatedDate())
+                .build();
+        return premiumSpanDto;
+    }
+
+    /**
+     * Convert premium span entities to premium span dtos
+     * @param premiumSpans
+     * @return
+     */
+    @Override
+    public List<PremiumSpanDto> premiumSpanToPremiumSpanDtos(List<PremiumSpan> premiumSpans) {
+        return premiumSpans.stream().map(this::premiumSpanToPremiumSpanDto).collect(Collectors.toList());
+    }
+}

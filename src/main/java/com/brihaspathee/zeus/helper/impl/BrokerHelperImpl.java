@@ -3,15 +3,21 @@ package com.brihaspathee.zeus.helper.impl;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.Broker;
 import com.brihaspathee.zeus.domain.repository.BrokerRepository;
+import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.account.BrokerDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.BrokerHelper;
+import com.brihaspathee.zeus.mapper.interfaces.BrokerMapper;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created in Intellij IDEA
@@ -26,6 +32,11 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class BrokerHelperImpl implements BrokerHelper {
+
+    /**
+     * The broker mapper instance
+     */
+    private final BrokerMapper brokerMapper;
 
     /**
      * Broker repository instance to perform CRUD operations
@@ -57,6 +68,20 @@ public class BrokerHelperImpl implements BrokerHelper {
             brokers.add(broker);
             account.setBrokers(brokers);
         }
+    }
 
+    /**
+     * Set the broker in the account dto to send to MMS
+     * @param accountDto
+     * @param account
+     */
+    @Override
+    public void setBroker(AccountDto accountDto, Account account) {
+        if(account.getBrokers() != null && account.getBrokers().size() > 0){
+            accountDto.setBrokers(brokerMapper
+                    .brokersToBrokerDtos(account.getBrokers())
+                    .stream()
+                    .collect(Collectors.toSet()));
+        }
     }
 }

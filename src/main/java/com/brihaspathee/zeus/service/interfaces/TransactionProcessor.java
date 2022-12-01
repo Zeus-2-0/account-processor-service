@@ -1,6 +1,7 @@
 package com.brihaspathee.zeus.service.interfaces;
 
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * Created in Intellij IDEA
@@ -13,5 +14,5 @@ import com.brihaspathee.zeus.dto.transaction.TransactionDto;
  */
 public interface TransactionProcessor {
 
-    void processTransaction(TransactionDto transactionDto, String accountNumber);
+    void processTransaction(TransactionDto transactionDto, String accountNumber) throws JsonProcessingException;
 }

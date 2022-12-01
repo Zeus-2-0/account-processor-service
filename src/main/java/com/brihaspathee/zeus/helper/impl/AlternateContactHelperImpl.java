@@ -3,8 +3,10 @@ package com.brihaspathee.zeus.helper.impl;
 import com.brihaspathee.zeus.domain.entity.AlternateContact;
 import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.repository.AlternateContactRepository;
+import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.helper.interfaces.AlternateContactHelper;
+import com.brihaspathee.zeus.mapper.interfaces.AlternateContactMapper;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created in Intellij IDEA
@@ -26,6 +29,11 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class AlternateContactHelperImpl implements AlternateContactHelper {
+
+    /**
+     * Alternate contact mapper instance
+     */
+    private final AlternateContactMapper alternateContactMapper;
 
     /**
      * Alternate contact repository instance to perform CRUD operations
@@ -71,5 +79,23 @@ public class AlternateContactHelperImpl implements AlternateContactHelper {
             member.setAlternateContacts(alternateContacts);
         }
 
+    }
+
+    /**
+     * Set Alternate contact dto to send to MMS
+     * @param memberDto
+     * @param member
+     */
+    @Override
+    public void setAlternateContact(MemberDto memberDto, Member member) {
+        if(member.getAlternateContacts() != null && member.getAlternateContacts().size() >0){
+            memberDto.setAlternateContacts(
+                    alternateContactMapper
+                            .alternateContactsToAlternateContactDtos(
+                                    member.getAlternateContacts())
+                            .stream()
+                            .collect(Collectors.toSet())
+            );
+        }
     }
 }

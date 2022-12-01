@@ -4,8 +4,10 @@ import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.Payer;
 import com.brihaspathee.zeus.domain.entity.Sponsor;
 import com.brihaspathee.zeus.domain.repository.PayerRepository;
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.PayerHelper;
+import com.brihaspathee.zeus.mapper.interfaces.PayerMapper;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created in Intellij IDEA
@@ -32,6 +35,11 @@ public class PayerHelperImpl implements PayerHelper {
      * Payer repository instance to perform CRUD operations
      */
     private final PayerRepository payerRepository;
+
+    /**
+     * Payer mapper instance
+     */
+    private final PayerMapper payerMapper;
 
     /**
      * Create a payer
@@ -56,5 +64,21 @@ public class PayerHelperImpl implements PayerHelper {
             account.setPayers(payers);
         }
 
+    }
+
+    /**
+     * Set the payer in account dto to send to MMS
+     * @param accountDto
+     * @param account
+     */
+    @Override
+    public void setPayer(AccountDto accountDto, Account account) {
+        if(account.getPayers() != null && account.getPayers().size() > 0){
+            accountDto.setPayers(
+                    payerMapper.payersToPayerDtos(
+                            account.getPayers())
+                            .stream()
+                            .collect(Collectors.toSet()));
+        }
     }
 }

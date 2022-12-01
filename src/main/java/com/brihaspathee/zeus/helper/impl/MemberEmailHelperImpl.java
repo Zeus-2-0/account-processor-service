@@ -3,8 +3,10 @@ package com.brihaspathee.zeus.helper.impl;
 import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.entity.MemberEmail;
 import com.brihaspathee.zeus.domain.repository.MemberEmailRepository;
+import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberEmailHelper;
+import com.brihaspathee.zeus.mapper.interfaces.MemberEmailMapper;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created in Intellij IDEA
@@ -26,6 +29,11 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class MemberEmailHelperImpl implements MemberEmailHelper {
+
+    /**
+     * Member email helper instance
+     */
+    private final MemberEmailMapper emailMapper;
 
     /**
      * Member email repository instance to perform CRUD operations
@@ -56,6 +64,24 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
                 emails.add(memberEmail);
             });
             member.setMemberEmails(emails);
+        }
+    }
+
+    /**
+     * Set the member email dto to  send to MMS
+     * @param memberDto
+     * @param member
+     */
+    @Override
+    public void setMemberEmail(MemberDto memberDto, Member member) {
+        if(member.getMemberEmails() != null && member.getMemberEmails().size() >0){
+            memberDto.setMemberEmails(
+                    emailMapper
+                            .emailsToEmailDtos(
+                                    member.getMemberEmails())
+                            .stream()
+                            .collect(Collectors.toSet())
+            );
         }
     }
 }
