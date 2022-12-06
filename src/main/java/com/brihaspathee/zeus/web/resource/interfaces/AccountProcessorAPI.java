@@ -1,8 +1,8 @@
 package com.brihaspathee.zeus.web.resource.interfaces;
 
 import com.brihaspathee.zeus.exception.ApiExceptionList;
-import com.brihaspathee.zeus.web.model.AccountProcessingRequest;
-import com.brihaspathee.zeus.web.model.AccountProcessingResponse;
+import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
+import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
 import com.brihaspathee.zeus.web.response.ZeusApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;

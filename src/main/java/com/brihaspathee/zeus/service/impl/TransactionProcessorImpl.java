@@ -1,15 +1,25 @@
 package com.brihaspathee.zeus.service.impl;
 
+import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
+import com.brihaspathee.zeus.broker.message.AccountUpdateRequest;
+import com.brihaspathee.zeus.broker.producer.AccountUpdateProducer;
+import com.brihaspathee.zeus.domain.entity.PayloadTracker;
 import com.brihaspathee.zeus.domain.entity.Transaction;
 import com.brihaspathee.zeus.domain.repository.TransactionRepository;
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.mapper.interfaces.TransactionMapper;
 import com.brihaspathee.zeus.service.interfaces.AccountService;
 import com.brihaspathee.zeus.service.interfaces.TransactionProcessor;
+import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
+import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 
 /**
  * Created in Intellij IDEA
@@ -41,9 +51,15 @@ public class TransactionProcessorImpl implements TransactionProcessor {
     private final TransactionMapper transactionMapper;
 
     /**
-     * Process the transaction received to update/create an account in MMA
+     * Producer instance to send Account information to MMS
+     */
+    private final AccountUpdateProducer accountUpdateProducer;
+
+    /**
+     * Process the transaction received to update/create an account in MMS
      * @param transactionDto
      * @param accountNumber
+     * @throws JsonProcessingException
      */
     @Override
     public void processTransaction(TransactionDto transactionDto, String accountNumber) throws JsonProcessingException {
@@ -51,7 +67,30 @@ public class TransactionProcessorImpl implements TransactionProcessor {
         transaction = transactionRepository.save(transaction);
         if(accountNumber == null){
             // If the account number is null, a new account has to be created in MMS
-            accountService.createAccount(transactionDto, transaction);
+            AccountDto accountDto =  accountService.createAccount(transactionDto, transaction);
+            AccountUpdateRequest accountUpdateRequest = AccountUpdateRequest.builder()
+                    .accountDto(accountDto)
+                    .build();
+            accountUpdateProducer.updateAccount(accountUpdateRequest);
         }
+    }
+
+    /**
+     * Process the transaction request that is received through Kafka topic
+     * @param accountProcessingRequest
+     * @param payloadTracker
+     */
+    @Override
+    public Mono<AccountProcessingResponse> processTransaction(AccountProcessingRequest accountProcessingRequest, PayloadTracker payloadTracker) throws JsonProcessingException {
+        processTransaction(accountProcessingRequest.getTransactionDto(),
+                accountProcessingRequest.getAccountNumber());
+
+        AccountProcessingResponse accountProcessingResponse = AccountProcessingResponse.builder()
+                .responseId(ZeusRandomStringGenerator.randomString(15))
+                .requestPayloadId(payloadTracker.getPayloadId())
+                .accountNumber(accountProcessingRequest.getAccountNumber())
+                .ztcn(accountProcessingRequest.getTransactionDto().getZtcn())
+                .build();
+        return Mono.just(accountProcessingResponse).delayElement(Duration.ofSeconds(30));
     }
 }

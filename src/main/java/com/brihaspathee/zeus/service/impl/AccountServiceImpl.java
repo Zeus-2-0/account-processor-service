@@ -75,9 +75,11 @@ public class AccountServiceImpl implements AccountService {
      * This method should be invoked if a new account should be created
      * @param transactionDto
      * @param transaction
+     * @return
+     * @throws JsonProcessingException
      */
     @Override
-    public void createAccount(TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
+    public AccountDto createAccount(TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
         // Create the account
         Account account = Account.builder()
                 .transaction(transaction)
@@ -105,6 +107,7 @@ public class AccountServiceImpl implements AccountService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
         log.info("Account to be set to MMS:{}", objectMapper.writeValueAsString(accountDto));
+        return accountDto;
     }
 
     /**

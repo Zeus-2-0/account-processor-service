@@ -42,6 +42,7 @@ public class EnrollmentSpanMapperImpl implements EnrollmentSpanMapper {
                 .businessUnitTypeCode(enrollmentSpan.getBusinessUnitTypeCode())
                 .startDate(enrollmentSpan.getStartDate())
                 .endDate(enrollmentSpan.getEndDate())
+                .effectuationDate(enrollmentSpan.getEffectuationDate())
                 .exchangeSubscriberId(enrollmentSpan.getExchangeSubscriberId())
                 .planId(enrollmentSpan.getPlanId())
                 .groupPolicyId(enrollmentSpan.getGroupPolicyId())

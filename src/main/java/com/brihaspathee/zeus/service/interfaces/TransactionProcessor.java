@@ -1,7 +1,12 @@
 package com.brihaspathee.zeus.service.interfaces;
 
+import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
+import com.brihaspathee.zeus.domain.entity.PayloadTracker;
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import reactor.core.publisher.Mono;
 
 /**
  * Created in Intellij IDEA
@@ -15,4 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public interface TransactionProcessor {
 
     void processTransaction(TransactionDto transactionDto, String accountNumber) throws JsonProcessingException;
+
+    Mono<AccountProcessingResponse> processTransaction(AccountProcessingRequest accountProcessingRequest,
+                                                       PayloadTracker payloadTracker) throws JsonProcessingException;
 }
