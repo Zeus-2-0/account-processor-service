@@ -201,12 +201,12 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
         if(currentEnrollmentSpan.getEffectuationDate() != null &&
                 !currentEnrollmentSpan.getStartDate()
                         .equals(currentEnrollmentSpan.getEndDate())){
-            return EnrollmentSpanStatus.ENROLL.name();
+            return EnrollmentSpanStatus.ENROLLED.name();
         }
         if(currentEnrollmentSpan.getEffectuationDate() == null &&
                 !currentEnrollmentSpan.getStartDate()
                         .equals(currentEnrollmentSpan.getEndDate())){
-            return EnrollmentSpanStatus.PREMEM.name();
+            return EnrollmentSpanStatus.PRE_MEMBER.name();
         }
         return EnrollmentSpanStatus.NO_VALID_STATUS.name();
     }

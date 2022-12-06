@@ -1,4 +1,4 @@
-package com.brihaspathee.zeus.web.model;
+package com.brihaspathee.zeus.broker.message;
 
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import lombok.*;

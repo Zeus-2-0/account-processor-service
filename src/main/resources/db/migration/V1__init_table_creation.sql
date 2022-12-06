@@ -1,17 +1,20 @@
-DROP TABLE IF EXISTS `accountprocessordb`.`transaction`;
-DROP TABLE IF EXISTS `accountprocessordb`.`account`;
-DROP TABLE IF EXISTS `accountprocessordb`.`enrollment_span`;
-DROP TABLE IF EXISTS `accountprocessordb`.`premium_span`;
 DROP TABLE IF EXISTS `accountprocessordb`.`broker`;
 DROP TABLE IF EXISTS `accountprocessordb`.`sponsor`;
 DROP TABLE IF EXISTS `accountprocessordb`.`payer`;
-DROP TABLE IF EXISTS `accountprocessordb`.`member`;
 DROP TABLE IF EXISTS `accountprocessordb`.`member_language`;
 DROP TABLE IF EXISTS `accountprocessordb`.`member_identifier`;
 DROP TABLE IF EXISTS `accountprocessordb`.`member_phone`;
 DROP TABLE IF EXISTS `accountprocessordb`.`member_address`;
 DROP TABLE IF EXISTS `accountprocessordb`.`member_email`;
 DROP TABLE IF EXISTS `accountprocessordb`.`alternate_contact`;
+DROP TABLE IF EXISTS `accountprocessordb`.`member_premium`;
+DROP TABLE IF EXISTS `accountprocessordb`.`premium_span`;
+DROP TABLE IF EXISTS `accountprocessordb`.`enrollment_span`;
+DROP TABLE IF EXISTS `accountprocessordb`.`member`;
+DROP TABLE IF EXISTS `accountprocessordb`.`account`;
+DROP TABLE IF EXISTS `accountprocessordb`.`transaction`;
+DROP TABLE IF EXISTS `accountprocessordb`.`payload_tracker_detail`;
+DROP TABLE IF EXISTS `accountprocessordb`.`payload_tracker`;
 CREATE TABLE IF NOT EXISTS `accountprocessordb`.`transaction` (
     `transaction_sk` VARCHAR(36) NOT NULL COMMENT 'The primary key of the table',
     `ztcn` VARCHAR(50) NOT NULL COMMENT 'The zeus transaction control number',
@@ -340,3 +343,35 @@ CREATE TABLE IF NOT EXISTS `accountprocessordb`.`alternate_contact` (
     ON UPDATE NO ACTION)
     ENGINE = InnoDB
     COMMENT = 'This table contains the alternate contacts associated with the member';
+CREATE TABLE IF NOT EXISTS `accountprocessordb`.`payload_tracker` (
+    `payload_tracker_sk` VARCHAR(36) NOT NULL,
+    `payload_id` VARCHAR(45) NOT NULL COMMENT 'A unique id assigned for the payload',
+    `payload_key` VARCHAR(50) NOT NULL COMMENT 'The key for the type of payload, like account number for account payload and zeus transaction control number for transaction payload.',
+    `payload_key_type_code` VARCHAR(45) NOT NULL COMMENT 'Identifies the type of payload like ACCOUNT, TRANSACTION, FILE etc',
+    `payload` LONGTEXT NOT NULL COMMENT 'The payload as a string',
+    `payload_direction_type_code` VARCHAR(45) NOT NULL COMMENT 'Identifies the direction of the payload INBOUND or OUTBOUND',
+    `src_dest` VARCHAR(100) NOT NULL COMMENT 'Identifies the source if the payload is inbound and destination if the payload is outbound',
+    `created_date` DATETIME NULL COMMENT 'Date when the record was created',
+    `updated_date` DATETIME NULL COMMENT 'Date when the record was updated',
+    PRIMARY KEY (`payload_tracker_sk`))
+    ENGINE = InnoDB
+    COMMENT = 'This table contains all the payloads that are sent out or received in to the transaction storage service';
+CREATE TABLE IF NOT EXISTS `accountprocessordb`.`payload_tracker_detail` (
+    `payload_tracker_detail_sk` VARCHAR(36) NOT NULL,
+    `payload_tracker_sk` VARCHAR(36) NOT NULL COMMENT 'The foreign key of the payload tracker table',
+    `response_type_code` VARCHAR(45) NOT NULL COMMENT 'The type of response received or sent. e.g. ACK, RESULT etc',
+    `response_payload_id` VARCHAR(45) NOT NULL COMMENT 'The unique id assigned to the response payload',
+    `response_payload` LONGTEXT NOT NULL,
+    `payload_direction_type_code` VARCHAR(45) NOT NULL COMMENT 'Identifies the direction of the payload INBOUND or OUTBOUND',
+    `src_dest` VARCHAR(100) NOT NULL COMMENT 'Identifies the source if the payload is inbound and destination if the payload is outbound',
+    `created_date` DATETIME NULL COMMENT 'Date when the record was created',
+    `updated_date` DATETIME NULL COMMENT 'Date when the record was updated',
+    PRIMARY KEY (`payload_tracker_detail_sk`),
+    INDEX `payload_tracker_fk_idx` (`payload_tracker_sk` ASC) VISIBLE,
+    CONSTRAINT `payload_tracker_fk`
+    FOREIGN KEY (`payload_tracker_sk`)
+    REFERENCES `accountprocessordb`.`payload_tracker` (`payload_tracker_sk`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+    ENGINE = InnoDB
+    COMMENT = 'The payload tracker detail table, that tracks all the responses received for an outbound payload and all the responses sent for an inbound payload';

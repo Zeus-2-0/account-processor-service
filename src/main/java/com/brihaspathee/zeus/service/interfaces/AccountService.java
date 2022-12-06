@@ -1,6 +1,7 @@
 package com.brihaspathee.zeus.service.interfaces;
 
 import com.brihaspathee.zeus.domain.entity.Transaction;
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -21,6 +22,8 @@ public interface AccountService {
      * This method should be invoked if a new account should be created
      * @param transactionDto
      * @param transaction
+     * @return
+     * @throws JsonProcessingException
      */
-    void createAccount(TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException;
+    AccountDto createAccount(TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException;
 }

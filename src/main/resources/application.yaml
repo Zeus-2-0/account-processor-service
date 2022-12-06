@@ -17,6 +17,21 @@ spring:
     url: jdbc:mysql://localhost:3306/accountprocessordb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: accountprocessorapp
     password: password
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: zeus-account-processor-consumer-group
+      enable-auto-commit: true
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
   flyway:
     user: accountprocessoradmin
     password: password
