@@ -35,6 +35,7 @@ spring:
   flyway:
     user: accountprocessoradmin
     password: password
+    clean-disabled: false
 logging:
   file:
     name: logs/local/account-processor.log

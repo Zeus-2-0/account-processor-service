@@ -6,6 +6,7 @@ import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.repository.MemberEmailRepository;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 
 import java.util.List;
 
@@ -34,4 +35,11 @@ public interface EnrollmentSpanHelper {
      * @param account
      */
     void setEnrollmentSpan(AccountDto accountDto, Account account, String ztcn);
+
+    /**
+     * Determine the status of the enrollment span
+     * @param enrollmentSpanStatusDto
+     * @return
+     */
+    String determineStatus(EnrollmentSpanStatusDto enrollmentSpanStatusDto);
 }

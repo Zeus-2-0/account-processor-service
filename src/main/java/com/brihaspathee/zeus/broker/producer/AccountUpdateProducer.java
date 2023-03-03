@@ -78,7 +78,7 @@ public class AccountUpdateProducer {
                 payloadTracker.getPayloadId());
         ProducerRecord<String, ZeusMessagePayload<AccountUpdateRequest>> producerRecord =
                 buildProducerRecord(messagePayload);
-        kafkaTemplate.send(producerRecord).addCallback(accountUpdateCallback);
+        kafkaTemplate.send(producerRecord);//.addCallback(accountUpdateCallback);
         log.info("After the publishing the account {} to MMS",
                 accountUpdateRequest.getAccountDto().getAccountNumber());
     }

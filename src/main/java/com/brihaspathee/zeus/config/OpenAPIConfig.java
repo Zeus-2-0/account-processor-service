@@ -1,5 +1,6 @@
 package com.brihaspathee.zeus.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -23,6 +24,7 @@ import java.util.List;
  * Package Name: com.brihaspathee.zeus.config
  * To change this template use File | Settings | File and Code Template
  */
+@OpenAPIDefinition
 @Configuration
 @Profile({"local", "clean"})
 public class OpenAPIConfig {

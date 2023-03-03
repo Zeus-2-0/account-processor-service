@@ -3,6 +3,7 @@ package com.brihaspathee.zeus.service.interfaces;
 import com.brihaspathee.zeus.domain.entity.Transaction;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.UUID;
@@ -26,4 +27,11 @@ public interface AccountService {
      * @throws JsonProcessingException
      */
     AccountDto createAccount(TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException;
+
+    /**
+     * Determine the status of the enrollment span
+     * @param enrollmentSpanStatusDto
+     * @return
+     */
+    String determineEnrollmentSpanStatus(EnrollmentSpanStatusDto enrollmentSpanStatusDto);
 }
