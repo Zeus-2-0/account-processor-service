@@ -48,6 +48,9 @@ public class EnrollmentSpanMapperImpl implements EnrollmentSpanMapper {
                 .groupPolicyId(enrollmentSpan.getGroupPolicyId())
                 .planId(enrollmentSpan.getPlanId())
                 .productTypeCode(enrollmentSpan.getProductTypeCode())
+                .delinqInd(enrollmentSpan.isDelinqInd())
+                .paidThroughDate(enrollmentSpan.getPaidThroughDate())
+                .claimPaidThroughDate(enrollmentSpan.getClaimPaidThroughDate())
                 .statusTypeCode(enrollmentSpan.getStatusTypeCode())
                 .createdDate(enrollmentSpan.getCreatedDate())
                 .updatedDate(enrollmentSpan.getUpdatedDate())
@@ -63,5 +66,38 @@ public class EnrollmentSpanMapperImpl implements EnrollmentSpanMapper {
     @Override
     public List<EnrollmentSpanDto> enrollmentSpansToEnrollmentSpanDtos(List<EnrollmentSpan> enrollmentSpans) {
         return enrollmentSpans.stream().map(this::enrollmentSpanToEnrollmentSpanDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert enrollment span dto to enrollment span mapper
+     * @param enrollmentSpanDto
+     * @return
+     */
+    @Override
+    public EnrollmentSpan enrollmentSpanDtoToEnrollmentSpan(EnrollmentSpanDto enrollmentSpanDto) {
+        if(enrollmentSpanDto == null){
+            return null;
+        }
+        EnrollmentSpan enrollmentSpan = EnrollmentSpan.builder()
+                .enrollmentSpanCode(enrollmentSpanDto.getEnrollmentSpanCode())
+                .stateTypeCode(enrollmentSpanDto.getStateTypeCode())
+                .marketplaceTypeCode(enrollmentSpanDto.getMarketplaceTypeCode())
+                .businessUnitTypeCode(enrollmentSpanDto.getBusinessUnitTypeCode())
+                .startDate(enrollmentSpanDto.getStartDate())
+                .endDate(enrollmentSpanDto.getEndDate())
+                .effectuationDate(enrollmentSpanDto.getEffectuationDate())
+                .exchangeSubscriberId(enrollmentSpanDto.getExchangeSubscriberId())
+                .planId(enrollmentSpanDto.getPlanId())
+                .groupPolicyId(enrollmentSpanDto.getGroupPolicyId())
+                .planId(enrollmentSpanDto.getPlanId())
+                .productTypeCode(enrollmentSpanDto.getProductTypeCode())
+                .delinqInd(enrollmentSpanDto.isDelinqInd())
+                .paidThroughDate(enrollmentSpanDto.getPaidThroughDate())
+                .claimPaidThroughDate(enrollmentSpanDto.getClaimPaidThroughDate())
+                .statusTypeCode(enrollmentSpanDto.getStatusTypeCode())
+                .createdDate(enrollmentSpanDto.getCreatedDate())
+                .updatedDate(enrollmentSpanDto.getUpdatedDate())
+                .build();
+        return enrollmentSpan;
     }
 }

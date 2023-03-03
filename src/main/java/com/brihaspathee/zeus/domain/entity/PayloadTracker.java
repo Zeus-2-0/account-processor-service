@@ -1,12 +1,12 @@
 package com.brihaspathee.zeus.domain.entity;
 
+import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
@@ -35,7 +35,7 @@ public class PayloadTracker {
      */
     @Id
     @GeneratedValue(generator = "UUID")
-    @Type(type = "uuid-char")
+    @JdbcTypeCode(Types.LONGVARCHAR)
     @GenericGenerator(name="UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "payload_tracker_sk", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID payloadTrackerSK;
@@ -63,6 +63,7 @@ public class PayloadTracker {
      * The payload data in JSON format
      */
     @Lob
+    @JdbcTypeCode(Types.LONGVARCHAR)
     @Column(name = "payload")
     private String payload;
 

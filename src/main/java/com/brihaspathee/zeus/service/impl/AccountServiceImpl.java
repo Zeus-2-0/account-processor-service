@@ -11,6 +11,7 @@ import com.brihaspathee.zeus.helper.interfaces.*;
 import com.brihaspathee.zeus.mapper.interfaces.AccountMapper;
 import com.brihaspathee.zeus.service.interfaces.AccountService;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
+import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -108,6 +109,16 @@ public class AccountServiceImpl implements AccountService {
         objectMapper.findAndRegisterModules();
         log.info("Account to be set to MMS:{}", objectMapper.writeValueAsString(accountDto));
         return accountDto;
+    }
+
+    /**
+     * Determine the status of the enrollment span
+     * @param enrollmentSpanStatusDto
+     * @return
+     */
+    @Override
+    public String determineEnrollmentSpanStatus(EnrollmentSpanStatusDto enrollmentSpanStatusDto) {
+        return enrollmentSpanHelper.determineStatus(enrollmentSpanStatusDto);
     }
 
     /**

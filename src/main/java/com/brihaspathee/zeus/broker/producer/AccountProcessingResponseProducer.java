@@ -83,7 +83,7 @@ public class AccountProcessingResponseProducer {
         ProducerRecord<String, ZeusMessagePayload<AccountProcessingResponse>> producerRecord =
                 buildProducerRecord(payloadTrackerDetail.getResponsePayloadId(), messagePayload);
         // Send to kafka topic
-        kafkaTemplate.send(producerRecord).addCallback(accountProcessingResponseCallback);
+        kafkaTemplate.send(producerRecord);//.addCallback(accountProcessingResponseCallback);
         log.info("After the sending the processing response to transaction manager is called");
     }
 

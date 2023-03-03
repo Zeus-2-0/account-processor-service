@@ -1,12 +1,12 @@
 package com.brihaspathee.zeus.domain.entity;
 
+import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -33,7 +33,7 @@ public class MemberIdentifier {
      */
     @Id
     @GeneratedValue(generator = "UUID")
-    @Type(type = "uuid-char")
+    @JdbcTypeCode(Types.LONGVARCHAR)
     @GenericGenerator(name="UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "member_identifier_sk", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID memberIdentifierSK;

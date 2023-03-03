@@ -1,8 +1,10 @@
 package com.brihaspathee.zeus.web.resource.interfaces;
 
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.exception.ApiExceptionList;
 import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
 import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
+import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.brihaspathee.zeus.web.response.ZeusApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 /**
  * Created in Intellij IDEA
@@ -28,7 +30,7 @@ import javax.validation.Valid;
  * Package Name: com.brihaspathee.zeus.web.resource.interfaces
  * To change this template use File | Settings | File and Code Template
  */
-@RequestMapping("/api/v1/zeus/account-processor/process")
+@RequestMapping("/api/v1/zeus/account-processor")
 @Validated
 public interface AccountProcessorAPI {
 
@@ -60,7 +62,10 @@ public interface AccountProcessorAPI {
                             @Content(mediaType = "application/json",schema = @Schema(implementation = ApiExceptionList.class))
                     })
     })
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "process", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ZeusApiResponse<AccountProcessingResponse>> processTransaction(
             @RequestBody @Valid AccountProcessingRequest accountProcessingRequest) throws JsonProcessingException;
+
+    @PostMapping(path =  "/span-status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ZeusApiResponse<String>> getEnrollmentSpanStatus(@RequestBody EnrollmentSpanStatusDto spanStatusDto);
 }

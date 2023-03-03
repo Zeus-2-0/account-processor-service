@@ -1,12 +1,12 @@
 package com.brihaspathee.zeus.domain.entity;
 
+import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,7 +35,7 @@ public class EnrollmentSpan {
      */
     @Id
     @GeneratedValue(generator = "UUID")
-    @Type(type = "uuid-char")
+    @JdbcTypeCode(Types.LONGVARCHAR)
     @GenericGenerator(name="UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "enrollment_span_sk", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID enrollmentSpanSK;
@@ -124,6 +124,24 @@ public class EnrollmentSpan {
      */
     @Column(name = "status_type_code", columnDefinition = "varchar", length = 50, nullable = false)
     private String statusTypeCode;
+
+    /**
+     * Identifies if the enrollment span is delinquent or not
+     */
+    @Column(name="delinq_ind")
+    private boolean delinqInd;
+
+    /**
+     * The paid through date of the enrollment span
+     */
+    @Column(name = "paid_through_date", nullable = true)
+    private LocalDate paidThroughDate;
+
+    /**
+     * The claim paid through date of the enrollment span
+     */
+    @Column(name = "claim_paid_through_date", nullable = true)
+    private LocalDate claimPaidThroughDate;
 
     /**
      * The list of premium spans that are associated with the enrollment span
