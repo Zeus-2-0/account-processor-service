@@ -214,8 +214,10 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
         boolean isEndDateGreaterThanStartDate = currentEnrollmentSpan.getEndDate().isAfter(currentEnrollmentSpan.getStartDate());
         boolean isEndDateLessThanStartDate = currentEnrollmentSpan.getEndDate().isBefore(currentEnrollmentSpan.getStartDate());
         boolean isEndDateEqualToStartDate =currentEnrollmentSpan.getEndDate().isEqual(currentEnrollmentSpan.getStartDate());
-        if(isDelinquent(currentEnrollmentSpan, priorEnrollmentSpan)){
+        if(isDelinquent(currentEnrollmentSpan, priorEnrollmentSpan) == 1){
             return EnrollmentSpanStatus.DELINQUENT.name();
+        }else if(isDelinquent(currentEnrollmentSpan, priorEnrollmentSpan) == -1){
+            return EnrollmentSpanStatus.SUSPENDED.name();
         }
         if (isEndDateLessThanStartDate) {
             return EnrollmentSpanStatus.CANCELED.name();
@@ -234,12 +236,16 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
     }
 
     /**
-     * Determine if the current enrollment span is delinquent
+     * Determine if the current enrollment span is delinquent or suspended or neither
+     * This method will return
+     * 1 - Delinquent
+     * -1 - Suspended
+     * 0 - Neither Suspended nor Delinquent
      * @param currentEnrollmentSpan
      * @param priorEnrollmentSpan
      * @return
      */
-    private boolean isDelinquent(EnrollmentSpan currentEnrollmentSpan,
+    private int isDelinquent(EnrollmentSpan currentEnrollmentSpan,
                                  EnrollmentSpan priorEnrollmentSpan){
         // Check if the effectuation date is not NULL and the delinquency flag is set to true and
         // the end date is not before the start date of the enrollment span
@@ -259,39 +265,38 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                 // and if the plan of the current and the prior enrollment spans are same
                 // and check if there is any gap in coverage between the prior and current enrollment spans
                 // and if the prior enrollment span is delinquent status
-                boolean localDateIsAfter = LocalDate.now().isBefore(currentEnrollmentSpan.getClaimPaidThroughDate());
+                boolean localDateIsBefore = LocalDate.now().isBefore(currentEnrollmentSpan.getClaimPaidThroughDate());
+                boolean localDateIsAfter = LocalDate.now().isAfter(currentEnrollmentSpan.getClaimPaidThroughDate());
                 boolean localDateIsEqual = LocalDate.now().isEqual(currentEnrollmentSpan.getClaimPaidThroughDate());
-                boolean samePlan = isSamePlan(currentEnrollmentSpan.getPlanId(), priorEnrollmentSpan.getPlanId());
-                boolean gapInCoverage = isThereGapInCoverage(currentEnrollmentSpan, priorEnrollmentSpan);
-                boolean priorSpanStatus = priorEnrollmentSpan.getStatusTypeCode().equals(EnrollmentSpanStatus.DELINQUENT.name());
-                boolean delinquent = localDateIsAfter || localDateIsEqual ||
+                boolean samePlan = priorEnrollmentSpan != null &&
+                        isSamePlan(currentEnrollmentSpan.getPlanId(), priorEnrollmentSpan.getPlanId());
+                boolean gapInCoverage = priorEnrollmentSpan != null &&
+                        isThereGapInCoverage(currentEnrollmentSpan, priorEnrollmentSpan);
+                boolean priorSpanStatus = priorEnrollmentSpan != null &&
+                        priorEnrollmentSpan.getStatusTypeCode().equals(EnrollmentSpanStatus.DELINQUENT.name());
+                boolean delinquent = localDateIsBefore || localDateIsEqual ||
                         (samePlan &&
                                 !gapInCoverage &&
                                 priorSpanStatus);
+
                 log.info("Delinquent:{}", delinquent);
                 if(delinquent){
-                    return true;
+                    return 1;
                 }else{
-                    return false;
+                    boolean suspended = localDateIsAfter || localDateIsEqual;
+                    return -1;
                 }
             }else{
                 // If the claim paid through date is null then
-                // Check if the plan of the current and the prior enrollment spans are same
-                // and check if there is any gap in coverage between the prior and current enrollment spans
-                // and if the prior enrollment span is delinquent status
-                if(((isSamePlan(currentEnrollmentSpan.getPlanId(), priorEnrollmentSpan.getPlanId()) &&
-                        isThereGapInCoverage(currentEnrollmentSpan, priorEnrollmentSpan)) &&
-                        priorEnrollmentSpan.getStatusTypeCode().equals(EnrollmentSpanStatus.DELINQUENT))){
-                    return true;
-                }else{
-                    return false;
-                }
+                // set the enrollment span status should be SUSPENDED
+                // At this point the delinquency flag is yes and the effectuation date is not null
+                return -1;
             }
         }else {
             // if effectuation date is not present or delinquency flag is not set to true or if the start date of the
             // enrollment span is greater than the end date of the enrollment span, then the enrollment span is not
             // delinquent
-            return false;
+            return 0;
         }
     }
 
