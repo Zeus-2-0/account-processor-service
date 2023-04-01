@@ -77,6 +77,7 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                 .stateTypeCode(transactionDto.getTradingPartnerDto().getStateTypeCode())
                 .marketplaceTypeCode(transactionDto.getTradingPartnerDto().getMarketplaceTypeCode())
                 .businessUnitTypeCode(transactionDto.getTradingPartnerDto().getBusinessTypeCode())
+                .coverageTypeCode(transactionDto.getTransactionDetail().getCoverageTypeCode())
                 .startDate(transactionDto.getTransactionDetail().getEffectiveDate())
                 // Determine and populate the end for the enrollment span
                 .endDate(determineEndDate(

@@ -74,7 +74,8 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
             premiumSpanRepository.save(premiumSpan);
             memberPremiumHelper.createMemberPremiums(transactionDto.getMembers(),
                     premiumSpan,
-                    account.getMembers());
+                    account.getMembers(),
+                    transactionDto.getTransactionDetail().getCoverageTypeCode());
         });
         // Associate the premium spans with the enrollment span
         enrollmentSpan.setPremiumSpans(premiumSpans);

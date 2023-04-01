@@ -23,10 +23,12 @@ public interface MemberPremiumHelper {
      * @param transactionMemberDtos
      * @param premiumSpan
      * @param members
+     * @param coverageTypeCode
      */
     void createMemberPremiums(List<TransactionMemberDto> transactionMemberDtos,
                                       PremiumSpan premiumSpan,
-                                      List<Member> members);
+                                      List<Member> members,
+                                      String coverageTypeCode);
 
     /**
      * Set the member premium span to send to MMS

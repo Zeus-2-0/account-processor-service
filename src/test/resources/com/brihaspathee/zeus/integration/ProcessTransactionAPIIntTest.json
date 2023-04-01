@@ -17,6 +17,7 @@
                 "transactionSourceTypeCode": "MARKETPLACE",
                 "transactionDetail": {
                   "transactionTypeCode": "ADD",
+                  "coverageTypeCode": "FAM",
                   "planId": "21663FL0130006",
                   "csrVariant": "01",
                   "groupPolicyId": "86947398",
@@ -530,6 +531,7 @@
                 "transactionSourceTypeCode": "MARKETPLACE",
                 "transactionDetail": {
                   "transactionTypeCode": "ADD",
+                  "coverageTypeCode": "FAM",
                   "planId": "21663FL0130006",
                   "csrVariant": "01",
                   "groupPolicyId": "86947398",
