@@ -36,7 +36,7 @@ public class WelcomeAPIImpl implements WelcomeAPI {
                 .message("Hello, Welcome to Zeus Account Processor Service")
                 .statusCode(200)
                 .status(HttpStatus.OK)
-                .timestamp(LocalDateTime.now())
+                //.timestamp(LocalDateTime.now())
                 .response(WelcomeDto.builder()
                         .welcomeMessage("Hello, I am glad that you are here!!! I am sure you will have a great time")
                         .build())

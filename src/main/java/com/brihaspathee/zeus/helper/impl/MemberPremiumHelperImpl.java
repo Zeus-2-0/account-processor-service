@@ -47,25 +47,38 @@ public class MemberPremiumHelperImpl implements MemberPremiumHelper {
      * @param transactionMemberDtos
      * @param premiumSpan
      * @param members
+     * @param coverageTypeCode
      */
     @Override
-    public void createMemberPremiums(List<TransactionMemberDto> transactionMemberDtos, PremiumSpan premiumSpan, List<Member> members) {
+    public void createMemberPremiums(List<TransactionMemberDto> transactionMemberDtos,
+                                     PremiumSpan premiumSpan,
+                                     List<Member> members,
+                                    String coverageTypeCode) {
         List<MemberPremium> memberPremiums = new ArrayList<>();
         members.stream().forEach(member -> {
-            TransactionMemberDto transactionMemberDto = transactionMemberDtos.stream().filter(memberDto -> {
-                return memberDto.getTransactionMemberCode().equals(member.getTransactionMemberCode());
-            }).findFirst().get();
-            MemberPremium memberPremium = MemberPremium.builder()
-                    .acctMemberSK(null)
-                    .acctMemPremSK(null)
-                    .acctMemberSK(null)
-                    .premiumSpan(premiumSpan)
-                    .member(member)
-                    .exchangeMemberId(getExchangeMemberId(transactionMemberDto))
-                    .individualRateAmount(transactionMemberDto.getMemberRate())
-                    .build();
-            memberPremium = memberPremiumRepository.save(memberPremium);
-            memberPremiums.add(memberPremium);
+            String relationshipType = member.getRelationShipTypeCode();
+            /**
+             * Coverage Type - Relationship Type - Action
+             * DEP           - HOH               - Don't Add
+             * DEP           - Not HOH           - Add
+             * Not DEP       - HOH               - Add
+             * Not DEP       - Not HOH           - Add
+             */
+            if(!(coverageTypeCode.equals("DEP") && relationshipType.equals("HOH"))){
+                TransactionMemberDto transactionMemberDto = transactionMemberDtos.stream().filter(memberDto -> {
+                    return memberDto.getTransactionMemberCode().equals(member.getTransactionMemberCode());
+                }).findFirst().get();
+                MemberPremium memberPremium = MemberPremium.builder()
+                        .acctMemberSK(null)
+                        .acctMemPremSK(null)
+                        .premiumSpan(premiumSpan)
+                        .member(member)
+                        .exchangeMemberId(getExchangeMemberId(transactionMemberDto))
+                        .individualRateAmount(transactionMemberDto.getMemberRate())
+                        .build();
+                memberPremium = memberPremiumRepository.save(memberPremium);
+                memberPremiums.add(memberPremium);
+            }
         });
         premiumSpan.setMemberPremiums(memberPremiums);
 

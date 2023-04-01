@@ -1,5 +1,6 @@
 package com.brihaspathee.zeus.web.resource.interfaces;
 
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.exception.ApiExceptionList;
 import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +39,7 @@ public interface AccountProcessorAPI {
     /**
      * Process the transaction
      * @param accountProcessingRequest
+     * @param sendToMMS
      * @return
      */
     @Operation(
@@ -62,9 +65,10 @@ public interface AccountProcessorAPI {
                             @Content(mediaType = "application/json",schema = @Schema(implementation = ApiExceptionList.class))
                     })
     })
-    @PostMapping(path = "process", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<ZeusApiResponse<AccountProcessingResponse>> processTransaction(
-            @RequestBody @Valid AccountProcessingRequest accountProcessingRequest) throws JsonProcessingException;
+    @PostMapping(path = "process/{sendToMMS}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ZeusApiResponse<AccountDto>> processTransaction(
+            @RequestBody @Valid AccountProcessingRequest accountProcessingRequest,
+            @PathVariable("sendToMMS") boolean sendToMMS) throws JsonProcessingException;
 
     @PostMapping(path =  "/span-status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ZeusApiResponse<String>> getEnrollmentSpanStatus(@RequestBody EnrollmentSpanStatusDto spanStatusDto);

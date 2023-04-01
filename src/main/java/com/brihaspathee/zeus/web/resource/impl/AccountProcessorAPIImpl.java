@@ -1,6 +1,7 @@
 package com.brihaspathee.zeus.web.resource.impl;
 
 import com.brihaspathee.zeus.constants.ApiResponseConstants;
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.service.interfaces.AccountService;
 import com.brihaspathee.zeus.service.interfaces.TransactionProcessor;
 import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
@@ -16,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created in Intellij IDEA
@@ -44,16 +47,26 @@ public class AccountProcessorAPIImpl implements AccountProcessorAPI {
     /**
      * Process the transaction
      * @param accountProcessingRequest
+     * @param sendToMMS
      * @return
      * @throws JsonProcessingException
      */
     @Override
-    public ResponseEntity<ZeusApiResponse<AccountProcessingResponse>> processTransaction(
-            AccountProcessingRequest accountProcessingRequest) throws JsonProcessingException {
-        log.info("Inside the account processor resource");
-        transactionProcessor.processTransaction(accountProcessingRequest.getTransactionDto(),
-                accountProcessingRequest.getAccountNumber());
-        return null;
+    public ResponseEntity<ZeusApiResponse<AccountDto>> processTransaction(
+            AccountProcessingRequest accountProcessingRequest,
+            boolean sendToMMS) throws JsonProcessingException {
+        log.info("Inside the account processor resource:{}", accountProcessingRequest.getTransactionDto());
+        AccountDto accountDto = transactionProcessor.processTransaction(accountProcessingRequest.getTransactionDto(),
+                accountProcessingRequest.getAccountNumber(), sendToMMS);
+        ZeusApiResponse<AccountDto> apiResponse = ZeusApiResponse.<AccountDto>builder()
+                .message(ApiResponseConstants.SUCCESS)
+                .developerMessage(ApiResponseConstants.SUCCESS_REASON)
+                .statusCode(200)
+                .status(HttpStatus.OK)
+                .response(accountDto)
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.ok(apiResponse);
     }
 
     /**

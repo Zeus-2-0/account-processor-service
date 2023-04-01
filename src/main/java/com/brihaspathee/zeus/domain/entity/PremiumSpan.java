@@ -92,19 +92,19 @@ public class PremiumSpan {
     /**
      * The APTC amount for the premium span
      */
-    @Column(name = "aptc_amt", nullable = false)
+    @Column(name = "aptc_amt", nullable = true)
     private BigDecimal aptcAmount;
 
     /**
      * The sum of other pay amt 1 and other pay amt 2 for the premium span
      */
-    @Column(name = "other_pay_amt", nullable = false)
+    @Column(name = "other_pay_amt", nullable = true)
     private BigDecimal otherPayAmount;
 
     /**
      * The CSR Amount for the premium span
      */
-    @Column(name = "csr_amt", nullable = false)
+    @Column(name = "csr_amt", nullable = true)
     private BigDecimal csrAmount;
 
     /**
@@ -126,4 +126,28 @@ public class PremiumSpan {
     @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
+
+    /**
+     * toString method
+     * @return
+     */
+    @Override
+    public String toString() {
+        return "PremiumSpan{" +
+                "premiumSpanSK=" + premiumSpanSK +
+                ", acctPremiumSpanSK=" + acctPremiumSpanSK +
+                ", premiumSpanCode='" + premiumSpanCode + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", csrVariant='" + csrVariant + '\'' +
+                ", totalPremAmount=" + totalPremAmount +
+                ", totalResponsibleAmount=" + totalResponsibleAmount +
+                ", aptcAmount=" + aptcAmount +
+                ", otherPayAmount=" + otherPayAmount +
+                ", csrAmount=" + csrAmount +
+                ", memberPremiums=" + memberPremiums +
+                ", createdDate=" + createdDate +
+                ", updatedDate=" + updatedDate +
+                '}';
+    }
 }

@@ -13,6 +13,61 @@ servers:
 - url: http://localhost:8098
   description: Development Server
 paths:
+  /api/v1/zeus/account-processor/span-status:
+    post:
+      tags:
+      - account-processor-api-impl
+      operationId: getEnrollmentSpanStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrollmentSpanStatusDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZeusApiResponseString'
+  /api/v1/zeus/account-processor/process/{sendToMMS}:
+    post:
+      tags:
+      - account
+      description: Process the transaction for the account
+      operationId: Process the transaction for the account
+      parameters:
+      - name: sendToMMS
+        in: path
+        required: true
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountProcessingRequest'
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiExceptionList'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiExceptionList'
+        "201":
+          description: Transaction successfully processed for the account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountProcessingResponse'
   /api/v1/zeus/account-processor/welcome:
     get:
       tags:
@@ -28,6 +83,1160 @@ paths:
                 $ref: '#/components/schemas/WelcomeDto'
 components:
   schemas:
+    EnrollmentSpanDto:
+      required:
+      - businessUnitTypeCode
+      - endDate
+      - groupPolicyId
+      - marketplaceTypeCode
+      - planId
+      - productTypeCode
+      - startDate
+      - stateTypeCode
+      type: object
+      properties:
+        enrollmentSpanSK:
+          type: string
+          description: Enrollment Span SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        accountSK:
+          type: string
+          description: Account SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        enrollmentSpanCode:
+          type: string
+          description: Enrollment Span Code - Unique id that is assigned to the enrollment
+            span in MMS
+          example: DFEV323455DE5S3
+        premiumSpans:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PremiumSpanDto'
+        stateTypeCode:
+          type: string
+          description: State associated with the enrollment span
+          example: FL
+        marketplaceTypeCode:
+          type: string
+          description: Marketplace associated with the enrollment span
+          example: FFM
+        businessUnitTypeCode:
+          type: string
+          description: Business unit associated with the enrollment span
+          example: FL_BU
+        startDate:
+          type: string
+          description: Start date associated with the enrollment span
+          format: date
+        endDate:
+          type: string
+          description: End date associated with the enrollment span
+          format: date
+        exchangeSubscriberId:
+          type: string
+          description: The exchange subscriber id associated with the enrollment span
+          example: "5236346"
+        effectuationDate:
+          type: string
+          description: Effectuation date associated with the enrollment span
+          format: date
+        planId:
+          type: string
+          description: Plan Id associated with the enrollment span
+          example: 52345FL424525235
+        groupPolicyId:
+          type: string
+          description: Group policy id associated with the enrollment span
+          example: "523452345"
+        productTypeCode:
+          type: string
+          description: Product type code of the plan
+          example: HMO
+        delinqInd:
+          type: boolean
+          description: Identifies if the enrollment span is delinquent or not
+          example: true
+        paidThroughDate:
+          type: string
+          description: Paid through date associated with the enrollment span
+          format: date
+        claimPaidThroughDate:
+          type: string
+          description: Claim Paid through date associated with the enrollment span
+          format: date
+        statusTypeCode:
+          type: string
+          description: Status of the enrollment span
+          example: ENROLLED
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the enrollment span
+          example: SDFG43456DFG23G
+        createdDate:
+          type: string
+          description: The date when the enrollment span was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the enrollment span was updated
+          format: date-time
+    EnrollmentSpanStatusDto:
+      type: object
+      properties:
+        currentEnrollmentSpan:
+          $ref: '#/components/schemas/EnrollmentSpanDto'
+        priorEnrollmentSpan:
+          $ref: '#/components/schemas/EnrollmentSpanDto'
+    MemberPremiumDto:
+      required:
+      - exchangeMemberId
+      - individualPremiumAmount
+      - memberCode
+      type: object
+      properties:
+        memberPremiumSK:
+          type: string
+          description: Member Premium Span SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberCode:
+          type: string
+          description: A unique member code
+          example: SDG3543SDFG23GF
+        memberSK:
+          type: string
+          description: Member SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        exchangeMemberId:
+          type: string
+          description: The exchange member id of the member
+          example: "2323452"
+        individualPremiumAmount:
+          type: number
+          description: The premium amount for the respective member
+          example: 150.0
+        createdDate:
+          type: string
+          description: The date when the premium span was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the premium span was updated
+          format: date-time
+    PremiumSpanDto:
+      required:
+      - csrVariant
+      - endDate
+      - memberPremiumSpans
+      - premiumSpanCode
+      - startDate
+      - totalPremiumAmount
+      - totalResponsibleAmount
+      - ztcn
+      type: object
+      properties:
+        premiumSpanSK:
+          type: string
+          description: Premium Span SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        enrollmentSpanSK:
+          type: string
+          description: Enrollment Span SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the premium span
+          example: SDFG43456DFG23G
+        premiumSpanCode:
+          type: string
+          description: Premium Span Code - Unique id that is assigned to the premium
+            span in MMS
+          example: DFEV323455DE5S3
+        memberPremiumSpans:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberPremiumDto'
+        startDate:
+          type: string
+          description: The start date of the premium span
+          format: date
+        endDate:
+          type: string
+          description: The end date of the premium span
+          format: date
+        csrVariant:
+          type: string
+          description: The CSR Variant of the premium span
+          example: "01"
+        totalPremiumAmount:
+          type: number
+          description: The total premium amount period of the premium span
+          example: 150.0
+        totalResponsibleAmount:
+          type: number
+          description: The total responsible amount period of the premium span
+          example: 150.0
+        aptcAmount:
+          type: number
+          description: The APTC amount period of the premium span
+          example: 150.0
+        otherPayAmount:
+          type: number
+          description: The other pay amount period of the premium span
+          example: 150.0
+        csrAmount:
+          type: number
+          description: The CSR amount period of the premium span
+          example: 150.0
+        createdDate:
+          type: string
+          description: The date when the premium span was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the premium span was updated
+          format: date-time
+    ZeusApiResponseString:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        statusCode:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum:
+          - 100 CONTINUE
+          - 101 SWITCHING_PROTOCOLS
+          - 102 PROCESSING
+          - 103 CHECKPOINT
+          - 200 OK
+          - 201 CREATED
+          - 202 ACCEPTED
+          - 203 NON_AUTHORITATIVE_INFORMATION
+          - 204 NO_CONTENT
+          - 205 RESET_CONTENT
+          - 206 PARTIAL_CONTENT
+          - 207 MULTI_STATUS
+          - 208 ALREADY_REPORTED
+          - 226 IM_USED
+          - 300 MULTIPLE_CHOICES
+          - 301 MOVED_PERMANENTLY
+          - 302 FOUND
+          - 302 MOVED_TEMPORARILY
+          - 303 SEE_OTHER
+          - 304 NOT_MODIFIED
+          - 305 USE_PROXY
+          - 307 TEMPORARY_REDIRECT
+          - 308 PERMANENT_REDIRECT
+          - 400 BAD_REQUEST
+          - 401 UNAUTHORIZED
+          - 402 PAYMENT_REQUIRED
+          - 403 FORBIDDEN
+          - 404 NOT_FOUND
+          - 405 METHOD_NOT_ALLOWED
+          - 406 NOT_ACCEPTABLE
+          - 407 PROXY_AUTHENTICATION_REQUIRED
+          - 408 REQUEST_TIMEOUT
+          - 409 CONFLICT
+          - 410 GONE
+          - 411 LENGTH_REQUIRED
+          - 412 PRECONDITION_FAILED
+          - 413 PAYLOAD_TOO_LARGE
+          - 413 REQUEST_ENTITY_TOO_LARGE
+          - 414 URI_TOO_LONG
+          - 414 REQUEST_URI_TOO_LONG
+          - 415 UNSUPPORTED_MEDIA_TYPE
+          - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+          - 417 EXPECTATION_FAILED
+          - 418 I_AM_A_TEAPOT
+          - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+          - 420 METHOD_FAILURE
+          - 421 DESTINATION_LOCKED
+          - 422 UNPROCESSABLE_ENTITY
+          - 423 LOCKED
+          - 424 FAILED_DEPENDENCY
+          - 425 TOO_EARLY
+          - 426 UPGRADE_REQUIRED
+          - 428 PRECONDITION_REQUIRED
+          - 429 TOO_MANY_REQUESTS
+          - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+          - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+          - 500 INTERNAL_SERVER_ERROR
+          - 501 NOT_IMPLEMENTED
+          - 502 BAD_GATEWAY
+          - 503 SERVICE_UNAVAILABLE
+          - 504 GATEWAY_TIMEOUT
+          - 505 HTTP_VERSION_NOT_SUPPORTED
+          - 506 VARIANT_ALSO_NEGOTIATES
+          - 507 INSUFFICIENT_STORAGE
+          - 508 LOOP_DETECTED
+          - 509 BANDWIDTH_LIMIT_EXCEEDED
+          - 510 NOT_EXTENDED
+          - 511 NETWORK_AUTHENTICATION_REQUIRED
+        reason:
+          type: string
+        message:
+          type: string
+        developerMessage:
+          type: string
+        response:
+          type: string
+    AccountProcessingRequest:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+        transactionDto:
+          $ref: '#/components/schemas/TransactionDto'
+    TransactionAlternateContactDto:
+      required:
+      - alternateContactTypeCode
+      - firstName
+      - identifierTypeCode
+      - lastName
+      - member
+      - zipCode
+      type: object
+      properties:
+        alternateContactSK:
+          type: string
+          description: Alternate Contact SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        member:
+          $ref: '#/components/schemas/TransactionMemberDto'
+        alternateContactTypeCode:
+          type: string
+          description: The type code of the alternate contact
+          example: CUSTPARENT
+        firstName:
+          type: string
+          description: The first name of the alternate contact
+          example: John
+        middleName:
+          type: string
+          description: The middle name of the alternate contact
+          example: Mosley
+        lastName:
+          type: string
+          description: The last name of the alternate contact
+          example: Doe
+        identifierTypeCode:
+          type: string
+          description: The identifier type of the identifier
+          example: SSN
+        identifierValue:
+          type: string
+          description: The identifier received for the alternate contact
+          example: 999-99-9999
+        phoneTypeCode:
+          type: string
+          description: The type of phone received for the alternate contact
+          example: CELL
+        phoneNumber:
+          type: string
+          description: The phone number received for the alternate contact
+          example: 813-357-9150
+        email:
+          type: string
+          description: The email received for the alternate contact
+          example: vbalaji215@gmail.com
+        addressLine1:
+          type: string
+          description: The address line 1 of the address received for the alternate
+            contact
+          example: 123 Main Street
+        addressLine2:
+          type: string
+          description: The address line 2 of the address received for the alternate
+            contact
+          example: Apt 301
+        city:
+          type: string
+          description: The city of the address received for the alternate contact
+          example: Tampa
+        stateTypeCode:
+          type: string
+          description: The state of the address received for the alternate contact
+          example: FL
+        zipCode:
+          type: string
+          description: The zip code received in the address
+          example: "33556"
+        receivedDate:
+          type: string
+          description: The date when the alternate contact was received
+          format: date-time
+          readOnly: true
+        createdDate:
+          type: string
+          description: The date when the transaction was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the transaction was updated
+          format: date-time
+    TransactionAttributeDto:
+      required:
+      - transactionAttributeTypeCode
+      - transactionAttributeValue
+      - transactionDto
+      type: object
+      properties:
+        transactionAttributeSK:
+          type: string
+          description: Transaction attribute SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        transactionDto:
+          $ref: '#/components/schemas/TransactionDto'
+        transactionAttributeTypeCode:
+          type: string
+          description: The transaction attribute type code
+          example: AMRC
+        transactionAttributeValue:
+          type: string
+          description: The transaction attribute value
+          example: FINANCIAL CHANGE
+        createdDate:
+          type: string
+          description: The date when the transaction was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the transaction was updated
+          format: date-time
+    TransactionBrokerDto:
+      required:
+      - brokerId
+      - brokerName
+      - transactionDto
+      type: object
+      properties:
+        transactionBrokerSK:
+          type: string
+          description: Broker SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        transactionDto:
+          $ref: '#/components/schemas/TransactionDto'
+        brokerName:
+          type: string
+          description: The name of the broker
+          example: John
+        brokerId:
+          type: string
+          description: The id of the broker
+          example: 786-32-6424
+        agencyName:
+          type: string
+          description: The name of the agency
+          example: Broker Inc.
+        agencyId:
+          type: string
+          description: The id of the agency
+          example: 6234-34-545
+        accountNumber1:
+          type: string
+          description: Account number 1 of the broker
+          example: 34524553-01
+        accountNumber2:
+          type: string
+          description: Account number 2 of the broker
+          example: 34524553-02
+        receivedDate:
+          type: string
+          description: The date when the broker was received
+          format: date-time
+          readOnly: true
+        createdDate:
+          type: string
+          description: The date when the transaction was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the transaction was updated
+          format: date-time
+    TransactionDetailDto:
+      required:
+      - csrVariant
+      - effectiveDate
+      - endDate
+      - groupPolicyId
+      - maintenanceEffectiveDate
+      - planId
+      - transaction
+      - transactionTypeCode
+      type: object
+      properties:
+        transactionDetailSK:
+          type: string
+          description: Transaction Detail SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        transaction:
+          $ref: '#/components/schemas/TransactionDto'
+        transactionTypeCode:
+          type: string
+          description: The type of transaction
+          example: ADD
+        planId:
+          type: string
+          description: The plan id received in the transaction
+          example: 67138CA0234501
+        csrVariant:
+          type: string
+          description: The csr variant received in the transaction
+          example: "03"
+        groupPolicyId:
+          type: string
+          description: The group policy id received in the transaction
+          example: "72352456"
+        effectiveDate:
+          type: string
+          description: The effective date received in the transaction
+          format: date
+        endDate:
+          type: string
+          description: The end date received in the transaction
+          format: date
+        maintenanceEffectiveDate:
+          type: string
+          description: The maintenance effective date received in the transaction
+          format: date
+        createdDate:
+          type: string
+          description: The date when the record was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the record was updated
+          format: date-time
+    TransactionDto:
+      required:
+      - members
+      - payer
+      - sponsor
+      - tradingPartnerDto
+      - transactionDetail
+      - transactionSourceTypeCode
+      - ztcn
+      type: object
+      properties:
+        transactionSK:
+          type: string
+          description: Transaction SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        ztcn:
+          type: string
+          description: The zeus transaction control number
+          readOnly: true
+          example: DFEV323455DE5S3
+        zfcn:
+          type: string
+          description: The zeus file control number
+          readOnly: true
+          example: DFEV323455DE5S3
+        transactionReceivedDate:
+          type: string
+          description: The date when the transaction was received
+          format: date-time
+          readOnly: true
+        transactionSourceTypeCode:
+          type: string
+          description: The source of the transaction
+          readOnly: true
+          example: MARKETPLACE
+        transactionDetail:
+          $ref: '#/components/schemas/TransactionDetailDto'
+        transactionStatus:
+          $ref: '#/components/schemas/TransactionStatusDto'
+        transactionAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionAttributeDto'
+        transactionRates:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionRateDto'
+        tradingPartnerDto:
+          $ref: '#/components/schemas/TransactionTradingPartnerDto'
+        sponsor:
+          $ref: '#/components/schemas/TransactionSponsorDto'
+        broker:
+          $ref: '#/components/schemas/TransactionBrokerDto'
+        payer:
+          $ref: '#/components/schemas/TransactionPayerDto'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionMemberDto'
+        createdDate:
+          type: string
+          description: The date when the transaction was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the transaction was updated
+          format: date-time
+    TransactionMemberAddressDto:
+      required:
+      - addressLine1
+      - addressTypeCode
+      - city
+      - member
+      - stateTypeCode
+      - zipCode
+      type: object
+      properties:
+        memberAddressSK:
+          type: string
+          description: Member Address SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        member:
+          $ref: '#/components/schemas/TransactionMemberDto'
+        addressTypeCode:
+          type: string
+          description: The type of address that was received for the member
+          example: RES
+        addressLine1:
+          type: string
+          description: The address line 1 of the address
+          example: 123 Main Street
+        addressLine2:
+          type: string
+          description: The address line 2 of the address
+          example: Apt 301
+        city:
+          type: string
+          description: The city of the address
+          example: Tampa
+        stateTypeCode:
+          type: string
+          description: The state received in the address
+          example: FL
+        zipCode:
+          type: string
+          description: The zip code received in the address
+          example: "33556"
+        countyCode:
+          type: string
+          description: The county code received in the address
+          example: "37017"
+        receivedDate:
+          type: string
+          description: The date when the member address was received
+          format: date-time
+          readOnly: true
+        createdDate:
+          type: string
+          description: The date when the record was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the record was updated
+          format: date-time
+    TransactionMemberDto:
+      required:
+      - firstName
+      - genderTypeCode
+      - lastName
+      - reasonTypeCode
+      - relationshipTypeCode
+      - tobaccoIndicator
+      - transaction
+      - transactionMemberCode
+      - transactionTypeCode
+      type: object
+      properties:
+        memberSK:
+          type: string
+          description: Member SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        transaction:
+          $ref: '#/components/schemas/TransactionDto'
+        transactionMemberCode:
+          type: string
+          description: Unique member code assigned for the member during transaction
+            processing
+          readOnly: true
+          example: DR323FS55WGS53D
+        transactionTypeCode:
+          type: string
+          description: Transaction type received for the member in the transaction
+          readOnly: true
+          example: ADD
+        effectiveDate:
+          type: string
+          description: Effective date received for the member in the transaction
+          format: date
+        endDate:
+          type: string
+          description: End date received for the member in the transaction
+          format: date
+        relationshipTypeCode:
+          type: string
+          description: The relationship of the member with the head of the household
+          example: HOH
+        reasonTypeCode:
+          type: string
+          description: The maintenance reason type code received for the member in
+            the transaction
+          example: BIRTH
+        firstName:
+          type: string
+          description: The first name of the member
+          example: John
+        middleName:
+          type: string
+          description: The middle name of the member
+          example: Mosley
+        lastName:
+          type: string
+          description: The last name of the member
+          example: Doe
+        tobaccoIndicator:
+          type: string
+          description: Identifies if the member uses tobacco
+          example: UNKNOWN
+        dateOfBirth:
+          type: string
+          description: The date of birth of the member
+          format: date
+        genderTypeCode:
+          type: string
+          description: The gender of the member
+          example: MALE
+        memberRate:
+          type: number
+          description: The rate received for the member in the transaction
+          example: 115.35
+        productCatalogRate:
+          type: number
+          description: The product catalog rate received for the member
+          example: 115.35
+        memberPhones:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionMemberPhoneDto'
+        memberAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionMemberAddressDto'
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionMemberIdentifierDto'
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionMemberEmailDto'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionMemberLanguageDto'
+        alternateContacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionAlternateContactDto'
+        createdDate:
+          type: string
+          description: The date when the transaction was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the transaction was updated
+          format: date-time
+    TransactionMemberEmailDto:
+      required:
+      - email
+      - member
+      type: object
+      properties:
+        memberEmailSK:
+          type: string
+          description: Member Email SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        member:
+          $ref: '#/components/schemas/TransactionMemberDto'
+        email:
+          type: string
+          description: The email that was received for the member
+          example: vbalaji215@gmail.com
+        receivedDate:
+          type: string
+          description: The date when the member email was received
+          format: date-time
+          readOnly: true
+        createdDate:
+          type: string
+          description: The date when the record was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the record was updated
+          format: date-time
+    TransactionMemberIdentifierDto:
+      required:
+      - identifierTypeCode
+      - identifierValue
+      - member
+      type: object
+      properties:
+        memberIdentifierSK:
+          type: string
+          description: Member Identifier SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        member:
+          $ref: '#/components/schemas/TransactionMemberDto'
+        identifierTypeCode:
+          type: string
+          description: The type of identifier that was received for the member
+          example: SSN
+        identifierValue:
+          type: string
+          description: The identifier that was received for the member
+          example: 999-99-9999
+        receivedDate:
+          type: string
+          description: The date when the member identifier was received
+          format: date-time
+          readOnly: true
+        createdDate:
+          type: string
+          description: The date when the record was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the record was updated
+          format: date-time
+    TransactionMemberLanguageDto:
+      required:
+      - languageCode
+      - languageTypeCode
+      - member
+      type: object
+      properties:
+        memberLanguageSK:
+          type: string
+          description: Member Language SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        member:
+          $ref: '#/components/schemas/TransactionMemberDto'
+        languageTypeCode:
+          type: string
+          description: The type of language that was received for the member
+          example: WRITTEN
+        languageCode:
+          type: string
+          description: The language that was received for the member
+          example: ENG
+        receivedDate:
+          type: string
+          description: The date when the member language was received
+          format: date-time
+          readOnly: true
+        createdDate:
+          type: string
+          description: The date when the record was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the record was updated
+          format: date-time
+    TransactionMemberPhoneDto:
+      required:
+      - member
+      - phoneNumber
+      - phoneTypeCode
+      type: object
+      properties:
+        memberPhoneSK:
+          type: string
+          description: Member Phone SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        member:
+          $ref: '#/components/schemas/TransactionMemberDto'
+        phoneTypeCode:
+          type: string
+          description: The type of phone that was received for the member
+          example: CELL
+        phoneNumber:
+          type: string
+          description: The phone number that was received for the member
+          example: 813-357-9150
+        receivedDate:
+          type: string
+          description: The date when the member phone was received
+          format: date-time
+          readOnly: true
+        createdDate:
+          type: string
+          description: The date when the record was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the record was updated
+          format: date-time
+    TransactionPayerDto:
+      required:
+      - payerId
+      - payerName
+      - transaction
+      type: object
+      properties:
+        payerSK:
+          type: string
+          description: Payer SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        transaction:
+          $ref: '#/components/schemas/TransactionDto'
+        payerName:
+          type: string
+          description: The payer name received in the transaction
+          example: Zeus Health plan
+        payerId:
+          type: string
+          description: The payer id received in the transaction
+          example: "65236472"
+        receivedDate:
+          type: string
+          description: The date when the payer was received
+          format: date-time
+          readOnly: true
+        createdDate:
+          type: string
+          description: The date when the payer was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the payer was updated
+          format: date-time
+    TransactionRateDto:
+      required:
+      - csrVariant
+      - rateStartDate
+      - rateTypeCode
+      - transaction
+      - transactionRate
+      type: object
+      properties:
+        transactionRateSK:
+          type: string
+          description: Transaction Rate SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        transaction:
+          $ref: '#/components/schemas/TransactionDto'
+        rateTypeCode:
+          type: string
+          description: The rate type
+          example: PREAMTOT
+        transactionRate:
+          type: number
+          description: The value that was received for the rate type
+          example: 155.65
+        csrVariant:
+          type: string
+          description: The CSR Variant that is associated with the rate
+          example: "01"
+        rateStartDate:
+          type: string
+          description: The start date of the rate
+          format: date
+        rateEndDate:
+          type: string
+          description: The end date of the rate
+          format: date
+        createdDate:
+          type: string
+          description: The date when the record was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the record was updated
+          format: date-time
+    TransactionSponsorDto:
+      required:
+      - sponsorId
+      - sponsorName
+      - transaction
+      type: object
+      properties:
+        sponsorSK:
+          type: string
+          description: Sponsor SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        transaction:
+          $ref: '#/components/schemas/TransactionDto'
+        sponsorName:
+          type: string
+          description: The sponsor name received in the transaction
+          example: John Doe
+        sponsorId:
+          type: string
+          description: The sponsor id received in the transaction
+          example: "65236472"
+        receivedDate:
+          type: string
+          description: The date when the sponsor was received
+          format: date-time
+          readOnly: true
+        createdDate:
+          type: string
+          description: The date when the sponsor was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the sponsor was updated
+          format: date-time
+    TransactionStatusDto:
+      required:
+      - transaction
+      type: object
+      properties:
+        transactionStatusSK:
+          type: string
+          description: Transaction Status SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        transaction:
+          $ref: '#/components/schemas/TransactionDto'
+        statusSequence:
+          type: integer
+          description: Sequence of the status
+          format: int32
+          readOnly: true
+          example: 1
+        transactionStatusTypeCode:
+          type: string
+          description: Status of the transaction
+          readOnly: true
+          example: PROCESSED
+        processingStatusTypeCode:
+          type: string
+          description: Processing status of the transaction
+          readOnly: true
+          example: VALIDATION
+        createdDate:
+          type: string
+          description: The date when the record was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the record was updated
+          format: date-time
+    TransactionTradingPartnerDto:
+      required:
+      - businessTypeCode
+      - lineOfBusinessTypeCode
+      - marketplaceTypeCode
+      - stateTypeCode
+      - tradingPartnerId
+      - transaction
+      type: object
+      properties:
+        tradingPartnerSK:
+          type: string
+          description: Trading Partner SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        transaction:
+          $ref: '#/components/schemas/TransactionDto'
+        tradingPartnerId:
+          type: string
+          description: The trading partner id associated with the transaction
+          example: "99130"
+        lineOfBusinessTypeCode:
+          type: string
+          description: The line of business type code associated with the transaction
+          example: HIX
+        businessTypeCode:
+          type: string
+          description: The business type code associated with the transaction
+          example: MP_FL
+        marketplaceTypeCode:
+          type: string
+          description: The marketplace type code associated with the transaction
+          example: FFM
+        stateTypeCode:
+          type: string
+          description: The state type code associated with the transaction
+          example: FL
+        createdDate:
+          type: string
+          description: The date when the record was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the record was updated
+          format: date-time
+    ApiException:
+      type: object
+      properties:
+        exceptionCode:
+          type: string
+        exceptionMessage:
+          type: string
+    ApiExceptionList:
+      type: object
+      properties:
+        exceptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiException'
+    AccountProcessingResponse:
+      type: object
+      properties:
+        responseId:
+          type: string
+        requestPayloadId:
+          type: string
+        accountNumber:
+          type: string
+        ztcn:
+          type: string
     WelcomeDto:
       type: object
       properties:

@@ -78,6 +78,12 @@ public class EnrollmentSpan {
     private String businessUnitTypeCode;
 
     /**
+     * Identifies the coverage type of the enrollment span
+     */
+    @Column(name = "coverage_type_code", length = 50, columnDefinition = "varchar", nullable = false)
+    private String coverageTypeCode;
+
+    /**
      * The start date of the enrollment span
      */
     @Column(name = "start_date", nullable = false)

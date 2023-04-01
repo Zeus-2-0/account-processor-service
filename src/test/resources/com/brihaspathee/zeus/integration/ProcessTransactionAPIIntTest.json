@@ -1,0 +1,1158 @@
+{
+  "testClassName": "ProcessTransactionAPIIntTest",
+  "testMethods": [
+    {
+      "testMethodName": "testProcessTransaction",
+      "testData": [
+        {
+          "testData": {
+            "exceptionExpected": false,
+            "httpStatusCode": "200",
+            "accountProcessingRequest": {
+              "accountNumber": null,
+              "transactionDto": {
+                "ztcn": "HW0VQ1NBEUJAID9",
+                "zfcn": "VRK245K5ZI7NWPF",
+                "transactionReceivedDate": "2022-11-07T06:27:25.470Z",
+                "transactionSourceTypeCode": "MARKETPLACE",
+                "transactionDetail": {
+                  "transactionTypeCode": "ADD",
+                  "coverageTypeCode": "FAM",
+                  "planId": "21663FL0130006",
+                  "csrVariant": "01",
+                  "groupPolicyId": "86947398",
+                  "effectiveDate": "2020-03-01"
+                },
+                "transactionAttributes": [
+                  {
+                    "transactionAttributeTypeCode": "RATINGAREA",
+                    "transactionAttributeValue": "R-FL043"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "SRCEXCHID",
+                    "transactionAttributeValue": "FL0"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "REQSBTTMS",
+                    "transactionAttributeValue": "20200127210516"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "AMRC",
+                    "transactionAttributeValue": "CIC"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "APPID",
+                    "transactionAttributeValue": "3340286919-1"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "SEPREASON",
+                    "transactionAttributeValue": "43"
+                  }
+                ],
+                "transactionRates": [
+                  {
+                    "rateTypeCode": "PREAMTTOT",
+                    "transactionRate": 1176.55,
+                    "rateStartDate": "2020-03-01",
+                    "csrVariant": "01"
+                  },
+                  {
+                    "rateTypeCode": "TOTRESAMT",
+                    "transactionRate": 0.0,
+                    "rateStartDate": "2020-03-01",
+                    "csrVariant": "01"
+                  },
+                  {
+                    "rateTypeCode": "APTCAMT",
+                    "transactionRate": 1176.55,
+                    "rateStartDate": "2020-03-01",
+                    "csrVariant": "01"
+                  }
+                ],
+                "tradingPartnerDto": {
+                  "tradingPartnerId": "21663",
+                  "lineOfBusinessTypeCode": "HIX",
+                  "businessTypeCode": "HIX",
+                  "marketplaceTypeCode": "FFM",
+                  "stateTypeCode": "FL"
+                },
+                "sponsor": {
+                  "sponsorName": "Peter A Peterson",
+                  "sponsorId": "166492101",
+                  "receivedDate": "2022-11-07T06:27:25.484Z"
+                },
+                "broker": {
+                  "brokerName": "Horacio  Sequeira",
+                  "brokerId": "17845067",
+                  "receivedDate": "2022-11-07T06:27:25.484Z"
+                },
+                "payer": {
+                  "payerName": "Ambetter from Sunshine Health",
+                  "payerId": "060641618",
+                  "receivedDate": "2022-11-07T06:27:25.484Z"
+                },
+                "members": [
+                  {
+                    "transactionMemberCode": "JHSL0KLIPE7YO9Q",
+                    "transactionTypeCode": "ADD",
+                    "effectiveDate": "2020-03-01",
+                    "relationshipTypeCode": "HOH",
+                    "reasonTypeCode": "MBS",
+                    "firstName": "Peter",
+                    "middleName": "A",
+                    "lastName": "Peterson",
+                    "tobaccoIndicator": "NONE",
+                    "dateOfBirth": "1962-08-27",
+                    "genderTypeCode": "MALE",
+                    "memberRate": 640.44,
+                    "memberPhones": [
+                      {
+                        "phoneTypeCode": "HOME",
+                        "phoneNumber": "7864223101",
+                        "receivedDate": "2022-11-07T06:27:25.562Z"
+                      }
+                    ],
+                    "memberAddresses": [
+                      {
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "14343 SW 258th Ln",
+                        "addressLine2": "Apt 2307",
+                        "city": "Homestead",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33032",
+                        "countyCode": "12086",
+                        "receivedDate": "2022-11-07T06:27:25.553Z"
+                      }
+                    ],
+                    "identifiers": [
+                      {
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "0008700676",
+                        "receivedDate": "2022-11-07T06:27:25.534Z"
+                      },
+                      {
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "0008700676",
+                        "receivedDate": "2022-11-07T06:27:25.543Z"
+                      },
+                      {
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "166492101",
+                        "receivedDate": "2022-11-07T06:27:25.553Z"
+                      }
+                    ],
+                    "emails": [
+                      {
+                        "email": "ppeterpiperbogus@bogus.com",
+                        "receivedDate": "2022-11-07T06:27:25.562Z"
+                      }
+                    ],
+                    "languages": [
+                      {
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "spa",
+                        "receivedDate": "2022-11-07T06:27:25.576Z"
+                      },
+                      {
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "spa",
+                        "receivedDate": "2022-11-07T06:27:25.584Z"
+                      }
+                    ]
+                  },
+                  {
+                    "transactionMemberCode": "P0Z6C3JLJ94KLHB",
+                    "transactionTypeCode": "ADD",
+                    "effectiveDate": "2020-03-01",
+                    "relationshipTypeCode": "SPOUSE",
+                    "reasonTypeCode": "MBS",
+                    "firstName": "Rachel",
+                    "middleName": "",
+                    "lastName": "Peterson",
+                    "tobaccoIndicator": "NONE",
+                    "dateOfBirth": "1966-11-21",
+                    "genderTypeCode": "FEMALE",
+                    "memberRate": 536.11,
+                    "memberAddresses": [
+                      {
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "14343 SW 258th Ln",
+                        "addressLine2": "Apt 2307",
+                        "city": "Homestead",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33032",
+                        "countyCode": "12086",
+                        "receivedDate": "2022-11-07T06:27:25.650Z"
+                      }
+                    ],
+                    "identifiers": [
+                      {
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "0008700676",
+                        "receivedDate": "2022-11-07T06:27:25.635Z"
+                      },
+                      {
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "0009185554",
+                        "receivedDate": "2022-11-07T06:27:25.643Z"
+                      },
+                      {
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "422850102",
+                        "receivedDate": "2022-11-07T06:27:25.650Z"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "expectedAccountDto": {
+              "accountSK": null,
+              "accountNumber": "BJGIM6USNPQ2CR4",
+              "lineOfBusinessTypeCode": "HIX",
+              "enrollmentSpans": [
+                {
+                  "enrollmentSpanSK": null,
+                  "accountSK": null,
+                  "enrollmentSpanCode": "HJLETNJ04LU1NSZ",
+                  "premiumSpans": [
+                    {
+                      "premiumSpanSK": null,
+                      "enrollmentSpanSK": null,
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "premiumSpanCode": "VKI8E5CLJDUB959",
+                      "memberPremiumSpans": [
+                        {
+                          "memberPremiumSK": null,
+                          "memberCode": "HWYJ2NQZ4NWJW20",
+                          "memberSK": null,
+                          "exchangeMemberId": "0008700676",
+                          "individualPremiumAmount": 640.44,
+                          "createdDate": "2023-03-21 13:37:40",
+                          "updatedDate": "2023-03-21 13:37:40"
+                        },
+                        {
+                          "memberPremiumSK": null,
+                          "memberCode": "J3DJL1RYOZJH6R1",
+                          "memberSK": null,
+                          "exchangeMemberId": "0009185554",
+                          "individualPremiumAmount": 536.11,
+                          "createdDate": "2023-03-21 13:37:40",
+                          "updatedDate": "2023-03-21 13:37:40"
+                        }
+                      ],
+                      "startDate": "2020-03-01",
+                      "endDate": "2020-12-31",
+                      "csrVariant": "01",
+                      "totalPremiumAmount": 1176.55,
+                      "totalResponsibleAmount": 0.0,
+                      "aptcAmount": 1176.55,
+                      "otherPayAmount": null,
+                      "csrAmount": null,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40"
+                    }
+                  ],
+                  "stateTypeCode": "FL",
+                  "marketplaceTypeCode": "FFM",
+                  "businessUnitTypeCode": "HIX",
+                  "startDate": "2020-03-01",
+                  "endDate": "2020-12-31",
+                  "exchangeSubscriberId": "0008700676",
+                  "effectuationDate": "2023-03-21",
+                  "planId": "21663FL0130006",
+                  "groupPolicyId": "86947398",
+                  "productTypeCode": "HMO",
+                  "delinqInd": false,
+                  "paidThroughDate": null,
+                  "claimPaidThroughDate": null,
+                  "statusTypeCode": "ENROLLED",
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "createdDate": "2023-03-21 13:37:40",
+                  "updatedDate": "2023-03-21 13:37:40"
+                }
+              ],
+              "members": [
+                {
+                  "memberSK": null,
+                  "accountSK": null,
+                  "memberCode": "HWYJ2NQZ4NWJW20",
+                  "firstName": "Peter",
+                  "middleName": "A",
+                  "lastName": "Peterson",
+                  "relationshipTypeCode": "HOH",
+                  "dateOfBirth": "1962-08-27",
+                  "genderTypeCode": "MALE",
+                  "height": 0.0,
+                  "weight": 0.0,
+                  "memberAttributes": null,
+                  "memberAddresses": [
+                    {
+                      "memberAddressSK": null,
+                      "memberSK": null,
+                      "memberAddressCode": "M036OHNZKZU1HD0",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "14343 SW 258th Ln",
+                      "addressLine2": "Apt 2307",
+                      "city": "Homestead",
+                      "stateTypeCode": "FL",
+                      "zipCode": "33032",
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40"
+                    }
+                  ],
+                  "memberIdentifiers": [
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "EMIZTL4ZI5QANY3",
+                      "identifierTypeCode": "EXCHMEMID",
+                      "identifierValue": "0008700676",
+                      "isActive": true,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40",
+                      "active": true
+                    },
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "P2UMZJO20EEHVMI",
+                      "identifierTypeCode": "EXCHSUBID",
+                      "identifierValue": "0008700676",
+                      "isActive": true,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40",
+                      "active": true
+                    },
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "7PKW62JVYTOLI9L",
+                      "identifierTypeCode": "SSN",
+                      "identifierValue": "166492101",
+                      "isActive": true,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40",
+                      "active": true
+                    }
+                  ],
+                  "memberLanguages": [
+                    {
+                      "memberLanguageSK": null,
+                      "memberSK": null,
+                      "memberLanguageCode": "S7PMO04WVUJ18G3",
+                      "languageTypeCode": "WRITING",
+                      "languageCode": "spa",
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40"
+                    },
+                    {
+                      "memberLanguageSK": null,
+                      "memberSK": null,
+                      "memberLanguageCode": "1U7R1SGRYWAFJBL",
+                      "languageTypeCode": "SPEAKING",
+                      "languageCode": "spa",
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40"
+                    }
+                  ],
+                  "memberPhones": [
+                    {
+                      "memberPhoneSK": null,
+                      "memberSK": null,
+                      "memberPhoneCode": "758VHEGLP811JNA",
+                      "phoneTypeCode": "HOME",
+                      "phoneNumber": "7864223101",
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40"
+                    }
+                  ],
+                  "memberEmails": [
+                    {
+                      "memberEmailSK": null,
+                      "memberSK": null,
+                      "memberEmailCode": "E4TU811OUE5U4MD",
+                      "emailTypeCode": "PERSONAL",
+                      "email": "ppeterpiperbogus@bogus.com",
+                      "isPrimary": true,
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40",
+                      "primary": true
+                    }
+                  ],
+                  "alternateContacts": null,
+                  "memberPremiums": null,
+                  "createdDate": "2023-03-21 13:37:40",
+                  "updatedDate": "2023-03-21 13:37:40"
+                },
+                {
+                  "memberSK": null,
+                  "accountSK": null,
+                  "memberCode": "J3DJL1RYOZJH6R1",
+                  "firstName": "Rachel",
+                  "middleName": "",
+                  "lastName": "Peterson",
+                  "relationshipTypeCode": "SPOUSE",
+                  "dateOfBirth": "1966-11-21",
+                  "genderTypeCode": "FEMALE",
+                  "height": 0.0,
+                  "weight": 0.0,
+                  "memberAttributes": null,
+                  "memberAddresses": [
+                    {
+                      "memberAddressSK": null,
+                      "memberSK": null,
+                      "memberAddressCode": "JEAF27IWX93OAI5",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "14343 SW 258th Ln",
+                      "addressLine2": "Apt 2307",
+                      "city": "Homestead",
+                      "stateTypeCode": "FL",
+                      "zipCode": "33032",
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40"
+                    }
+                  ],
+                  "memberIdentifiers": [
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "QNLE3245K2AMZZY",
+                      "identifierTypeCode": "EXCHSUBID",
+                      "identifierValue": "0008700676",
+                      "isActive": true,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40",
+                      "active": true
+                    },
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "C7MISP5O3URA1HS",
+                      "identifierTypeCode": "SSN",
+                      "identifierValue": "422850102",
+                      "isActive": true,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40",
+                      "active": true
+                    },
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "544S4ZVXQ1MQ9KS",
+                      "identifierTypeCode": "EXCHMEMID",
+                      "identifierValue": "0009185554",
+                      "isActive": true,
+                      "createdDate": "2023-03-21 13:37:40",
+                      "updatedDate": "2023-03-21 13:37:40",
+                      "active": true
+                    }
+                  ],
+                  "memberLanguages": null,
+                  "memberPhones": null,
+                  "memberEmails": null,
+                  "alternateContacts": null,
+                  "memberPremiums": null,
+                  "createdDate": "2023-03-21 13:37:40",
+                  "updatedDate": "2023-03-21 13:37:40"
+                }
+              ],
+              "brokers": [
+                {
+                  "brokerSK": null,
+                  "accountSK": null,
+                  "brokerCode": "12V948P4ULYVQOI",
+                  "brokerName": "Horacio  Sequeira",
+                  "brokerId": "17845067",
+                  "agencyName": null,
+                  "agencyId": null,
+                  "accountNumber1": null,
+                  "accountNumber2": null,
+                  "startDate": "2022-11-07",
+                  "endDate": null,
+                  "createdDate": "2023-03-21 13:37:40",
+                  "updatedDate": "2023-03-21 13:37:40"
+                }
+              ],
+              "sponsors": [
+                {
+                  "sponsorSK": null,
+                  "sponsorCode": "L3UPURFII98KVYN",
+                  "accountSK": null,
+                  "sponsorId": "166492101",
+                  "sponsorName": "Peter A Peterson",
+                  "startDate": "2022-11-07",
+                  "endDate": null,
+                  "createdDate": "2023-03-21 13:37:40",
+                  "updatedDate": "2023-03-21 13:37:40"
+                }
+              ],
+              "payers": [
+                {
+                  "payerSK": null,
+                  "accountSK": null,
+                  "payerCode": "PBHUDWW3698LYNH",
+                  "payerName": "Ambetter from Sunshine Health",
+                  "payerId": "060641618",
+                  "startDate": "2022-11-07",
+                  "endDate": null,
+                  "createdDate": "2023-03-21 13:37:40",
+                  "updatedDate": "2023-03-21 13:37:40"
+                }
+              ],
+              "accountAttributes": null,
+              "createdDate": "2023-03-21 13:37:40",
+              "updatedDate": "2023-03-21 13:37:40"
+            }
+          }
+        },
+        {
+          "testData": {
+            "exceptionExpected": false,
+            "httpStatusCode": "200",
+            "accountProcessingRequest": {
+              "accountNumber": null,
+              "transactionDto": {
+                "ztcn": "HW0VQ1NBEUJAID9",
+                "zfcn": "VRK245K5ZI7NWPF",
+                "transactionReceivedDate": "2022-11-07T06:27:25.470Z",
+                "transactionSourceTypeCode": "MARKETPLACE",
+                "transactionDetail": {
+                  "transactionTypeCode": "ADD",
+                  "coverageTypeCode": "FAM",
+                  "planId": "21663FL0130006",
+                  "csrVariant": "01",
+                  "groupPolicyId": "86947398",
+                  "effectiveDate": "2020-03-01"
+                },
+                "transactionAttributes": [
+                  {
+                    "transactionAttributeTypeCode": "RATINGAREA",
+                    "transactionAttributeValue": "R-FL043"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "SRCEXCHID",
+                    "transactionAttributeValue": "FL0"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "REQSBTTMS",
+                    "transactionAttributeValue": "20200127210516"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "AMRC",
+                    "transactionAttributeValue": "CIC"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "APPID",
+                    "transactionAttributeValue": "3340286919-1"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "SEPREASON",
+                    "transactionAttributeValue": "43"
+                  }
+                ],
+                "transactionRates": [
+                  {
+                    "rateTypeCode": "PREAMTTOT",
+                    "transactionRate": 1176.55,
+                    "rateStartDate": "2020-03-01",
+                    "csrVariant": "01"
+                  },
+                  {
+                    "rateTypeCode": "TOTRESAMT",
+                    "transactionRate": 0.0,
+                    "rateStartDate": "2020-03-01",
+                    "csrVariant": "01"
+                  },
+                  {
+                    "rateTypeCode": "APTCAMT",
+                    "transactionRate": 1176.55,
+                    "rateStartDate": "2020-03-01",
+                    "csrVariant": "01"
+                  },
+                  {
+                    "rateTypeCode": "PREAMTTOT",
+                    "transactionRate": 1176.55,
+                    "rateStartDate": "2020-05-01",
+                    "csrVariant": "02"
+                  },
+                  {
+                    "rateTypeCode": "TOTRESAMT",
+                    "transactionRate": 100.0,
+                    "rateStartDate": "2020-05-01",
+                    "csrVariant": "02"
+                  },
+                  {
+                    "rateTypeCode": "APTCAMT",
+                    "transactionRate": 1076.55,
+                    "rateStartDate": "2020-05-01",
+                    "csrVariant": "02"
+                  },
+                  {
+                    "rateTypeCode": "PREAMTTOT",
+                    "transactionRate": 1176.55,
+                    "rateStartDate": "2020-07-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "TOTRESAMT",
+                    "transactionRate": 100.0,
+                    "rateStartDate": "2020-07-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "APTCAMT",
+                    "transactionRate": 976.55,
+                    "rateStartDate": "2020-07-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "OTHERPAYAMT1",
+                    "transactionRate": 75.00,
+                    "rateStartDate": "2020-07-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "OTHERPAYAMT2",
+                    "transactionRate": 25.00,
+                    "rateStartDate": "2020-07-01",
+                    "csrVariant": "03"
+                  }
+                ],
+                "tradingPartnerDto": {
+                  "tradingPartnerId": "21663",
+                  "lineOfBusinessTypeCode": "HIX",
+                  "businessTypeCode": "HIX",
+                  "marketplaceTypeCode": "FFM",
+                  "stateTypeCode": "FL"
+                },
+                "sponsor": {
+                  "sponsorName": "Peter A Peterson",
+                  "sponsorId": "166492101",
+                  "receivedDate": "2022-11-07T06:27:25.484Z"
+                },
+                "broker": {
+                  "brokerName": "Horacio  Sequeira",
+                  "brokerId": "17845067",
+                  "receivedDate": "2022-11-07T06:27:25.484Z"
+                },
+                "payer": {
+                  "payerName": "Ambetter from Sunshine Health",
+                  "payerId": "060641618",
+                  "receivedDate": "2022-11-07T06:27:25.484Z"
+                },
+                "members": [
+                  {
+                    "transactionMemberCode": "JHSL0KLIPE7YO9Q",
+                    "transactionTypeCode": "ADD",
+                    "effectiveDate": "2020-03-01",
+                    "relationshipTypeCode": "HOH",
+                    "reasonTypeCode": "MBS",
+                    "firstName": "Peter",
+                    "middleName": "A",
+                    "lastName": "Peterson",
+                    "tobaccoIndicator": "NONE",
+                    "dateOfBirth": "1962-08-27",
+                    "genderTypeCode": "MALE",
+                    "memberRate": 640.44,
+                    "memberPhones": [
+                      {
+                        "phoneTypeCode": "HOME",
+                        "phoneNumber": "7864223101",
+                        "receivedDate": "2022-11-07T06:27:25.562Z"
+                      }
+                    ],
+                    "memberAddresses": [
+                      {
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "14343 SW 258th Ln",
+                        "addressLine2": "Apt 2307",
+                        "city": "Homestead",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33032",
+                        "countyCode": "12086",
+                        "receivedDate": "2022-11-07T06:27:25.553Z"
+                      }
+                    ],
+                    "identifiers": [
+                      {
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "0008700676",
+                        "receivedDate": "2022-11-07T06:27:25.534Z"
+                      },
+                      {
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "0008700676",
+                        "receivedDate": "2022-11-07T06:27:25.543Z"
+                      },
+                      {
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "166492101",
+                        "receivedDate": "2022-11-07T06:27:25.553Z"
+                      }
+                    ],
+                    "emails": [
+                      {
+                        "email": "ppeterpiperbogus@bogus.com",
+                        "receivedDate": "2022-11-07T06:27:25.562Z"
+                      }
+                    ],
+                    "languages": [
+                      {
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "spa",
+                        "receivedDate": "2022-11-07T06:27:25.576Z"
+                      },
+                      {
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "spa",
+                        "receivedDate": "2022-11-07T06:27:25.584Z"
+                      }
+                    ]
+                  },
+                  {
+                    "transactionMemberCode": "P0Z6C3JLJ94KLHB",
+                    "transactionTypeCode": "ADD",
+                    "effectiveDate": "2020-03-01",
+                    "relationshipTypeCode": "SPOUSE",
+                    "reasonTypeCode": "MBS",
+                    "firstName": "Rachel",
+                    "middleName": "",
+                    "lastName": "Peterson",
+                    "tobaccoIndicator": "NONE",
+                    "dateOfBirth": "1966-11-21",
+                    "genderTypeCode": "FEMALE",
+                    "memberRate": 536.11,
+                    "memberAddresses": [
+                      {
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "14343 SW 258th Ln",
+                        "addressLine2": "Apt 2307",
+                        "city": "Homestead",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33032",
+                        "countyCode": "12086",
+                        "receivedDate": "2022-11-07T06:27:25.650Z"
+                      }
+                    ],
+                    "identifiers": [
+                      {
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "0008700676",
+                        "receivedDate": "2022-11-07T06:27:25.635Z"
+                      },
+                      {
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "0009185554",
+                        "receivedDate": "2022-11-07T06:27:25.643Z"
+                      },
+                      {
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "422850102",
+                        "receivedDate": "2022-11-07T06:27:25.650Z"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "expectedAccountDto": {
+              "accountSK": null,
+              "accountNumber": "77CIIYEI60JWTN6",
+              "lineOfBusinessTypeCode": "HIX",
+              "enrollmentSpans": [
+                {
+                  "enrollmentSpanSK": null,
+                  "accountSK": null,
+                  "enrollmentSpanCode": "UH4WCAL7M5NQGFS",
+                  "premiumSpans": [
+                    {
+                      "premiumSpanSK": null,
+                      "enrollmentSpanSK": null,
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "premiumSpanCode": "3KDZHQ64ZB67RIK",
+                      "memberPremiumSpans": [
+                        {
+                          "memberPremiumSK": null,
+                          "memberCode": "2ZGSD90BVIEFHQ8",
+                          "memberSK": null,
+                          "exchangeMemberId": "0008700676",
+                          "individualPremiumAmount": 640.44,
+                          "createdDate": "2023-03-22 06:34:18",
+                          "updatedDate": "2023-03-22 06:34:18"
+                        },
+                        {
+                          "memberPremiumSK": null,
+                          "memberCode": "SYBKJE3O5A57XYB",
+                          "memberSK": null,
+                          "exchangeMemberId": "0009185554",
+                          "individualPremiumAmount": 536.11,
+                          "createdDate": "2023-03-22 06:34:18",
+                          "updatedDate": "2023-03-22 06:34:18"
+                        }
+                      ],
+                      "startDate": "2020-05-01",
+                      "endDate": "2020-06-30",
+                      "csrVariant": "02",
+                      "totalPremiumAmount": 1176.55,
+                      "totalResponsibleAmount": 100.0,
+                      "aptcAmount": 1076.55,
+                      "otherPayAmount": null,
+                      "csrAmount": null,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18"
+                    },
+                    {
+                      "premiumSpanSK": null,
+                      "enrollmentSpanSK": null,
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "premiumSpanCode": "SPIS4DIIA2XKKVO",
+                      "memberPremiumSpans": [
+                        {
+                          "memberPremiumSK": null,
+                          "memberCode": "SYBKJE3O5A57XYB",
+                          "memberSK": null,
+                          "exchangeMemberId": "0009185554",
+                          "individualPremiumAmount": 536.11,
+                          "createdDate": "2023-03-22 06:34:18",
+                          "updatedDate": "2023-03-22 06:34:18"
+                        },
+                        {
+                          "memberPremiumSK": null,
+                          "memberCode": "2ZGSD90BVIEFHQ8",
+                          "memberSK": null,
+                          "exchangeMemberId": "0008700676",
+                          "individualPremiumAmount": 640.44,
+                          "createdDate": "2023-03-22 06:34:18",
+                          "updatedDate": "2023-03-22 06:34:18"
+                        }
+                      ],
+                      "startDate": "2020-07-01",
+                      "endDate": "2020-12-31",
+                      "csrVariant": "03",
+                      "totalPremiumAmount": 1176.55,
+                      "totalResponsibleAmount": 100.0,
+                      "aptcAmount": 976.55,
+                      "otherPayAmount": 100.00,
+                      "csrAmount": null,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18"
+                    },
+                    {
+                      "premiumSpanSK": null,
+                      "enrollmentSpanSK": null,
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "premiumSpanCode": "7EVVTANXQW24V0T",
+                      "memberPremiumSpans": [
+                        {
+                          "memberPremiumSK": null,
+                          "memberCode": "2ZGSD90BVIEFHQ8",
+                          "memberSK": null,
+                          "exchangeMemberId": "0008700676",
+                          "individualPremiumAmount": 640.44,
+                          "createdDate": "2023-03-22 06:34:18",
+                          "updatedDate": "2023-03-22 06:34:18"
+                        },
+                        {
+                          "memberPremiumSK": null,
+                          "memberCode": "SYBKJE3O5A57XYB",
+                          "memberSK": null,
+                          "exchangeMemberId": "0009185554",
+                          "individualPremiumAmount": 536.11,
+                          "createdDate": "2023-03-22 06:34:18",
+                          "updatedDate": "2023-03-22 06:34:18"
+                        }
+                      ],
+                      "startDate": "2020-03-01",
+                      "endDate": "2020-04-30",
+                      "csrVariant": "01",
+                      "totalPremiumAmount": 1176.55,
+                      "totalResponsibleAmount": 0.0,
+                      "aptcAmount": 1176.55,
+                      "otherPayAmount": null,
+                      "csrAmount": null,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18"
+                    }
+                  ],
+                  "stateTypeCode": "FL",
+                  "marketplaceTypeCode": "FFM",
+                  "businessUnitTypeCode": "HIX",
+                  "startDate": "2020-03-01",
+                  "endDate": "2020-12-31",
+                  "exchangeSubscriberId": "0008700676",
+                  "effectuationDate": "2023-03-22",
+                  "planId": "21663FL0130006",
+                  "groupPolicyId": "86947398",
+                  "productTypeCode": "HMO",
+                  "delinqInd": false,
+                  "paidThroughDate": null,
+                  "claimPaidThroughDate": null,
+                  "statusTypeCode": "ENROLLED",
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "createdDate": "2023-03-22 06:34:18",
+                  "updatedDate": "2023-03-22 06:34:18"
+                }
+              ],
+              "members": [
+                {
+                  "memberSK": null,
+                  "accountSK": null,
+                  "memberCode": "2ZGSD90BVIEFHQ8",
+                  "firstName": "Peter",
+                  "middleName": "A",
+                  "lastName": "Peterson",
+                  "relationshipTypeCode": "HOH",
+                  "dateOfBirth": "1962-08-27",
+                  "genderTypeCode": "MALE",
+                  "height": 0.0,
+                  "weight": 0.0,
+                  "memberAttributes": null,
+                  "memberAddresses": [
+                    {
+                      "memberAddressSK": null,
+                      "memberSK": null,
+                      "memberAddressCode": "86XNO2GK42ZE3ZE",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "14343 SW 258th Ln",
+                      "addressLine2": "Apt 2307",
+                      "city": "Homestead",
+                      "stateTypeCode": "FL",
+                      "zipCode": "33032",
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18"
+                    }
+                  ],
+                  "memberIdentifiers": [
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "2SV5N22RTEFIZ36",
+                      "identifierTypeCode": "SSN",
+                      "identifierValue": "166492101",
+                      "isActive": true,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18",
+                      "active": true
+                    },
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "NLI5MOFT37S8V6F",
+                      "identifierTypeCode": "EXCHMEMID",
+                      "identifierValue": "0008700676",
+                      "isActive": true,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18",
+                      "active": true
+                    },
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "WXC7NFX5ESFOHP3",
+                      "identifierTypeCode": "EXCHSUBID",
+                      "identifierValue": "0008700676",
+                      "isActive": true,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18",
+                      "active": true
+                    }
+                  ],
+                  "memberLanguages": [
+                    {
+                      "memberLanguageSK": null,
+                      "memberSK": null,
+                      "memberLanguageCode": "BTEMT8N9SHTXT04",
+                      "languageTypeCode": "SPEAKING",
+                      "languageCode": "spa",
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18"
+                    },
+                    {
+                      "memberLanguageSK": null,
+                      "memberSK": null,
+                      "memberLanguageCode": "CB2Q8KQ2K4IPRAF",
+                      "languageTypeCode": "WRITING",
+                      "languageCode": "spa",
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18"
+                    }
+                  ],
+                  "memberPhones": [
+                    {
+                      "memberPhoneSK": null,
+                      "memberSK": null,
+                      "memberPhoneCode": "5O2J3OO7Y6JCOVT",
+                      "phoneTypeCode": "HOME",
+                      "phoneNumber": "7864223101",
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18"
+                    }
+                  ],
+                  "memberEmails": [
+                    {
+                      "memberEmailSK": null,
+                      "memberSK": null,
+                      "memberEmailCode": "C76JAOHX8QOPC5X",
+                      "emailTypeCode": "PERSONAL",
+                      "email": "ppeterpiperbogus@bogus.com",
+                      "isPrimary": true,
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18",
+                      "primary": true
+                    }
+                  ],
+                  "alternateContacts": null,
+                  "memberPremiums": null,
+                  "createdDate": "2023-03-22 06:34:18",
+                  "updatedDate": "2023-03-22 06:34:18"
+                },
+                {
+                  "memberSK": null,
+                  "accountSK": null,
+                  "memberCode": "SYBKJE3O5A57XYB",
+                  "firstName": "Rachel",
+                  "middleName": "",
+                  "lastName": "Peterson",
+                  "relationshipTypeCode": "SPOUSE",
+                  "dateOfBirth": "1966-11-21",
+                  "genderTypeCode": "FEMALE",
+                  "height": 0.0,
+                  "weight": 0.0,
+                  "memberAttributes": null,
+                  "memberAddresses": [
+                    {
+                      "memberAddressSK": null,
+                      "memberSK": null,
+                      "memberAddressCode": "M7MX7VOE3M197NV",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "14343 SW 258th Ln",
+                      "addressLine2": "Apt 2307",
+                      "city": "Homestead",
+                      "stateTypeCode": "FL",
+                      "zipCode": "33032",
+                      "startDate": "2022-11-07",
+                      "endDate": null,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18"
+                    }
+                  ],
+                  "memberIdentifiers": [
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "S5XKJNXYN7YWARD",
+                      "identifierTypeCode": "EXCHMEMID",
+                      "identifierValue": "0009185554",
+                      "isActive": true,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18",
+                      "active": true
+                    },
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "VJHY2J09QG2UGZ6",
+                      "identifierTypeCode": "EXCHSUBID",
+                      "identifierValue": "0008700676",
+                      "isActive": true,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18",
+                      "active": true
+                    },
+                    {
+                      "memberIdentifierSK": null,
+                      "memberSK": null,
+                      "memberIdentifierCode": "KPBBW43HFE66KCB",
+                      "identifierTypeCode": "SSN",
+                      "identifierValue": "422850102",
+                      "isActive": true,
+                      "createdDate": "2023-03-22 06:34:18",
+                      "updatedDate": "2023-03-22 06:34:18",
+                      "active": true
+                    }
+                  ],
+                  "memberLanguages": null,
+                  "memberPhones": null,
+                  "memberEmails": null,
+                  "alternateContacts": null,
+                  "memberPremiums": null,
+                  "createdDate": "2023-03-22 06:34:18",
+                  "updatedDate": "2023-03-22 06:34:18"
+                }
+              ],
+              "brokers": [
+                {
+                  "brokerSK": null,
+                  "accountSK": null,
+                  "brokerCode": "NIAD31HWLRT4WGG",
+                  "brokerName": "Horacio  Sequeira",
+                  "brokerId": "17845067",
+                  "agencyName": null,
+                  "agencyId": null,
+                  "accountNumber1": null,
+                  "accountNumber2": null,
+                  "startDate": "2022-11-07",
+                  "endDate": null,
+                  "createdDate": "2023-03-22 06:34:18",
+                  "updatedDate": "2023-03-22 06:34:18"
+                }
+              ],
+              "sponsors": [
+                {
+                  "sponsorSK": null,
+                  "sponsorCode": "Y9J0XYJKTZ77ILS",
+                  "accountSK": null,
+                  "sponsorId": "166492101",
+                  "sponsorName": "Peter A Peterson",
+                  "startDate": "2022-11-07",
+                  "endDate": null,
+                  "createdDate": "2023-03-22 06:34:18",
+                  "updatedDate": "2023-03-22 06:34:18"
+                }
+              ],
+              "payers": [
+                {
+                  "payerSK": null,
+                  "accountSK": null,
+                  "payerCode": "E1DT5WJ3DWV33ZA",
+                  "payerName": "Ambetter from Sunshine Health",
+                  "payerId": "060641618",
+                  "startDate": "2022-11-07",
+                  "endDate": null,
+                  "createdDate": "2023-03-22 06:34:18",
+                  "updatedDate": "2023-03-22 06:34:18"
+                }
+              ],
+              "accountAttributes": null,
+              "createdDate": "2023-03-22 06:34:18",
+              "updatedDate": "2023-03-22 06:34:18"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

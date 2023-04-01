@@ -1,0 +1,70 @@
+{
+  "testClassName": "EnrollmentSpanStatusAPIIntTest",
+  "testMethods": [
+    {
+      "testMethodName": "testEnrollmentSpanStatus",
+      "testData": [
+        {
+          "testData": {
+            "exceptionExpected": false,
+            "httpStatusCode": "200",
+            "enrollmentSpanStatusDto": {
+              "currentEnrollmentSpan": {
+                "startDate": "2023-01-01",
+                "endDate": "2023-12-31",
+                "delinqInd": false
+              }
+            },
+            "expectedEnrollmentSpanStatus": "PRE_MEMBER"
+          }
+        },
+        {
+          "testData": {
+            "exceptionExpected": false,
+            "httpStatusCode": "200",
+            "enrollmentSpanStatusDto": {
+              "currentEnrollmentSpan": {
+                "startDate": "2023-01-01",
+                "endDate": "2023-12-31",
+                "effectuationDate": "2023-01-15",
+                "delinqInd": false
+              }
+            },
+            "expectedEnrollmentSpanStatus": "ENROLLED"
+          }
+        },
+        {
+          "testData": {
+            "exceptionExpected": false,
+            "httpStatusCode": "200",
+            "enrollmentSpanStatusDto": {
+              "currentEnrollmentSpan": {
+                "startDate": "2023-01-01",
+                "endDate": "2023-12-31",
+                "effectuationDate": "2023-01-15",
+                "delinqInd": true
+              }
+            },
+            "expectedEnrollmentSpanStatus": "SUSPENDED"
+          }
+        },
+        {
+          "testData": {
+            "exceptionExpected": false,
+            "httpStatusCode": "200",
+            "enrollmentSpanStatusDto": {
+              "currentEnrollmentSpan": {
+                "startDate": "2023-01-01",
+                "endDate": "2023-12-31",
+                "effectuationDate": "2023-01-15",
+                "claimPaidThroughDate": "2023-01-31",
+                "delinqInd": true
+              }
+            },
+            "expectedEnrollmentSpanStatus": "SUSPENDED"
+          }
+        }
+      ]
+    }
+  ]
+}

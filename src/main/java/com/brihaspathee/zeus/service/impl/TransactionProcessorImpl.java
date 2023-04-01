@@ -59,10 +59,14 @@ public class TransactionProcessorImpl implements TransactionProcessor {
      * Process the transaction received to update/create an account in MMS
      * @param transactionDto
      * @param accountNumber
+     * @param sendToMMS
+     * @return
      * @throws JsonProcessingException
      */
     @Override
-    public void processTransaction(TransactionDto transactionDto, String accountNumber) throws JsonProcessingException {
+    public AccountDto processTransaction(TransactionDto transactionDto,
+                                   String accountNumber,
+                                   boolean sendToMMS) throws JsonProcessingException {
         Transaction transaction = transactionMapper.transactionDtoToTransaction(transactionDto);
         transaction = transactionRepository.save(transaction);
         if(accountNumber == null){
@@ -71,8 +75,12 @@ public class TransactionProcessorImpl implements TransactionProcessor {
             AccountUpdateRequest accountUpdateRequest = AccountUpdateRequest.builder()
                     .accountDto(accountDto)
                     .build();
-            accountUpdateProducer.updateAccount(accountUpdateRequest);
+            if(sendToMMS){
+                accountUpdateProducer.updateAccount(accountUpdateRequest);
+            }
+            return accountDto;
         }
+        return null;
     }
 
     /**
@@ -83,7 +91,7 @@ public class TransactionProcessorImpl implements TransactionProcessor {
     @Override
     public Mono<AccountProcessingResponse> processTransaction(AccountProcessingRequest accountProcessingRequest, PayloadTracker payloadTracker) throws JsonProcessingException {
         processTransaction(accountProcessingRequest.getTransactionDto(),
-                accountProcessingRequest.getAccountNumber());
+                accountProcessingRequest.getAccountNumber(), true);
 
         AccountProcessingResponse accountProcessingResponse = AccountProcessingResponse.builder()
                 .responseId(ZeusRandomStringGenerator.randomString(15))
