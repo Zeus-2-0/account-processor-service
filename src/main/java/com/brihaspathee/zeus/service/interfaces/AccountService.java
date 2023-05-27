@@ -21,17 +21,40 @@ public interface AccountService {
 
     /**
      * This method should be invoked if a new account should be created
-     * @param transactionDto
-     * @param transaction
-     * @return
-     * @throws JsonProcessingException
+     * @param transactionDto the dto object that was received for processing the account
+     * @param transaction the entity object that was persisted in APS
+     * @return return the account dto object that was updated
+     * @throws JsonProcessingException json processing exception
      */
     AccountDto createAccount(TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException;
 
     /**
+     * This method should be invoked if an account should be updated
+     * Use this method if the calling method only has the account number of the account that needs to be updated
+     * @param accountNumber Account number of the account that needs to be updated
+     * @param transactionDto the dto object that was received for processing the account
+     * @param transaction the entity object that was persisted in APS
+     * @return return the account dto object that was updated
+     * @throws JsonProcessingException json processing exception
+     */
+    AccountDto updateAccount(String accountNumber, TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException;
+
+    /**
+     * This method should be invoked if an account should be updated.
+     * Use this method if the calling method already has the account dto that needs to be updated
+     * @param accountDto Account that needs to be updated
+     * @param transactionDto the dto object that was received for processing the account
+     * @param transaction the entity object that was persisted in APS
+     * @return return the account dto object that was updated
+     * @throws JsonProcessingException json processing exception
+     */
+    AccountDto updateAccount(AccountDto accountDto, TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException;
+
+    /**
      * Determine the status of the enrollment span
-     * @param enrollmentSpanStatusDto
-     * @return
+     * @param enrollmentSpanStatusDto enrollment span for which the status is to be determined
+     * @return the status of the enrollment span
      */
     String determineEnrollmentSpanStatus(EnrollmentSpanStatusDto enrollmentSpanStatusDto);
+
 }

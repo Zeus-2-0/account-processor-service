@@ -56,8 +56,7 @@ public class AccountProcessorAPIImpl implements AccountProcessorAPI {
             AccountProcessingRequest accountProcessingRequest,
             boolean sendToMMS) throws JsonProcessingException {
         log.info("Inside the account processor resource:{}", accountProcessingRequest.getTransactionDto());
-        AccountDto accountDto = transactionProcessor.processTransaction(accountProcessingRequest.getTransactionDto(),
-                accountProcessingRequest.getAccountNumber(), sendToMMS);
+        AccountDto accountDto = transactionProcessor.processTransaction(accountProcessingRequest, sendToMMS);
         ZeusApiResponse<AccountDto> apiResponse = ZeusApiResponse.<AccountDto>builder()
                 .message(ApiResponseConstants.SUCCESS)
                 .developerMessage(ApiResponseConstants.SUCCESS_REASON)

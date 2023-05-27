@@ -1,6 +1,9 @@
 zeus-account-processor:
   api:
     version: 1.0.0
+url:
+  host:
+    member-mgmt: http://localhost:8084/api/v1/
 server:
   port: 8099
 spring:

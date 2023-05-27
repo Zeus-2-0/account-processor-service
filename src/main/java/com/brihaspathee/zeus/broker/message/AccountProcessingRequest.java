@@ -1,5 +1,6 @@
 package com.brihaspathee.zeus.broker.message;
 
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import lombok.*;
 
@@ -23,6 +24,11 @@ public class AccountProcessingRequest {
      * The account number for which the request is received.
      */
     private String accountNumber;
+
+    /**
+     * Account dto of the account that needs to be updated.
+     */
+    private AccountDto accountDto;
 
     /**
      * The transaction details that needs to be processed
