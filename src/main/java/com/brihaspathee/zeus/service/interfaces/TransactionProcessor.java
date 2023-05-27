@@ -20,15 +20,22 @@ import reactor.core.publisher.Mono;
 public interface TransactionProcessor {
 
     /**
-     * Process the transaction received to update/create an account in MMS
-     * @param transactionDto
-     * @param accountNumber
-     * @param sendToMMS
-     * @return
-     * @throws JsonProcessingException
+     * Process the transaction using accounting processing request
+     * @param accountProcessingRequest the accounting processing request
+     * @param payloadTracker the payload tracker object
+     * @return returns the account processing response
+     * @throws JsonProcessingException generates json processing exception
      */
-    AccountDto processTransaction(TransactionDto transactionDto, String accountNumber, boolean sendToMMS) throws JsonProcessingException;
-
     Mono<AccountProcessingResponse> processTransaction(AccountProcessingRequest accountProcessingRequest,
                                                        PayloadTracker payloadTracker) throws JsonProcessingException;
+
+    /**
+     * Process the transaction using accounting processing request
+     * @param accountProcessingRequest the accounting processing request
+     * @param sendToMMS identifies if the feed needs to be sent to MMS
+     * @return returns the updated account
+     * @throws JsonProcessingException generates json processing exception
+     */
+    AccountDto processTransaction(AccountProcessingRequest accountProcessingRequest,
+                                  boolean sendToMMS) throws JsonProcessingException;
 }

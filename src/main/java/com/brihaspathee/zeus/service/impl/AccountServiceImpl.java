@@ -10,6 +10,7 @@ import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.*;
 import com.brihaspathee.zeus.mapper.interfaces.AccountMapper;
 import com.brihaspathee.zeus.service.interfaces.AccountService;
+import com.brihaspathee.zeus.service.interfaces.MemberManagementService;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -73,6 +74,16 @@ public class AccountServiceImpl implements AccountService {
     private final PayerHelper payerHelper;
 
     /**
+     * Member management service instance to get information from MMS
+     */
+    private final MemberManagementService memberManagementService;
+
+    /**
+     * Add Transaction helper instance to process ADD transactions
+     */
+    private final AddTransactionHelper addTransactionHelper;
+
+    /**
      * This method should be invoked if a new account should be created
      * @param transactionDto
      * @param transaction
@@ -109,6 +120,36 @@ public class AccountServiceImpl implements AccountService {
         objectMapper.findAndRegisterModules();
         log.info("Account to be set to MMS:{}", objectMapper.writeValueAsString(accountDto));
         return accountDto;
+    }
+
+    /**
+     * This method should be invoked if an account should be updated
+     * @param accountNumber Account number of the account that needs to be updated
+     * @param transactionDto the dto object that was received for processing the account
+     * @param transaction the entity object that was persisted in APS
+     * @return the account dto object that was updated
+     * @throws JsonProcessingException json processing exception
+     */
+    @Override
+    public AccountDto updateAccount(String accountNumber, TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
+        AccountDto accountDto = memberManagementService.getAccountByAccountNumber(accountNumber);
+        updateAccount(accountDto, transactionDto, transaction);
+        return null;
+    }
+
+    /**
+     * This method should be invoked if an account should be updated
+     * Use this method if the calling method only has the account number of the account that needs to be updated
+     * @param accountDto Account number of the account that needs to be updated
+     * @param transactionDto the dto object that was received for processing the account
+     * @param transaction the entity object that was persisted in APS
+     * @return the account dto object that was updated
+     * @throws JsonProcessingException json processing exception
+     */
+    @Override
+    public AccountDto updateAccount(AccountDto accountDto, TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
+        addTransactionHelper.updateAccount(accountDto, transactionDto, transaction);
+        return null;
     }
 
     /**

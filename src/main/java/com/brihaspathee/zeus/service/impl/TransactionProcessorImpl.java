@@ -55,33 +55,7 @@ public class TransactionProcessorImpl implements TransactionProcessor {
      */
     private final AccountUpdateProducer accountUpdateProducer;
 
-    /**
-     * Process the transaction received to update/create an account in MMS
-     * @param transactionDto
-     * @param accountNumber
-     * @param sendToMMS
-     * @return
-     * @throws JsonProcessingException
-     */
-    @Override
-    public AccountDto processTransaction(TransactionDto transactionDto,
-                                   String accountNumber,
-                                   boolean sendToMMS) throws JsonProcessingException {
-        Transaction transaction = transactionMapper.transactionDtoToTransaction(transactionDto);
-        transaction = transactionRepository.save(transaction);
-        if(accountNumber == null){
-            // If the account number is null, a new account has to be created in MMS
-            AccountDto accountDto =  accountService.createAccount(transactionDto, transaction);
-            AccountUpdateRequest accountUpdateRequest = AccountUpdateRequest.builder()
-                    .accountDto(accountDto)
-                    .build();
-            if(sendToMMS){
-                accountUpdateProducer.updateAccount(accountUpdateRequest);
-            }
-            return accountDto;
-        }
-        return null;
-    }
+
 
     /**
      * Process the transaction request that is received through Kafka topic
@@ -100,5 +74,70 @@ public class TransactionProcessorImpl implements TransactionProcessor {
                 .ztcn(accountProcessingRequest.getTransactionDto().getZtcn())
                 .build();
         return Mono.just(accountProcessingResponse).delayElement(Duration.ofSeconds(30));
+    }
+
+    /**
+     * Process the transaction using accounting processing request
+     * @param accountProcessingRequest the accounting processing request
+     * @param sendToMMS identifies if the feed needs to be sent to MMS
+     * @return returns the updated account
+     * @throws JsonProcessingException generates json processing exception
+     */
+    @Override
+    public AccountDto processTransaction(AccountProcessingRequest accountProcessingRequest, boolean sendToMMS) throws JsonProcessingException {
+        AccountDto accountDto = null;
+        if(accountProcessingRequest.getAccountDto() == null){
+            accountDto = processTransaction(accountProcessingRequest.getTransactionDto(), accountProcessingRequest.getAccountNumber(), sendToMMS);
+        }else{
+            accountDto = processTransaction(accountProcessingRequest.getTransactionDto(), accountProcessingRequest.getAccountDto(), sendToMMS);
+        }
+        return accountDto;
+    }
+
+    /**
+     * Process the transaction received to update/create an account in MMS
+     * @param transactionDto
+     * @param accountNumber
+     * @param sendToMMS
+     * @return
+     * @throws JsonProcessingException
+     */
+    private AccountDto processTransaction(TransactionDto transactionDto,
+                                          String accountNumber,
+                                          boolean sendToMMS) throws JsonProcessingException {
+        Transaction transaction = transactionMapper.transactionDtoToTransaction(transactionDto);
+        transaction = transactionRepository.save(transaction);
+        AccountDto accountDto = null;
+        if(accountNumber == null){
+            // If the account number is null, a new account has to be created in MMS
+            accountDto =  accountService.createAccount(transactionDto, transaction);
+        }else{
+            // If the account number is not null then update the account
+            accountDto = accountService.updateAccount(accountNumber, transactionDto, transaction);
+        }
+        AccountUpdateRequest accountUpdateRequest = AccountUpdateRequest.builder()
+                .accountDto(accountDto)
+                .build();
+        if(sendToMMS){
+            accountUpdateProducer.updateAccount(accountUpdateRequest);
+        }
+        return accountDto;
+    }
+
+    /**
+     * Process the transaction received to update/create an account in MMS
+     * @param transactionDto
+     * @param accountDto
+     * @param sendToMMS
+     * @return
+     * @throws JsonProcessingException
+     */
+    private AccountDto processTransaction(TransactionDto transactionDto,
+                                          AccountDto accountDto,
+                                          boolean sendToMMS) throws JsonProcessingException {
+        Transaction transaction = transactionMapper.transactionDtoToTransaction(transactionDto);
+        transaction = transactionRepository.save(transaction);
+        accountService.updateAccount(accountDto, transactionDto, transaction);
+        return null;
     }
 }

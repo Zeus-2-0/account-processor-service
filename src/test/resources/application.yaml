@@ -1,3 +1,6 @@
+url:
+  host:
+    member-mgmt: http://localhost:8084/api/v1/
 spring:
   h2:
     console:
