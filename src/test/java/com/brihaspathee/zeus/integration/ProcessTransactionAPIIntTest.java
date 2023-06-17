@@ -4,9 +4,8 @@ import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.test.BuildTestData;
 import com.brihaspathee.zeus.test.TestClass;
-import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
+import com.brihaspathee.zeus.test.validator.AccountValidation;
 import com.brihaspathee.zeus.web.model.TestAccountProcessingRequest;
-import com.brihaspathee.zeus.web.model.TestEnrollmentSpanStatusRequest;
 import com.brihaspathee.zeus.web.response.ZeusApiResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,6 +69,12 @@ public class ProcessTransactionAPIIntTest {
     private BuildTestData<TestAccountProcessingRequest> buildTestData;
 
     /**
+     * The account validation instance to validate the details of the account
+     */
+    private AccountValidation accountValidation = new AccountValidation();
+
+
+    /**
      * The list of test requests
      */
     private List<TestAccountProcessingRequest> requests = new ArrayList<>();
@@ -91,9 +96,9 @@ public class ProcessTransactionAPIIntTest {
 
     /**
      * This method tests the processing of the transaction
-     * @param repetitionInfo
+     * @param repetitionInfo the repetition identifies the test iteration
      */
-    @RepeatedTest(2)
+    @RepeatedTest(8)
     @Order(1)
     void testProcessTransaction(RepetitionInfo repetitionInfo){
         log.info("Current Repetition:{}", repetitionInfo.getCurrentRepetition());
@@ -103,6 +108,7 @@ public class ProcessTransactionAPIIntTest {
         log.info("Test accounting processing request:{}", testAccountProcessingRequest);
         AccountDto expectedAccountDto = testAccountProcessingRequest.getExpectedAccountDto();
         AccountProcessingRequest accountProcessingRequest = testAccountProcessingRequest.getAccountProcessingRequest();
+        log.info("Entity Codes:{}", accountProcessingRequest.getTransactionDto().getEntityCodes());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<AccountProcessingRequest> httpEntity = new HttpEntity<>(accountProcessingRequest, headers);
@@ -115,5 +121,6 @@ public class ProcessTransactionAPIIntTest {
         AccountDto actualAccountDto =
                 objectMapper.convertValue(apiResponse.getResponse(), AccountDto.class);
         log.info("Account Dto:{}", actualAccountDto);
+        accountValidation.assertAccount(expectedAccountDto, actualAccountDto);
     }
 }

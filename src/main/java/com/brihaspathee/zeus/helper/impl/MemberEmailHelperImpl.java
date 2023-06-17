@@ -7,9 +7,11 @@ import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberEmailHelper;
 import com.brihaspathee.zeus.mapper.interfaces.MemberEmailMapper;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,6 +43,11 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
     private final MemberEmailRepository memberEmailRepository;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * Create the member email
      * @param member
      * @param transactionMemberDto
@@ -49,16 +56,19 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
     public void createMemberEmail(Member member, TransactionMemberDto transactionMemberDto) {
         if(transactionMemberDto.getEmails() != null && transactionMemberDto.getEmails().size() > 0){
             List<MemberEmail> emails = new ArrayList<>();
-            transactionMemberDto.getEmails().stream().forEach(emailDto -> {
+            transactionMemberDto.getEmails().forEach(emailDto -> {
+                String memberEmailCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
+                        "memberEmailCode");
                 MemberEmail memberEmail = MemberEmail.builder()
                         .member(member)
                         .memberAcctEmailSK(null)
-                        .memberEmailCode(ZeusRandomStringGenerator.randomString(15))
+                        .memberEmailCode(memberEmailCode)
                         .emailTypeCode("PERSONAL")
                         .email(emailDto.getEmail())
                         .isPrimary(true)
                         .startDate(emailDto.getReceivedDate().toLocalDate())
                         .endDate(null)
+                        .changed(true)
                         .build();
                 memberEmail = memberEmailRepository.save(memberEmail);
                 emails.add(memberEmail);

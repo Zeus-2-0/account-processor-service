@@ -3,6 +3,7 @@ package com.brihaspathee.zeus.helper.interfaces;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public interface MemberHelper {
      * @param members
      * @param account
      */
-    List<Member> createMember(List<TransactionMemberDto> members, Account account);
+    List<Member> createMembers(List<TransactionMemberDto> members, Account account);
 
     /**
      * Set the members in the account to send to MMS
@@ -31,4 +32,12 @@ public interface MemberHelper {
      * @param account
      */
     void setMember(AccountDto accountDto, Account account);
+
+    /**
+     * Match the members in the transaction with members in the account
+     * @param accountDto The account dto that contains the members in the account
+     * @param transactionDto The transaction dto that contains the members in the transaction
+     * @param account The account entity to which the matched members have to be added
+     */
+    void matchMember(AccountDto accountDto, TransactionDto transactionDto, Account account);
 }

@@ -8,9 +8,11 @@ import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberIdentifierDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberIdentifierHelper;
 import com.brihaspathee.zeus.mapper.interfaces.MemberIdentifierMapper;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,6 +43,11 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
      */
     private final MemberIdentifierRepository memberIdentifierRepository;
 
+    /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
     @Override
     public void createMemberIdentifier(Member member, TransactionMemberDto transactionMemberDto) {
         if(transactionMemberDto.getIdentifiers() != null && transactionMemberDto.getIdentifiers().size() > 0){
@@ -50,13 +57,16 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
                         !memberIdentifierDto.getIdentifierTypeCode().equals("EXCHMEMID");
             }).collect(Collectors.toList());
             memberIdentifierDtos.stream().forEach(memberIdentifierDto -> {
+                String memberIdentifierCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
+                        "memberIdentifierCode");
                 MemberIdentifier memberIdentifier = MemberIdentifier.builder()
                         .member(member)
                         .memberAcctIdentifierSK(null)
-                        .memberIdentifierCode(ZeusRandomStringGenerator.randomString(15))
+                        .memberIdentifierCode(memberIdentifierCode)
                         .identifierTypeCode(memberIdentifierDto.getIdentifierTypeCode())
                         .identifierValue(memberIdentifierDto.getIdentifierValue())
                         .active(true)
+                        .changed(true)
                         .build();
                 memberIdentifier = memberIdentifierRepository.save(memberIdentifier);
                 identifiers.add(memberIdentifier);

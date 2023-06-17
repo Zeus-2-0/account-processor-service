@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created in Intellij IDEA
@@ -58,6 +59,12 @@ public class EnrollmentSpan {
     @ManyToOne
     @JoinColumn(name = "account_sk")
     private Account account;
+
+    /**
+     * The zeus transaction control number of the transaction that created the enrollment span
+     */
+    @Column(name = "ztcn", length = 20, columnDefinition = "varchar", nullable = false)
+    private String ztcn;
 
     /**
      * The state that is associated with the enrollment span
@@ -154,6 +161,12 @@ public class EnrollmentSpan {
      */
     @OneToMany(mappedBy = "enrollmentSpan", fetch = FetchType.EAGER)
     private List<PremiumSpan> premiumSpans;
+
+    /**
+     * Identifies if the enrollment span was updated
+     */
+    @Column(name = "changed", columnDefinition = "boolean", nullable = false)
+    private boolean changed;
 
     /**
      * The date when the record was created

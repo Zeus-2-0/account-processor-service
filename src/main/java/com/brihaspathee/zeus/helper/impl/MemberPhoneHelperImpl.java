@@ -7,9 +7,11 @@ import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberPhoneHelper;
 import com.brihaspathee.zeus.mapper.interfaces.MemberPhoneMapper;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,6 +43,11 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
     private final MemberPhoneRepository memberPhoneRepository;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * Create member phone
      * @param member
      * @param transactionMemberDto
@@ -49,15 +56,18 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
     public void createMemberPhone(Member member, TransactionMemberDto transactionMemberDto) {
         if(transactionMemberDto.getMemberPhones() != null && transactionMemberDto.getMemberPhones().size() > 0){
             List<MemberPhone> phones = new ArrayList<>();
-            transactionMemberDto.getMemberPhones().stream().forEach(phoneDto -> {
+            transactionMemberDto.getMemberPhones().forEach(phoneDto -> {
+                String memberPhoneCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
+                        "memberPhoneCode");
                 MemberPhone memberPhone = MemberPhone.builder()
                         .member(member)
                         .memberAcctPhoneSK(null)
-                        .memberPhoneCode(ZeusRandomStringGenerator.randomString(15))
+                        .memberPhoneCode(memberPhoneCode)
                         .phoneTypeCode(phoneDto.getPhoneTypeCode())
                         .phoneNumber(phoneDto.getPhoneNumber())
                         .startDate(phoneDto.getReceivedDate().toLocalDate())
                         .endDate(null)
+                        .changed(true)
                         .build();
                 memberPhone = memberPhoneRepository.save(memberPhone);
                 phones.add(memberPhone);

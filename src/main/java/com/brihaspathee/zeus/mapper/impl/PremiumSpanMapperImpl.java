@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -35,20 +36,46 @@ public class PremiumSpanMapperImpl implements PremiumSpanMapper {
             return null;
         }
         PremiumSpanDto premiumSpanDto = PremiumSpanDto.builder()
-                .premiumSpanSK(premiumSpan.getAcctPremiumSpanSK())
+                .premiumSpanSK(premiumSpan.getPremiumSpanSK())
                 .premiumSpanCode(premiumSpan.getPremiumSpanCode())
+                .ztcn(premiumSpan.getZtcn())
                 .startDate(premiumSpan.getStartDate())
                 .endDate(premiumSpan.getEndDate())
+                .statusTypeCode(premiumSpan.getStatusTypeCode())
                 .csrVariant(premiumSpan.getCsrVariant())
                 .totalPremiumAmount(premiumSpan.getTotalPremAmount())
                 .totalResponsibleAmount(premiumSpan.getTotalResponsibleAmount())
                 .aptcAmount(premiumSpan.getAptcAmount())
                 .otherPayAmount(premiumSpan.getOtherPayAmount())
                 .csrAmount(premiumSpan.getCsrAmount())
+                .changed(new AtomicBoolean(premiumSpan.isChanged()))
                 .createdDate(premiumSpan.getCreatedDate())
                 .updatedDate(premiumSpan.getUpdatedDate())
                 .build();
         return premiumSpanDto;
+    }
+
+    @Override
+    public PremiumSpan premiumSpanDtoToPremiumSpan(PremiumSpanDto premiumSpanDto) {
+        if(premiumSpanDto == null){
+            return null;
+        }
+        PremiumSpan premiumSpan = PremiumSpan.builder()
+                .premiumSpanCode(premiumSpanDto.getPremiumSpanCode())
+                .ztcn(premiumSpanDto.getZtcn())
+                .startDate(premiumSpanDto.getStartDate())
+                .endDate(premiumSpanDto.getEndDate())
+                .statusTypeCode(premiumSpanDto.getStatusTypeCode())
+                .csrVariant(premiumSpanDto.getCsrVariant())
+                .totalPremAmount(premiumSpanDto.getTotalPremiumAmount())
+                .totalResponsibleAmount(premiumSpanDto.getTotalResponsibleAmount())
+                .aptcAmount(premiumSpanDto.getAptcAmount())
+                .otherPayAmount(premiumSpanDto.getOtherPayAmount())
+                .csrAmount(premiumSpanDto.getCsrAmount())
+                .createdDate(premiumSpanDto.getCreatedDate())
+                .updatedDate(premiumSpanDto.getUpdatedDate())
+                .build();
+        return premiumSpan;
     }
 
     /**
@@ -59,5 +86,10 @@ public class PremiumSpanMapperImpl implements PremiumSpanMapper {
     @Override
     public List<PremiumSpanDto> premiumSpanToPremiumSpanDtos(List<PremiumSpan> premiumSpans) {
         return premiumSpans.stream().map(this::premiumSpanToPremiumSpanDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PremiumSpan> premiumSpanDtosToPremiumSpans(List<PremiumSpanDto> premiumSpanDtos) {
+        return premiumSpanDtos.stream().map(this::premiumSpanDtoToPremiumSpan).collect(Collectors.toList());
     }
 }

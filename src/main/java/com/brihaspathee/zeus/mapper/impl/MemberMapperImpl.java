@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +44,9 @@ public class MemberMapperImpl implements MemberMapper {
                 .relationshipTypeCode(member.getRelationShipTypeCode())
                 .dateOfBirth(member.getDateOfBirth())
                 .genderTypeCode(member.getGenderTypeCode())
+                .height(member.getHeight())
+                .weight(member.getWeight())
+                .changed(new AtomicBoolean(member.isChanged()))
                 .createdDate(member.getCreatedDate())
                 .updatedDate(member.getUpdatedDate())
                 .build();

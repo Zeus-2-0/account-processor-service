@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created in Intellij IDEA
@@ -74,6 +75,12 @@ public class MemberIdentifier {
      */
     @Column(name = "active")
     private boolean active;
+
+    /**
+     * Identifies if the member identifier was updated
+     */
+    @Column(name = "changed", columnDefinition = "boolean", nullable = false)
+    private boolean changed;
 
     /**
      * The date when the record was created

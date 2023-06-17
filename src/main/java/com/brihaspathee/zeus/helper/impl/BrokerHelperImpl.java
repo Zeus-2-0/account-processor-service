@@ -8,9 +8,11 @@ import com.brihaspathee.zeus.dto.account.BrokerDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.BrokerHelper;
 import com.brihaspathee.zeus.mapper.interfaces.BrokerMapper;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -44,17 +46,24 @@ public class BrokerHelperImpl implements BrokerHelper {
     private final BrokerRepository brokerRepository;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * Create Broker
      * @param transactionDto
      */
     @Override
     public void createBroker(TransactionDto transactionDto, Account account) {
         if(transactionDto.getBroker() != null){
+            String brokerCode = accountProcessorUtil.generateUniqueCode(transactionDto.getEntityCodes(),
+                    "brokerCode");
             List<Broker> brokers = new ArrayList<>();
             Broker broker = Broker.builder()
                     .acctBrokerSK(null)
                     .account(account)
-                    .brokerCode(ZeusRandomStringGenerator.randomString(15))
+                    .brokerCode(brokerCode)
                     .brokerName(transactionDto.getBroker().getBrokerName())
                     .brokerId((transactionDto.getBroker().getBrokerId()))
                     .agencyName(transactionDto.getBroker().getAgencyName())
@@ -63,6 +72,7 @@ public class BrokerHelperImpl implements BrokerHelper {
                     .accountNumber2(transactionDto.getBroker().getAccountNumber2())
                     .startDate(transactionDto.getBroker().getReceivedDate().toLocalDate())
                     .endDate(null)
+                    .changed(true)
                     .build();
             broker = brokerRepository.save(broker);
             brokers.add(broker);

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created in Intellij IDEA
@@ -54,6 +55,12 @@ public class PremiumSpan {
     private EnrollmentSpan enrollmentSpan;
 
     /**
+     * The zeus transaction control number of the transaction that created the premium span
+     */
+    @Column(name = "ztcn", length = 20, columnDefinition = "varchar", nullable = false)
+    private String ztcn;
+
+    /**
      * Unique span code that is assigned to the premium span
      */
     @Column(name = "premium_span_code", columnDefinition = "varchar", length = 50, nullable = false)
@@ -70,6 +77,12 @@ public class PremiumSpan {
      */
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
+
+    /**
+     * The status of the premium span
+     */
+    @Column(name = "status_type_code", length = 50, columnDefinition = "varchar", nullable = false)
+    private String statusTypeCode;
 
     /**
      * The CSR Variant present in the plan id received for the enrollment span
@@ -112,6 +125,12 @@ public class PremiumSpan {
      */
     @OneToMany(mappedBy = "premiumSpan")
     List<MemberPremium> memberPremiums;
+
+    /**
+     * Identifies if the premium span was updated
+     */
+    @Column(name = "changed", columnDefinition = "boolean", nullable = false)
+    private boolean changed;
 
     /**
      * The date when the record was created

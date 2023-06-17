@@ -4,6 +4,7 @@ import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
 import com.brihaspathee.zeus.domain.entity.PremiumSpan;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
+import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 
 import java.util.List;
@@ -37,4 +38,12 @@ public interface PremiumSpanHelper {
     void setPremiumSpan(EnrollmentSpanDto enrollmentSpanDto,
                         EnrollmentSpan enrollmentSpan,
                         String ztcn);
+
+    /**
+     * Save the updated premium spans
+     * @param premiumSpanDtos premium spans that need to be saved
+     * @param enrollmentSpan the enrollment span that the premium span belongs
+     * @return return the saved premium spans
+     */
+    List<PremiumSpan> saveUpdatedPremiumSpans(List<PremiumSpanDto> premiumSpanDtos, EnrollmentSpan enrollmentSpan);
 }

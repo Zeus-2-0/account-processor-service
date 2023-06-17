@@ -6,23 +6,24 @@ import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.entity.Transaction;
 import com.brihaspathee.zeus.domain.repository.AccountRepository;
 import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.*;
 import com.brihaspathee.zeus.mapper.interfaces.AccountMapper;
 import com.brihaspathee.zeus.service.interfaces.AccountService;
 import com.brihaspathee.zeus.service.interfaces.MemberManagementService;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.protocol.types.Field;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created in Intellij IDEA
@@ -84,30 +85,37 @@ public class AccountServiceImpl implements AccountService {
     private final AddTransactionHelper addTransactionHelper;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * This method should be invoked if a new account should be created
-     * @param transactionDto
-     * @param transaction
-     * @return
-     * @throws JsonProcessingException
+     * @param transactionDto The transaction dto from which the account has to be created
+     * @param transaction the transaction entity to which the created account has to be associated
+     * @return the created account
+     * @throws JsonProcessingException the json processing exception
      */
     @Override
     public AccountDto createAccount(TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
+        String accountNumber = accountProcessorUtil.generateUniqueCode(transactionDto.getEntityCodes(),
+                "accountNumber");
         // Create the account
         Account account = Account.builder()
                 .transaction(transaction)
                 .matchFound(false)
-                .accountNumber(ZeusRandomStringGenerator.randomString(15))
+                .accountNumber(accountNumber)
                 .lineOfBusinessTypeCode(transactionDto.getTradingPartnerDto().getLineOfBusinessTypeCode())
                 .build();
         account = accountRepository.save(account);
         // Create the members. Members are created first before creating the enrollment spans so that the created
         // members can be passed to create the member premium records
-        List<Member> members = memberHelper.createMember(transactionDto.getMembers(), account);
+        List<Member> members = memberHelper.createMembers(transactionDto.getMembers(), account);
         // Set the created members in the account object
         account.setMembers(members);
         // Create the enrollment span
         EnrollmentSpan enrollmentSpan =
-                enrollmentSpanHelper.createEnrollmentSpan(transactionDto, account);
+                enrollmentSpanHelper.createEnrollmentSpan(transactionDto, account, null);
         account.setEnrollmentSpan(Arrays.asList(enrollmentSpan));
         // Create the sponsors from the transaction
         sponsorHelper.createSponsor(transactionDto, account);
@@ -133,8 +141,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto updateAccount(String accountNumber, TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
         AccountDto accountDto = memberManagementService.getAccountByAccountNumber(accountNumber);
-        updateAccount(accountDto, transactionDto, transaction);
-        return null;
+        return updateAccount(accountDto, transactionDto, transaction);
     }
 
     /**
@@ -148,8 +155,16 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public AccountDto updateAccount(AccountDto accountDto, TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
-        addTransactionHelper.updateAccount(accountDto, transactionDto, transaction);
-        return null;
+        Account account = Account.builder()
+                .transaction(transaction)
+                .matchFound(true)
+                .matchAccountSK(accountDto.getAccountSK())
+                .accountNumber(accountDto.getAccountNumber())
+                .lineOfBusinessTypeCode(transactionDto.getTradingPartnerDto().getLineOfBusinessTypeCode())
+                .build();
+        account = accountRepository.save(account);
+        account = addTransactionHelper.updateAccount(accountDto, account, transactionDto, transaction);
+        return createAccountDto(account, transactionDto.getZtcn());
     }
 
     /**
