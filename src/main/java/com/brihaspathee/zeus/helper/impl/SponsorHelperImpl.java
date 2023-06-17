@@ -8,9 +8,11 @@ import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.SponsorHelper;
 import com.brihaspathee.zeus.mapper.interfaces.SponsorMapper;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -42,6 +44,11 @@ public class SponsorHelperImpl implements SponsorHelper {
     private final SponsorRepository sponsorRepository;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * Create a sponsor
      * @param transactionDto
      * @param account
@@ -50,14 +57,17 @@ public class SponsorHelperImpl implements SponsorHelper {
     public void createSponsor(TransactionDto transactionDto, Account account) {
         if(transactionDto.getSponsor() != null){
             List<Sponsor> sponsors = new ArrayList<>();
+            String sponsorCode = accountProcessorUtil.generateUniqueCode(transactionDto.getEntityCodes(),
+                    "sponsorCode");
             Sponsor sponsor = Sponsor.builder()
                     .acctSponsorSK(null)
                     .account(account)
-                    .sponsorCode(ZeusRandomStringGenerator.randomString(15))
+                    .sponsorCode(sponsorCode)
                     .sponsorName(transactionDto.getSponsor().getSponsorName())
                     .sponsorId(transactionDto.getSponsor().getSponsorId())
                     .startDate(transactionDto.getBroker().getReceivedDate().toLocalDate())
                     .endDate(null)
+                    .changed(true)
                     .build();
             sponsor = sponsorRepository.save(sponsor);
             sponsors.add(sponsor);

@@ -7,9 +7,11 @@ import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberLanguageHelper;
 import com.brihaspathee.zeus.mapper.interfaces.MemberLanguageMapper;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,6 +43,11 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
     private final MemberLanguageRepository memberLanguageRepository;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * Create the member language
      * @param member
      * @param transactionMemberDto
@@ -49,15 +56,18 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
     public void createMemberLanguage(Member member, TransactionMemberDto transactionMemberDto) {
         if(transactionMemberDto.getLanguages() != null && transactionMemberDto.getLanguages().size() > 0){
             List<MemberLanguage> languages = new ArrayList<>();
-            transactionMemberDto.getLanguages().stream().forEach(languageDto -> {
+            transactionMemberDto.getLanguages().forEach(languageDto -> {
+                String memberLanguageCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
+                        "memberLanguageCode");
                 MemberLanguage memberLanguage = MemberLanguage.builder()
                         .member(member)
                         .memberAcctLangSK(null)
-                        .memberLanguageCode(ZeusRandomStringGenerator.randomString(15))
+                        .memberLanguageCode(memberLanguageCode)
                         .languageTypeCode(languageDto.getLanguageTypeCode())
                         .languageCode(languageDto.getLanguageCode())
                         .startDate(languageDto.getReceivedDate().toLocalDate())
                         .endDate(null)
+                        .changed(true)
                         .build();
                 memberLanguage = memberLanguageRepository.save(memberLanguage);
                 languages.add(memberLanguage);

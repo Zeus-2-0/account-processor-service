@@ -3,6 +3,8 @@ package com.brihaspathee.zeus.web.model;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * Created in Intellij IDEA
  * User: Balaji Varadharajan
@@ -25,7 +27,7 @@ public class EnrollmentSpanStatusDto {
     private EnrollmentSpanDto currentEnrollmentSpan;
 
     /**
-     * The enrollment span that is prior to the current enrollment span
+     * The enrollment spans that are prior to the current enrollment span
      */
-    private EnrollmentSpanDto priorEnrollmentSpan;
+    private List<EnrollmentSpanDto> priorEnrollmentSpans;
 }

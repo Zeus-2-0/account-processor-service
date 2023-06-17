@@ -9,9 +9,11 @@ import com.brihaspathee.zeus.dto.transaction.TransactionRateDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberPremiumHelper;
 import com.brihaspathee.zeus.helper.interfaces.PremiumSpanHelper;
 import com.brihaspathee.zeus.mapper.interfaces.PremiumSpanMapper;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -52,6 +54,11 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
     private final MemberPremiumHelper memberPremiumHelper;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * Create the premium spans for the enrollment span
      * @param transactionDto
      * @param enrollmentSpan
@@ -61,10 +68,9 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
     public List<PremiumSpan> createPremiumSpans(TransactionDto transactionDto,
                                                 EnrollmentSpan enrollmentSpan,
                                                 Account account) {
-        List<TransactionRateDto> premiumRates = sortPremiumDates(transactionDto.getTransactionRates());
         // Create the premium spans based on the information that is available in the PREAMTTOT rate
         // If there are more than one PREAMTTOT rates then as many premium spans will be created
-        List<PremiumSpan> premiumSpans = createPremiumSpans(premiumRates, enrollmentSpan);
+        List<PremiumSpan> premiumSpans = createPremiumSpans(transactionDto, enrollmentSpan);
         // Once the premium spans are created, the premium amounts will be populated for each of the premium spans from
         // the transaction. This will complete the creation of all the premium spans
         populatePremiumAmounts(premiumSpans, transactionDto.getTransactionRates());
@@ -95,12 +101,39 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
             List<PremiumSpanDto> premiumSpanDtos = new ArrayList<>();
             enrollmentSpan.getPremiumSpans().stream().forEach(premiumSpan -> {
                 PremiumSpanDto premiumSpanDto = premiumSpanMapper.premiumSpanToPremiumSpanDto(premiumSpan);
-                premiumSpanDto.setZtcn(ztcn);
+//                premiumSpanDto.setZtcn(ztcn);
                 memberPremiumHelper.setMemberPremiums(premiumSpanDto, premiumSpan);
                 premiumSpanDtos.add(premiumSpanDto);
             });
             enrollmentSpanDto.setPremiumSpans(premiumSpanDtos.stream().collect(Collectors.toSet()));
         }
+    }
+
+    /**
+     * Save the updated premium spans
+     * @param premiumSpanDtos premium spans that need to be saved
+     * @param enrollmentSpan the enrollment span that the premium span belongs
+     * @return return the saved premium spans
+     */
+    @Override
+    public List<PremiumSpan> saveUpdatedPremiumSpans(List<PremiumSpanDto> premiumSpanDtos,
+                                                     EnrollmentSpan enrollmentSpan) {
+        if(premiumSpanDtos != null && !premiumSpanDtos.isEmpty()){
+            List<PremiumSpan> savedPremiumSpans = new ArrayList<>();
+            premiumSpanDtos.forEach(premiumSpanDto -> {
+                PremiumSpan premiumSpan =
+                        premiumSpanMapper.premiumSpanDtoToPremiumSpan(premiumSpanDto);
+                premiumSpan.setAcctPremiumSpanSK(premiumSpanDto.getPremiumSpanSK());
+                premiumSpan.setChanged(true);
+                premiumSpan.setEnrollmentSpan(enrollmentSpan);
+                premiumSpan = premiumSpanRepository.save(premiumSpan);
+                savedPremiumSpans.add(premiumSpan);
+
+            });
+            return savedPremiumSpans;
+        }
+
+        return null;
     }
 
     /**
@@ -172,21 +205,27 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
 
     /**
      * Create the premium spans with only the start and end dates
-     * @param premiumRates
+     * @param transactionDto
      * @param enrollmentSpan
      * @return
      */
-    private List<PremiumSpan> createPremiumSpans(List<TransactionRateDto> premiumRates, EnrollmentSpan enrollmentSpan){
+    private List<PremiumSpan> createPremiumSpans(TransactionDto transactionDto, EnrollmentSpan enrollmentSpan){
+        List<TransactionRateDto> premiumRates = sortPremiumDates(transactionDto.getTransactionRates());
         log.info("Premium Rates:{}", premiumRates);
         List<PremiumSpan> premiumSpans = new ArrayList<>();
-        premiumRates.stream().forEach(rateDto -> {
+        premiumRates.forEach(rateDto -> {
+            String premiumSpanCode = accountProcessorUtil.generateUniqueCode(transactionDto.getEntityCodes(),
+                    "premiumSpanCode");
             PremiumSpan premiumSpan = PremiumSpan.builder()
-                    .premiumSpanCode(ZeusRandomStringGenerator.randomString(15))
+                    .premiumSpanCode(premiumSpanCode)
+                    .ztcn(transactionDto.getZtcn())
                     .enrollmentSpan(enrollmentSpan)
                     .startDate(rateDto.getRateStartDate())
+                    .statusTypeCode("ACTIVE")
                     .csrVariant(rateDto.getCsrVariant())
                     .acctPremiumSpanSK(null)
                     .totalPremAmount(rateDto.getTransactionRate())
+                    .changed(true)
                     .build();
             LocalDate endDate = rateDto.getRateEndDate();
             if(endDate != null){
@@ -195,7 +234,7 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
                 int year = rateDto.getRateStartDate().getYear();
                 premiumSpan.setEndDate(LocalDate.of(year, 12, 31));
             }
-            if(premiumSpans != null && !premiumSpans.isEmpty()){
+            if(!premiumSpans.isEmpty()){
                 Optional<PremiumSpan> optionalPremiumSpan = premiumSpans.stream().filter(premiumSpan1 -> {
                     boolean b = premiumSpan1.getStartDate().isBefore(premiumSpan.getStartDate()) &&
                             premiumSpan1.getEndDate().isAfter(premiumSpan.getStartDate());

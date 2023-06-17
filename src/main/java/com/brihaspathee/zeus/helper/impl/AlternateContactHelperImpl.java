@@ -7,9 +7,11 @@ import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.helper.interfaces.AlternateContactHelper;
 import com.brihaspathee.zeus.mapper.interfaces.AlternateContactMapper;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,6 +43,11 @@ public class AlternateContactHelperImpl implements AlternateContactHelper {
     private final AlternateContactRepository alternateContactRepository;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * Create alternate contact
      * @param member
      * @param transactionMemberDto
@@ -51,11 +58,13 @@ public class AlternateContactHelperImpl implements AlternateContactHelper {
         List<AlternateContact> alternateContacts = new ArrayList<>();
         if(transactionMemberDto.getAlternateContacts() != null &&
         transactionMemberDto.getAlternateContacts().size() > 0){
-            transactionMemberDto.getAlternateContacts().stream().forEach(alternateContactDto -> {
+            transactionMemberDto.getAlternateContacts().forEach(alternateContactDto -> {
+                String alternateContactCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
+                        "alternateContactCode");
                 AlternateContact alternateContact = AlternateContact.builder()
                         .member(member)
                         .acctAltContactSK(null)
-                        .alternateContactCode(ZeusRandomStringGenerator.randomString(15))
+                        .alternateContactCode(alternateContactCode)
                         .alternateContactTypeCode(alternateContactDto.getAlternateContactTypeCode())
                         .firstName(alternateContactDto.getFirstName())
                         .lastName(alternateContactDto.getLastName())
@@ -72,6 +81,7 @@ public class AlternateContactHelperImpl implements AlternateContactHelper {
                         .zipCode(alternateContactDto.getZipCode())
                         .startDate(alternateContactDto.getReceivedDate().toLocalDate())
                         .endDate(null)
+                        .changed(true)
                         .build();
                 alternateContact = alternateContactRepository.save(alternateContact);
                 alternateContacts.add(alternateContact);

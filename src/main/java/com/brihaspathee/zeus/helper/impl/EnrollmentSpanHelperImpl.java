@@ -3,10 +3,11 @@ package com.brihaspathee.zeus.helper.impl;
 import com.brihaspathee.zeus.constants.EnrollmentSpanStatus;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
-import com.brihaspathee.zeus.domain.entity.Member;
+import com.brihaspathee.zeus.domain.entity.PremiumSpan;
 import com.brihaspathee.zeus.domain.repository.EnrollmentSpanRepository;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
+import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberIdentifierDto;
@@ -14,7 +15,7 @@ import com.brihaspathee.zeus.dto.transaction.TransactionRateDto;
 import com.brihaspathee.zeus.helper.interfaces.EnrollmentSpanHelper;
 import com.brihaspathee.zeus.helper.interfaces.PremiumSpanHelper;
 import com.brihaspathee.zeus.mapper.interfaces.EnrollmentSpanMapper;
-import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +24,8 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -58,22 +58,32 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
     private final PremiumSpanHelper premiumSpanHelper;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * Create an enrollment span from the transaction data
-     * @param transactionDto
-     * @param account
-     * @return
+     * @param transactionDto The transaction detail
+     * @param account the account to which the enrollment span should be associated
+     * @param priorEnrollmentSpans enrollment spans that is immediately prior to the effective date in the transaction
+     * @return return the created enrollment span
      */
     @Override
     public EnrollmentSpan createEnrollmentSpan(TransactionDto transactionDto,
-                                               Account account) {
+                                               Account account,
+                                               List<EnrollmentSpanDto> priorEnrollmentSpans) {
         // Get the primary member from the transaction dto, need to get the
-        // exchange subscriber if from the primary subscriber
+        // exchange subscriber id from the primary subscriber
         TransactionMemberDto primarySubscriber = getPrimaryMember(transactionDto);
         // Create the enrollment span entity
+        String enrollmentSpanCode = accountProcessorUtil.generateUniqueCode(transactionDto.getEntityCodes(),
+                "enrollmentSpanCode");
         EnrollmentSpan enrollmentSpan = EnrollmentSpan.builder()
                 .acctEnrollmentSpanSK(null)
-                .enrollmentSpanCode(ZeusRandomStringGenerator.randomString(15))
+                .enrollmentSpanCode(enrollmentSpanCode)
                 .account(account)
+                .ztcn(transactionDto.getZtcn())
                 .stateTypeCode(transactionDto.getTradingPartnerDto().getStateTypeCode())
                 .marketplaceTypeCode(transactionDto.getTradingPartnerDto().getMarketplaceTypeCode())
                 .businessUnitTypeCode(transactionDto.getTradingPartnerDto().getBusinessTypeCode())
@@ -87,10 +97,11 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                 // get the exchange subscriber id and set it
                 .exchangeSubscriberId(getExchangeSubscriberId(primarySubscriber))
                 // determine the effectuation date
-                .effectuationDate(determineEffectuationDate(transactionDto, null))
+                .effectuationDate(determineEffectuationDate(transactionDto, priorEnrollmentSpans))
                 .planId(transactionDto.getTransactionDetail().getPlanId())
                 .productTypeCode("HMO")
                 .groupPolicyId(transactionDto.getTransactionDetail().getGroupPolicyId())
+                .changed(true)
                 .build();
         // Determine the enrollment span status
         String spanStatus = determineEnrollmentSpanStatus(enrollmentSpan, null);
@@ -115,9 +126,9 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                                   String ztcn) {
         if(account.getEnrollmentSpan() != null && account.getEnrollmentSpan().size() > 0){
             List<EnrollmentSpanDto> enrollmentSpanDtos = new ArrayList<>();
-            account.getEnrollmentSpan().stream().forEach(enrollmentSpan -> {
+            account.getEnrollmentSpan().forEach(enrollmentSpan -> {
                 EnrollmentSpanDto enrollmentSpanDto = enrollmentSpanMapper.enrollmentSpanToEnrollmentSpanDto(enrollmentSpan);
-                enrollmentSpanDto.setZtcn(ztcn);
+//                enrollmentSpanDto.setZtcn(ztcn);
                 premiumSpanHelper.setPremiumSpan(enrollmentSpanDto, enrollmentSpan, ztcn);
                 enrollmentSpanDtos.add(enrollmentSpanDto);
             });
@@ -134,7 +145,187 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
     @Override
     public String determineStatus(EnrollmentSpanStatusDto enrollmentSpanStatusDto) {
         return determineEnrollmentSpanStatus(enrollmentSpanMapper.enrollmentSpanDtoToEnrollmentSpan(enrollmentSpanStatusDto.getCurrentEnrollmentSpan()),
-                enrollmentSpanMapper.enrollmentSpanDtoToEnrollmentSpan(enrollmentSpanStatusDto.getPriorEnrollmentSpan()));
+                enrollmentSpanStatusDto.getPriorEnrollmentSpans());
+    }
+
+    /**
+     * Get enrollment spans that are overlapping
+     * @param accountDto The account from which the overlapping enrollment spans are to be identfied
+     * @param effectiveStartDate the start date that is to be used
+     * @param effectiveEndDate the end date that is to be used
+     * @param coverageTypeCode identifies the type of coverage "FAM" or "DEP"
+     * @return return the enrollment spans that are overlapping with the dates that are passed
+     */
+    @Override
+    public List<EnrollmentSpanDto> getOverlappingEnrollmentSpans(AccountDto accountDto,
+                                                                 LocalDate effectiveStartDate,
+                                                                 LocalDate effectiveEndDate,
+                                                                 String coverageTypeCode) {
+        if(accountDto.getEnrollmentSpans() == null || accountDto.getEnrollmentSpans().isEmpty()){
+            return null;
+        }
+        Set<EnrollmentSpanDto> overlappingEnrollmentSpans = new HashSet<>();
+        Set<EnrollmentSpanDto> enrollmentSpanDtos = accountDto.getEnrollmentSpans();
+        int effectiveYear = effectiveStartDate.getYear();
+        // Get all the enrollment spans that are present for the year for which the effective date is received and
+        // has the same coverage type code that is passed in the input
+        // i.e. if the effective date is 2/1/2023 get all the enrollment spans that belong to the year 2023 and also
+        // has the same coverage type code "FAM" or "DEP"
+        overlappingEnrollmentSpans = enrollmentSpanDtos.stream()
+                .filter(enrollmentSpanDto -> enrollmentSpanDto.getStartDate().getYear() == effectiveYear &&
+                                             enrollmentSpanDto.getCoverageTypeCode().equals(coverageTypeCode))
+                .collect(Collectors.toSet());
+        // Get all the enrollment spans that have the end date that is greater than the effective start date
+        // This eliminates all the enrollment spans that are termed prior to the effective start date of the transaction
+        overlappingEnrollmentSpans = overlappingEnrollmentSpans.stream()
+                .filter(enrollmentSpanDto -> enrollmentSpanDto.getEndDate().isAfter(effectiveStartDate))
+                .collect(Collectors.toSet());
+        // Get all enrollment spans that have the start date that is before the effective end date received in the
+        // transaction
+        overlappingEnrollmentSpans = overlappingEnrollmentSpans.stream()
+                .filter(enrollmentSpanDto -> {
+                    if(enrollmentSpanDto.getStatusTypeCode().equals("CANCELED")){
+                        return false;
+                    }
+                    LocalDate enrollmentSpanStartDate = enrollmentSpanDto.getStartDate();
+                    return enrollmentSpanStartDate.isBefore(effectiveEndDate);
+                })
+                .collect(Collectors.toSet());
+        // Return null if there are no overlapping enrollment spans
+        if(overlappingEnrollmentSpans.isEmpty()){
+            return null;
+        }else {
+            return overlappingEnrollmentSpans.stream().toList();
+        }
+    }
+
+    /**
+     * Identify the enrollment spans that overlap the dates and term or cancel them appropriately
+     * @param overlappingEnrollmentSpans List of enrollment spans that overlap
+     * @param effectiveStartDate the dates when the enrollment spans are overlapping
+     * @param effectiveEndDate the dates when the enrollment spans are overlapping
+     * @return return the enrollment spans the need to be termed or canceled to avoid overlapping issues
+     */
+    @Override
+    public List<EnrollmentSpanDto> updateOverlappingEnrollmentSpans(List<EnrollmentSpanDto> overlappingEnrollmentSpans,
+                                                                    LocalDate effectiveStartDate,
+                                                                    LocalDate effectiveEndDate) {
+        // Check if there are any enrollment spans that need to be termed or canceled
+        if(overlappingEnrollmentSpans != null && !overlappingEnrollmentSpans.isEmpty()){
+            // Get the enrollment span in which the effective date is falling in between its start date and end date
+            Set<EnrollmentSpanDto> termCancelEnrollmentSpans = overlappingEnrollmentSpans.stream().filter(enrollmentSpanDto ->
+                    enrollmentSpanDto.getStartDate().isEqual(effectiveStartDate) ||
+                            (enrollmentSpanDto.getStartDate().isBefore(effectiveStartDate) &&
+                                    enrollmentSpanDto.getEndDate().isAfter(effectiveStartDate))).collect(Collectors.toSet());
+            if(termCancelEnrollmentSpans.size() > 1){
+                log.info("More than one enrollment spans to be termed");
+                // todo generate an exception when this is true
+            }else if (termCancelEnrollmentSpans.size() == 1) {
+                // Get the first element from the set to term
+                final EnrollmentSpanDto termCancelEnrollmentSpan = termCancelEnrollmentSpans.stream().findFirst().get();
+                // Identify the enrollment span that needs to be termed/canceled from the overlapping enrollment span list
+                // The rest of the enrollment spans should be canceled
+                overlappingEnrollmentSpans.forEach(enrollmentSpanDto -> {
+                    if (enrollmentSpanDto.getEnrollmentSpanCode().equals(termCancelEnrollmentSpan.getEnrollmentSpanCode())) {
+                        if (enrollmentSpanDto.getStartDate().isBefore(effectiveStartDate)) {
+                            LocalDate termDate = effectiveStartDate.minusDays(1);
+                            enrollmentSpanDto.setEndDate(termDate);
+                            // Identify the premium spans that need to be termed or canceled
+                            enrollmentSpanDto.getPremiumSpans().forEach(premiumSpanDto -> {
+                                // Premiums spans where the start date is before the term date but the end date is
+                                // after the term date, then the premium span has to be termed
+                                if (premiumSpanDto.getStartDate().isBefore(termDate) &&
+                                        premiumSpanDto.getEndDate().isAfter(termDate)) {
+                                    premiumSpanDto.setEndDate(termDate);
+                                }// If the premium span start date is after the term date then it has to be canceled
+                                else if (premiumSpanDto.getStartDate().isAfter(termDate)) {
+                                    cancelPremiumSpan(premiumSpanDto);
+                                }
+                            });
+                        } else {
+                            enrollmentSpanDto.setEndDate(enrollmentSpanDto.getStartDate());
+                            enrollmentSpanDto.setStatusTypeCode("CANCELED");
+                            cancelPremiumSpans(enrollmentSpanDto.getPremiumSpans());
+                        }
+                    } else { // The rest of the enrollment spans should be canceled
+                        enrollmentSpanDto.setEndDate(enrollmentSpanDto.getStartDate());
+                        enrollmentSpanDto.setStatusTypeCode("CANCELED");
+                        cancelPremiumSpans(enrollmentSpanDto.getPremiumSpans());
+                    }
+                });
+            }
+            // This contains the list of enrollment span dtos that are updated depending on if they need to be
+            // canceled or termed
+            return overlappingEnrollmentSpans;
+        }
+        return null;
+    }
+
+    /**
+     * Save the updated enrollment spans
+     * @param enrollmentSpanDtos enrollment spans that need to be saved
+     * @param account the account to which the enrollment spans belong
+     * @return saved enrollment spans
+     */
+    @Override
+    public List<EnrollmentSpan> saveUpdatedEnrollmentSpans(List<EnrollmentSpanDto> enrollmentSpanDtos, Account account) {
+        if(enrollmentSpanDtos != null && !enrollmentSpanDtos.isEmpty()){
+            List<EnrollmentSpan> savedEnrollmentSpans = new ArrayList<>();
+            enrollmentSpanDtos.forEach(enrollmentSpanDto -> {
+
+                EnrollmentSpan enrollmentSpan =
+                        enrollmentSpanMapper.enrollmentSpanDtoToEnrollmentSpan(enrollmentSpanDto);
+                enrollmentSpan.setAcctEnrollmentSpanSK(enrollmentSpanDto.getEnrollmentSpanSK());
+                enrollmentSpan.setChanged(true);
+                enrollmentSpan.setAccount(account);
+                enrollmentSpan = enrollmentSpanRepository.save(enrollmentSpan);
+                List<PremiumSpan> updatedPremiumSpans = premiumSpanHelper
+                        .saveUpdatedPremiumSpans(enrollmentSpanDto.getPremiumSpans().stream().toList(),
+                                enrollmentSpan);
+                enrollmentSpan.setPremiumSpans(updatedPremiumSpans);
+                savedEnrollmentSpans.add(enrollmentSpan);
+
+            });
+            return savedEnrollmentSpans;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the enrollment spans that are immediately before the start date provided in the input
+     * @param accountDto the account dto that contains the enrollment spans
+     * @param startDate the start date before which the enrollment spans are requested
+     * @param matchCancelSpans boolean to indicate of cancel spans should be considered a match
+     * @return return the list of matched enrollment spans
+     */
+    @Override
+    public List<EnrollmentSpanDto> getPriorEnrollmentSpans(AccountDto accountDto, LocalDate startDate, boolean matchCancelSpans) {
+        List<EnrollmentSpanDto> enrollmentSpanDtos = accountDto.getEnrollmentSpans().stream().toList();
+        enrollmentSpanDtos =
+                enrollmentSpanDtos.stream()
+                        .sorted(Comparator.comparing(EnrollmentSpanDto::getStartDate))
+                        .collect(Collectors.toList());
+        enrollmentSpanDtos =
+                enrollmentSpanDtos.stream()
+                        .takeWhile(
+                                enrollmentSpanDto ->
+                                        enrollmentSpanDto.getEndDate().isBefore(startDate))
+                        .collect(Collectors.toList());
+        if(!matchCancelSpans){
+            enrollmentSpanDtos = removeCanceledSpans(enrollmentSpanDtos);
+        }
+        if(enrollmentSpanDtos != null && !enrollmentSpanDtos.isEmpty()){
+            LocalDate maxEndDate =
+                    enrollmentSpanDtos.stream().map(EnrollmentSpanDto::getEndDate).max(Comparator.naturalOrder()).get();
+            List<EnrollmentSpanDto> priorYearEnrollmentSpans =
+                    enrollmentSpanDtos.stream()
+                            .takeWhile(
+                                    enrollmentSpanDto -> enrollmentSpanDto.getEndDate().isEqual(maxEndDate))
+                            .toList();
+            return priorYearEnrollmentSpans;
+        }
+        return null;
     }
 
     /**
@@ -185,11 +376,11 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
     /**
      * Determine the effectuation date of the enrollment span
      * @param transactionDto
-     * @param priorEnrollmentSpan
+     * @param priorEnrollmentSpans
      * @return
      */
     private LocalDate determineEffectuationDate(TransactionDto transactionDto,
-                                                EnrollmentSpan priorEnrollmentSpan){
+                                                List<EnrollmentSpanDto> priorEnrollmentSpans){
         Optional<TransactionRateDto> optionalTotResAmt = transactionDto.getTransactionRates().stream().filter(rateDto -> {
             return rateDto.getRateTypeCode().equals("TOTRESAMT");
         }).findFirst();
@@ -201,23 +392,35 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                 return LocalDate.now();
             }
         }
+        Optional<EnrollmentSpanDto> optionalPriorEnrollmentSpan = priorEnrollmentSpans.stream()
+                .filter(
+                        enrollmentSpanDto -> enrollmentSpanDto.getStatusTypeCode().equals("ENROLLED")).findFirst();
+        if(optionalPriorEnrollmentSpan.isPresent()){
+            EnrollmentSpanDto priorEnrollmentSpan = optionalPriorEnrollmentSpan.get();
+            boolean samePlan = isSamePlan(transactionDto.getTransactionDetail().getPlanId(), priorEnrollmentSpan.getPlanId());
+            boolean gapInCoverage = isThereGapInCoverage(transactionDto.getTransactionDetail().getEffectiveDate(), priorEnrollmentSpan);
+            if(samePlan && !gapInCoverage){
+                return LocalDate.now();
+            }
+        }
         return null;
     }
 
     /**
      * Determine the enrollment span status
      * @param currentEnrollmentSpan
-     * @param priorEnrollmentSpan
+     * @param priorEnrollmentSpans
      * @return
      */
-    private String determineEnrollmentSpanStatus(EnrollmentSpan currentEnrollmentSpan,
-                                                 EnrollmentSpan priorEnrollmentSpan){
+    @Override
+    public String determineEnrollmentSpanStatus(EnrollmentSpan currentEnrollmentSpan,
+                                                 List<EnrollmentSpanDto> priorEnrollmentSpans){
         boolean isEndDateGreaterThanStartDate = currentEnrollmentSpan.getEndDate().isAfter(currentEnrollmentSpan.getStartDate());
         boolean isEndDateLessThanStartDate = currentEnrollmentSpan.getEndDate().isBefore(currentEnrollmentSpan.getStartDate());
         boolean isEndDateEqualToStartDate =currentEnrollmentSpan.getEndDate().isEqual(currentEnrollmentSpan.getStartDate());
-        if(isDelinquent(currentEnrollmentSpan, priorEnrollmentSpan) == 1){
+        if(isDelinquent(currentEnrollmentSpan, priorEnrollmentSpans) == 1){
             return EnrollmentSpanStatus.DELINQUENT.name();
-        }else if(isDelinquent(currentEnrollmentSpan, priorEnrollmentSpan) == -1){
+        }else if(isDelinquent(currentEnrollmentSpan, priorEnrollmentSpans) == -1){
             return EnrollmentSpanStatus.SUSPENDED.name();
         }
         if (isEndDateLessThanStartDate) {
@@ -243,11 +446,11 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
      * -1 - Suspended
      * 0 - Neither Suspended nor Delinquent
      * @param currentEnrollmentSpan
-     * @param priorEnrollmentSpan
+     * @param priorEnrollmentSpans
      * @return
      */
     private int isDelinquent(EnrollmentSpan currentEnrollmentSpan,
-                                 EnrollmentSpan priorEnrollmentSpan){
+                                 List<EnrollmentSpanDto> priorEnrollmentSpans){
         // Check if the effectuation date is not NULL and the delinquency flag is set to true and
         // the end date is not before the start date of the enrollment span
         log.info("currentEnrollmentSpan.getEffectuationDate() != null:{}", currentEnrollmentSpan.getEffectuationDate() != null);
@@ -269,16 +472,29 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                 boolean localDateIsBefore = LocalDate.now().isBefore(currentEnrollmentSpan.getClaimPaidThroughDate());
                 boolean localDateIsAfter = LocalDate.now().isAfter(currentEnrollmentSpan.getClaimPaidThroughDate());
                 boolean localDateIsEqual = LocalDate.now().isEqual(currentEnrollmentSpan.getClaimPaidThroughDate());
-                boolean samePlan = priorEnrollmentSpan != null &&
-                        isSamePlan(currentEnrollmentSpan.getPlanId(), priorEnrollmentSpan.getPlanId());
-                boolean gapInCoverage = priorEnrollmentSpan != null &&
-                        isThereGapInCoverage(currentEnrollmentSpan, priorEnrollmentSpan);
-                boolean priorSpanStatus = priorEnrollmentSpan != null &&
-                        priorEnrollmentSpan.getStatusTypeCode().equals(EnrollmentSpanStatus.DELINQUENT.name());
-                boolean delinquent = localDateIsBefore || localDateIsEqual ||
-                        (samePlan &&
-                                !gapInCoverage &&
-                                priorSpanStatus);
+                AtomicBoolean samePlan = new AtomicBoolean(false);
+                AtomicBoolean gapInCoverage = new AtomicBoolean(false);
+                AtomicBoolean priorSpanStatus = new AtomicBoolean(false);
+                boolean delinquent = false;
+                if(priorEnrollmentSpans != null && !priorEnrollmentSpans.isEmpty()){
+                    delinquent = priorEnrollmentSpans.stream().anyMatch(priorEnrollmentSpan -> {
+                        samePlan.set(priorEnrollmentSpan != null &&
+                                isSamePlan(currentEnrollmentSpan.getPlanId(), priorEnrollmentSpan.getPlanId()));
+                        gapInCoverage.set(priorEnrollmentSpan != null &&
+                                isThereGapInCoverage(currentEnrollmentSpan.getStartDate(), priorEnrollmentSpan));
+                        priorSpanStatus.set(priorEnrollmentSpan != null &&
+                                priorEnrollmentSpan.getStatusTypeCode().equals(EnrollmentSpanStatus.DELINQUENT.name()));
+                        return localDateIsBefore || localDateIsEqual ||
+                                (samePlan.get() &&
+                                        !gapInCoverage.get() &&
+                                        priorSpanStatus.get());
+                    });
+                }
+
+//                boolean delinquent = localDateIsBefore || localDateIsEqual ||
+//                        (samePlan.get() &&
+//                                !gapInCoverage.get() &&
+//                                priorSpanStatus.get());
 
                 log.info("Delinquent:{}", delinquent);
                 if(delinquent){
@@ -314,17 +530,17 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
 
     /**
      * Determine if there is a gap between the current and the prior enrollment span
-     * @param currentEnrollmentSpan
-     * @param priorEnrollmentSpan
-     * @return
+     * @param effectiveStartDate of the enrollment span to be created
+     * @param priorEnrollmentSpan the prior year enrollment span
+     * @return return true if there is a gap in coverage
      */
-    private boolean isThereGapInCoverage(EnrollmentSpan currentEnrollmentSpan,
-                                         EnrollmentSpan priorEnrollmentSpan){
+    private boolean isThereGapInCoverage(LocalDate effectiveStartDate,
+                                         EnrollmentSpanDto priorEnrollmentSpan){
         if(priorEnrollmentSpan.getStatusTypeCode().equals(EnrollmentSpanStatus.CANCELED)){
             return true;
         }else{
             long numOfDays = ChronoUnit.DAYS.between(priorEnrollmentSpan.getEndDate(),
-                    currentEnrollmentSpan.getStartDate());
+                    effectiveStartDate);
             // numOfDays will be 1 if the end date of the prior enrollment span is the day prior to the
             // start of the current enrollment span
 
@@ -345,5 +561,44 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                 return false;
             }
         }
+    }
+
+    /**
+     * Cancel the premium span and set the status
+     * @param premiumSpanDto cancel the premium span
+     */
+    private void cancelPremiumSpan(PremiumSpanDto premiumSpanDto){
+        // Check if the premium span is not already canceled before setting it to cancel
+        if(!premiumSpanDto.getStartDate().isEqual(premiumSpanDto.getEndDate()) ||
+                (premiumSpanDto.getStartDate().isEqual(premiumSpanDto.getEndDate()) &&
+                        premiumSpanDto.getStatusTypeCode().equals("ACTIVE"))){
+            premiumSpanDto.setEndDate(premiumSpanDto.getStartDate());
+            premiumSpanDto.setStatusTypeCode("CANCELED");
+            premiumSpanDto.setChanged(new AtomicBoolean(true));
+        }
+
+    }
+
+    /**
+     * Cancel all the premium spans
+     * @param premiumSpanDtos premium spans to be canceled
+     */
+    private void cancelPremiumSpans(Set<PremiumSpanDto> premiumSpanDtos){
+        premiumSpanDtos.forEach(this::cancelPremiumSpan);
+    }
+
+    /**
+     * Remove canceled enrollment span from the list
+     * @param enrollmentSpanDtos
+     * @return
+     */
+    private List<EnrollmentSpanDto> removeCanceledSpans(List<EnrollmentSpanDto> enrollmentSpanDtos){
+        List<EnrollmentSpanDto> nonCanceledEnrollmentSpans = enrollmentSpanDtos.stream()
+                .filter(
+                        enrollmentSpanDto ->
+                                !enrollmentSpanDto.getStatusTypeCode()
+                                        .equals(EnrollmentSpanStatus.CANCELED))
+                .collect(Collectors.toList());
+        return nonCanceledEnrollmentSpans;
     }
 }

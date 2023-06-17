@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +38,7 @@ public class EnrollmentSpanMapperImpl implements EnrollmentSpanMapper {
         EnrollmentSpanDto enrollmentSpanDto = EnrollmentSpanDto.builder()
                 .enrollmentSpanSK(enrollmentSpan.getAcctEnrollmentSpanSK())
                 .enrollmentSpanCode(enrollmentSpan.getEnrollmentSpanCode())
+                .ztcn(enrollmentSpan.getZtcn())
                 .stateTypeCode(enrollmentSpan.getStateTypeCode())
                 .marketplaceTypeCode(enrollmentSpan.getMarketplaceTypeCode())
                 .businessUnitTypeCode(enrollmentSpan.getBusinessUnitTypeCode())
@@ -53,6 +55,7 @@ public class EnrollmentSpanMapperImpl implements EnrollmentSpanMapper {
                 .paidThroughDate(enrollmentSpan.getPaidThroughDate())
                 .claimPaidThroughDate(enrollmentSpan.getClaimPaidThroughDate())
                 .statusTypeCode(enrollmentSpan.getStatusTypeCode())
+                .changed(new AtomicBoolean(enrollmentSpan.isChanged()))
                 .createdDate(enrollmentSpan.getCreatedDate())
                 .updatedDate(enrollmentSpan.getUpdatedDate())
                 .build();
@@ -81,6 +84,7 @@ public class EnrollmentSpanMapperImpl implements EnrollmentSpanMapper {
         }
         EnrollmentSpan enrollmentSpan = EnrollmentSpan.builder()
                 .enrollmentSpanCode(enrollmentSpanDto.getEnrollmentSpanCode())
+                .ztcn(enrollmentSpanDto.getZtcn())
                 .stateTypeCode(enrollmentSpanDto.getStateTypeCode())
                 .marketplaceTypeCode(enrollmentSpanDto.getMarketplaceTypeCode())
                 .businessUnitTypeCode(enrollmentSpanDto.getBusinessUnitTypeCode())

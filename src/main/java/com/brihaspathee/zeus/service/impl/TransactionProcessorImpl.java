@@ -64,7 +64,7 @@ public class TransactionProcessorImpl implements TransactionProcessor {
      */
     @Override
     public Mono<AccountProcessingResponse> processTransaction(AccountProcessingRequest accountProcessingRequest, PayloadTracker payloadTracker) throws JsonProcessingException {
-        processTransaction(accountProcessingRequest.getTransactionDto(),
+        processTransactionByAccountNumber(accountProcessingRequest.getTransactionDto(),
                 accountProcessingRequest.getAccountNumber(), true);
 
         AccountProcessingResponse accountProcessingResponse = AccountProcessingResponse.builder()
@@ -87,9 +87,9 @@ public class TransactionProcessorImpl implements TransactionProcessor {
     public AccountDto processTransaction(AccountProcessingRequest accountProcessingRequest, boolean sendToMMS) throws JsonProcessingException {
         AccountDto accountDto = null;
         if(accountProcessingRequest.getAccountDto() == null){
-            accountDto = processTransaction(accountProcessingRequest.getTransactionDto(), accountProcessingRequest.getAccountNumber(), sendToMMS);
+            accountDto = processTransactionByAccountNumber(accountProcessingRequest.getTransactionDto(), accountProcessingRequest.getAccountNumber(), sendToMMS);
         }else{
-            accountDto = processTransaction(accountProcessingRequest.getTransactionDto(), accountProcessingRequest.getAccountDto(), sendToMMS);
+            accountDto = processTransactionByAccountDto(accountProcessingRequest.getTransactionDto(), accountProcessingRequest.getAccountDto(), sendToMMS);
         }
         return accountDto;
     }
@@ -102,7 +102,7 @@ public class TransactionProcessorImpl implements TransactionProcessor {
      * @return
      * @throws JsonProcessingException
      */
-    private AccountDto processTransaction(TransactionDto transactionDto,
+    private AccountDto processTransactionByAccountNumber(TransactionDto transactionDto,
                                           String accountNumber,
                                           boolean sendToMMS) throws JsonProcessingException {
         Transaction transaction = transactionMapper.transactionDtoToTransaction(transactionDto);
@@ -132,12 +132,11 @@ public class TransactionProcessorImpl implements TransactionProcessor {
      * @return
      * @throws JsonProcessingException
      */
-    private AccountDto processTransaction(TransactionDto transactionDto,
+    private AccountDto processTransactionByAccountDto(TransactionDto transactionDto,
                                           AccountDto accountDto,
                                           boolean sendToMMS) throws JsonProcessingException {
         Transaction transaction = transactionMapper.transactionDtoToTransaction(transactionDto);
         transaction = transactionRepository.save(transaction);
-        accountService.updateAccount(accountDto, transactionDto, transaction);
-        return null;
+        return accountService.updateAccount(accountDto, transactionDto, transaction);
     }
 }

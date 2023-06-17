@@ -8,9 +8,11 @@ import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.PayerHelper;
 import com.brihaspathee.zeus.mapper.interfaces.PayerMapper;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -42,6 +44,11 @@ public class PayerHelperImpl implements PayerHelper {
     private final PayerMapper payerMapper;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * Create a payer
      * @param transactionDto
      * @param account
@@ -50,14 +57,17 @@ public class PayerHelperImpl implements PayerHelper {
     public void createPayer(TransactionDto transactionDto, Account account) {
         if(transactionDto.getPayer() != null){
             List<Payer> payers = new ArrayList<>();
+            String payerCode = accountProcessorUtil.generateUniqueCode(transactionDto.getEntityCodes(),
+                    "payerCode");
             Payer payer = Payer.builder()
                     .acctPayerSK(null)
                     .account(account)
-                    .payerCode(ZeusRandomStringGenerator.randomString(15))
+                    .payerCode(payerCode)
                     .payerName(transactionDto.getPayer().getPayerName())
                     .payerId(transactionDto.getPayer().getPayerId())
                     .startDate(transactionDto.getBroker().getReceivedDate().toLocalDate())
                     .endDate(null)
+                    .changed(true)
                     .build();
             payer = payerRepository.save(payer);
             payers.add(payer);

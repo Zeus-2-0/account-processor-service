@@ -1,5 +1,7 @@
 package com.brihaspathee.zeus.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -10,6 +12,7 @@ import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created in Intellij IDEA
@@ -153,6 +156,12 @@ public class AlternateContact {
      */
     @Column(name = "end_date", columnDefinition = "datetime", nullable = true)
     private LocalDate endDate;
+
+    /**
+     * Identifies if the alternate contact was updated
+     */
+    @Column(name = "changed", columnDefinition = "boolean", nullable = false)
+    private boolean changed;
 
     /**
      * The date when the record was created

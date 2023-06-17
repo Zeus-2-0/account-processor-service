@@ -24,9 +24,23 @@ public interface PremiumSpanMapper {
     PremiumSpanDto premiumSpanToPremiumSpanDto(PremiumSpan premiumSpan);
 
     /**
+     * Convert premium span dto to premium span entity
+     * @param premiumSpanDto
+     * @return
+     */
+    PremiumSpan premiumSpanDtoToPremiumSpan(PremiumSpanDto premiumSpanDto);
+
+    /**
      * Convert premium span entities to premium span dtos
      * @param premiumSpans
      * @return
      */
     List<PremiumSpanDto> premiumSpanToPremiumSpanDtos(List<PremiumSpan> premiumSpans);
+
+    /**
+     * Convert premium span dtos to premium span entities
+     * @param premiumSpanDtos
+     * @return
+     */
+    List<PremiumSpan> premiumSpanDtosToPremiumSpans(List<PremiumSpanDto> premiumSpanDtos);
 }

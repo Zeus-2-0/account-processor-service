@@ -9,13 +9,16 @@ import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberAddressHelper;
 import com.brihaspathee.zeus.mapper.interfaces.MemberAddressMapper;
+import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +46,11 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
     private final MemberAddressRepository memberAddressRepository;
 
     /**
+     * The utility class for account processor service
+     */
+    private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
      * Create a member address
      * @param member
      * @param transactionMemberDto
@@ -51,11 +59,13 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
     public void createMemberAddress(Member member, TransactionMemberDto transactionMemberDto) {
         if(transactionMemberDto.getMemberAddresses() != null && transactionMemberDto.getMemberAddresses().size() > 0){
             List<MemberAddress> addresses = new ArrayList<>();
-            transactionMemberDto.getMemberAddresses().stream().forEach(addressDto -> {
+            transactionMemberDto.getMemberAddresses().forEach(addressDto -> {
+                String memberAddressCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
+                        "memberAddressCode");
                 MemberAddress memberAddress = MemberAddress.builder()
                         .member(member)
                         .memberAcctAddressSK(null)
-                        .memberAddressCode(ZeusRandomStringGenerator.randomString(15))
+                        .memberAddressCode(memberAddressCode)
                         .addressTypeCode(addressDto.getAddressTypeCode())
                         .addressLine1(addressDto.getAddressLine1())
                         .addressLine2(addressDto.getAddressLine2())
@@ -65,6 +75,7 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
                         .countyCode(addressDto.getCountyCode())
                         .startDate(addressDto.getReceivedDate().toLocalDate())
                         .endDate(null)
+                        .changed(true)
                         .build();
                 memberAddress = memberAddressRepository.save(memberAddress);
                 addresses.add(memberAddress);

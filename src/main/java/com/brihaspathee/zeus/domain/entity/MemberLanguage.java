@@ -10,6 +10,7 @@ import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created in Intellij IDEA
@@ -81,6 +82,12 @@ public class MemberLanguage {
      */
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    /**
+     * Identifies if the member language was updated
+     */
+    @Column(name = "changed", columnDefinition = "boolean", nullable = false)
+    private boolean changed;
 
     /**
      * The date when the record was created

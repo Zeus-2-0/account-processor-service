@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created in Intellij IDEA
@@ -81,6 +82,12 @@ public class MemberPremium {
      */
     @Column(name = "individual_premium_amount")
     private BigDecimal individualRateAmount;
+
+    /**
+     * Identifies if the member premium was updated
+     */
+    @Column(name = "changed", columnDefinition = "boolean", nullable = false)
+    private boolean changed;
 
     /**
      * The date when the record was created

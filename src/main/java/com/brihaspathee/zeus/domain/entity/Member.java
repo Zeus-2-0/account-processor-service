@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created in Intellij IDEA
@@ -109,6 +110,18 @@ public class Member {
     private boolean tobaccoInd;
 
     /**
+     * The height of the member
+     */
+    @Column(name = "height", columnDefinition = "decimal", nullable = true)
+    private double height;
+
+    /**
+     * The weight of the member
+     */
+    @Column(name = "weight", columnDefinition = "decimal", nullable = true)
+    private double weight;
+
+    /**
      * List of member address associated with the member
      */
     @OneToMany(mappedBy = "member")
@@ -145,10 +158,16 @@ public class Member {
     private List<AlternateContact> alternateContacts;
 
     /**
-     * List pf memmber premiums
+     * List of member premiums
      */
     @OneToMany(mappedBy = "member")
     private List<MemberPremium> memberPremiums;
+
+    /**
+     * Identifies if the member was updated
+     */
+    @Column(name = "changed", columnDefinition = "boolean", nullable = false)
+    private boolean changed;
 
     /**
      * The date when the record was created

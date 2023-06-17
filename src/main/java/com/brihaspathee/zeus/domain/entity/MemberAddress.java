@@ -12,6 +12,7 @@ import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created in Intellij IDEA
@@ -113,6 +114,12 @@ public class MemberAddress {
      */
     @Column(name = "end_date", columnDefinition = "datetime", nullable = true)
     private LocalDate endDate;
+
+    /**
+     * Identifies if the member address was updated
+     */
+    @Column(name = "changed", columnDefinition = "boolean", nullable = false)
+    private boolean changed;
 
     /**
      * Date when the record was created
