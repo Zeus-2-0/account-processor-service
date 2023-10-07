@@ -31,6 +31,9 @@ workflows:
   # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
   build:
     jobs:
+      - jq/install:
+          override: true
+          version: "jq-1.7"
       - build-and-test:
           post-steps:
             - jira/notify
