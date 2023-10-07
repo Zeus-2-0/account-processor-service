@@ -6,6 +6,8 @@ import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 
+import java.time.LocalDateTime;
+
 /**
  * Created in Intellij IDEA
  * User: Balaji Varadharajan
@@ -30,4 +32,12 @@ public interface MemberAddressHelper {
      * @param member
      */
     void setMemberAddress(MemberDto memberDto, Member member);
+
+    /**
+     * Compare ana match the member addresses from the transaction and account
+     * @param member
+     * @param memberDto
+     * @param transactionMemberDto
+     */
+    void matchMemberAddress(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto);
 }

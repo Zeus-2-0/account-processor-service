@@ -24,9 +24,23 @@ public interface MemberAddressMapper {
     MemberAddressDto memberAddressToMemberAddressDto(MemberAddress memberAddress);
 
     /**
+     * Convert member address dto to member address entity
+     * @param memberAddressDto
+     * @return
+     */
+    MemberAddress memberAddressDtoToMemberAddress(MemberAddressDto memberAddressDto);
+
+    /**
      * Convert member address entities to member address dtos
      * @param memberAddresses
      * @return
      */
     List<MemberAddressDto> memberAddressesToMemberAddressDtos(List<MemberAddress> memberAddresses);
+
+    /**
+     * Convert member address dtos to member address entities
+     * @param memberAddressDtos
+     * @return
+     */
+    List<MemberAddress> memberAddressDtosToMemberAddresses(List<MemberAddressDto> memberAddressDtos);
 }

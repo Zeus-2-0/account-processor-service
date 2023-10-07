@@ -31,6 +31,8 @@ import java.util.stream.Collectors;
  * Project: Zeus
  * Package Name: com.brihaspathee.zeus.helper.impl
  * To change this template use File | Settings | File and Code Template
+ * Nuclino: <a href="https://app.nuclino.com/Balaji-Inc/Engineering-Wiki/Add-Transaction-Helper-89637208-402f-469e-a399-3244d8f23b88>Nuclino</a>
+ * Confluence: <a href="https://vbalaji.atlassian.net/wiki/spaces/ZEUS/pages/99876887/Add+Transaction+Helper>Confluence</a>
  */
 @Slf4j
 @Component
@@ -67,69 +69,8 @@ public class AddTransactionHelperImpl implements AddTransactionHelper {
                                     Transaction transaction) throws JsonProcessingException {
         // Match the members in the transaction and create them in the APS repository
         memberHelper.matchMember(accountDto,transactionDto, account);
-        LocalDate effectiveStartDate = transactionDto.getTransactionDetail().getEffectiveDate();
-        LocalDate effectiveEndDate = transactionDto.getTransactionDetail().getEndDate();
-        if(effectiveEndDate == null){
-            effectiveEndDate = LocalDate.of(effectiveStartDate.getYear(), 12, 31);
-        }
-        // Get the enrollment span if any are affected
-        List<EnrollmentSpanDto> overlappingEnrollmentSpans = enrollmentSpanHelper.getOverlappingEnrollmentSpans(accountDto,
-                effectiveStartDate,
-                effectiveEndDate, transactionDto.getTransactionDetail().getCoverageTypeCode());
-        // Get the overlapping enrollment spans updated appropriately.
-        // Note this will just update within the DTO and not in the DB
-        overlappingEnrollmentSpans = enrollmentSpanHelper.updateOverlappingEnrollmentSpans(
-                overlappingEnrollmentSpans,
-                effectiveStartDate,
-                effectiveEndDate);
-        updateAccountDtoWithOverlappingSpans(accountDto, overlappingEnrollmentSpans);
-        List<EnrollmentSpan> updatedEnrollmentSpans = enrollmentSpanHelper.saveUpdatedEnrollmentSpans(overlappingEnrollmentSpans,
-                account);
-        if(updatedEnrollmentSpans == null){
-            updatedEnrollmentSpans = new ArrayList<>();
-        }
-        updatedEnrollmentSpans.forEach(enrollmentSpan -> {
-            log.info("Saved Enrollment span code before :{}", enrollmentSpan.getEnrollmentSpanCode());
-            log.info("Saved Enrollment span ztcn before:{}", enrollmentSpan.getZtcn());
-        });
-        EnrollmentSpan newEnrollmentSpan = enrollmentSpanHelper.createEnrollmentSpan(transactionDto,
-                account,
-                enrollmentSpanHelper.getPriorEnrollmentSpans(accountDto, effectiveStartDate, false));
-        updatedEnrollmentSpans.add(newEnrollmentSpan);
-        updatedEnrollmentSpans.forEach(enrollmentSpan -> {
-            log.info("Saved Enrollment span code after :{}", enrollmentSpan.getEnrollmentSpanCode());
-            log.info("Saved Enrollment span ztcn after:{}", enrollmentSpan.getZtcn());
-        });
-        account.setEnrollmentSpan(updatedEnrollmentSpans);
-//        String updatedAccountString = objectMapper.writeValueAsString(account);
-//        log.info("Updated Account:{}", updatedAccountString);
+        enrollmentSpanHelper.updateEnrollmentSpans(accountDto, transactionDto, account);
         return account;
-    }
-
-    /**
-     * The account dto object will be updated with the overlapping enrollment spans
-     * @param accountDto The account dto that is to be updated
-     * @param overlappingEnrollmentSpans the overlapping enrollment spans that needs to be added back to the account
-     */
-    private void updateAccountDtoWithOverlappingSpans(AccountDto accountDto,
-                                                      List<EnrollmentSpanDto> overlappingEnrollmentSpans) {
-        if(overlappingEnrollmentSpans == null || overlappingEnrollmentSpans.isEmpty()){
-            return;
-        }else{
-            // todo add the overlapping enrollment spans
-            Set<EnrollmentSpanDto> accountEnrollmentSpans = accountDto.getEnrollmentSpans();
-            overlappingEnrollmentSpans.forEach(enrollmentSpanDto -> {
-                Optional<EnrollmentSpanDto> optionalEnrollmentSpan = accountEnrollmentSpans.stream()
-                        .filter(
-                                accountEnrollmentSpan ->
-                                        accountEnrollmentSpan.getEnrollmentSpanCode().equals(
-                                                enrollmentSpanDto.getEnrollmentSpanCode()))
-                        .findFirst();
-                optionalEnrollmentSpan.ifPresent(accountEnrollmentSpans::remove);
-
-            });
-            accountEnrollmentSpans.addAll(overlappingEnrollmentSpans);
-        }
     }
 
 

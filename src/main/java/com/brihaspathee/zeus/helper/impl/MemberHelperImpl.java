@@ -149,6 +149,7 @@ public class MemberHelperImpl implements MemberHelper {
             Member member = createMember(account,
                     transactionMemberDto,
                     primarySubscriber);
+            memberAddressHelper.matchMemberAddress(member, primarySubscriber, transactionMemberDto);
             account.setMembers(List.of(member));
         }else{
             // List to hold all the members from the transaction
@@ -168,6 +169,7 @@ public class MemberHelperImpl implements MemberHelper {
                     member = createMember(account,
                             transactionMemberDto,
                             memberDto);
+                    memberAddressHelper.matchMemberAddress(member, memberDto, transactionMemberDto);
                 }
                 // Add the member to the list
                 members.add(member);
@@ -217,45 +219,15 @@ public class MemberHelperImpl implements MemberHelper {
             member.setMemberCode(memberDto.getMemberCode());
             // if there was no change to the member from the transaction then set the details from MMS
             boolean changed = doMemberChange(transactionMemberDto, memberDto);
-            if(!changed){
-                member.setFirstName(memberDto.getFirstName());
-                member.setMiddleName(memberDto.getMiddleName());
-                member.setLastName(memberDto.getLastName());
-                member.setDateOfBirth(memberDto.getDateOfBirth());
-                member.setGenderTypeCode(memberDto.getGenderTypeCode());
-                member.setTobaccoInd(false);
-                member.setHeight(memberDto.getHeight());
-                member.setWeight(memberDto.getWeight());
-                member.setChanged(changed);
-            } // if there was a change in the transaction then set the details from the transaction if they are present
-            else{
-                member.setFirstName(transactionMemberDto.getFirstName());
-                // If the transaction has a middle name then set it from the transaction
-                // if it is not present in the transaction then set it from the member matched in MMS
-                if(transactionMemberDto.getMiddleName() != null){
-                    member.setMiddleName(transactionMemberDto.getMiddleName());
-                }else{
-                    member.setMiddleName(memberDto.getMiddleName());
-                }
-                member.setLastName(transactionMemberDto.getLastName());
-                // If the transaction has a date of birth then set it from the transaction
-                // if it is not present in the transaction then set it from the member matched in MMS
-                if(transactionMemberDto.getDateOfBirth() != null){
-                    member.setDateOfBirth(transactionMemberDto.getDateOfBirth());
-                }else{
-                    member.setDateOfBirth(memberDto.getDateOfBirth());
-                }
-                // If the transaction has a gender then set it from the transaction
-                // if it is not present in the transaction then set it from the member matched in MMS
-                if(transactionMemberDto.getGenderTypeCode() != null){
-                    member.setGenderTypeCode(transactionMemberDto.getGenderTypeCode());
-                }else{
-                    member.setGenderTypeCode(memberDto.getGenderTypeCode());
-                }
-                member.setTobaccoInd(false);
-                member.setChanged(changed);
-
-            }
+            member.setFirstName(memberDto.getFirstName());
+            member.setMiddleName(memberDto.getMiddleName());
+            member.setLastName(memberDto.getLastName());
+            member.setDateOfBirth(memberDto.getDateOfBirth());
+            member.setGenderTypeCode(memberDto.getGenderTypeCode());
+            member.setTobaccoInd(false);
+            member.setHeight(memberDto.getHeight());
+            member.setWeight(memberDto.getWeight());
+            member.setChanged(changed);
         } // Else set the member sk to null and create a new member code
         else{
             member.setAcctMemberSK(null);
@@ -324,12 +296,37 @@ public class MemberHelperImpl implements MemberHelper {
      */
     private boolean doMemberChange(TransactionMemberDto transactionMemberDto, MemberDto accountMemberDto){
         boolean memberUpdated = false;
-        if(!transactionMemberDto.getFirstName().equals(accountMemberDto.getFirstName())){
+        // Check if first name of the member has changed
+        if(transactionMemberDto.getFirstName() != null && !transactionMemberDto.getFirstName().equals(accountMemberDto.getFirstName())){
             accountMemberDto.setFirstName(transactionMemberDto.getFirstName());
+            memberUpdated = true;
         }
-        if(!transactionMemberDto.getMiddleName().equals(accountMemberDto.getMiddleName())){
+        // Check if the middle name of the member has changed
+        if(transactionMemberDto.getMiddleName() != null && !transactionMemberDto.getMiddleName().equals(accountMemberDto.getMiddleName())){
             accountMemberDto.setMiddleName(transactionMemberDto.getMiddleName());
+            memberUpdated = true;
         }
+        // Check if the last name of the member has changed
+        if(transactionMemberDto.getLastName() != null && !transactionMemberDto.getLastName().equals(accountMemberDto.getLastName())){
+            accountMemberDto.setLastName(transactionMemberDto.getLastName());
+            memberUpdated = true;
+        }
+        // Check if the date of birth of the member has changed
+        if(transactionMemberDto.getDateOfBirth() != null && !transactionMemberDto.getDateOfBirth().isEqual(accountMemberDto.getDateOfBirth())){
+            accountMemberDto.setDateOfBirth(transactionMemberDto.getDateOfBirth());
+            memberUpdated = true;
+        }
+        // Check if the gender of the member has changed
+        if(transactionMemberDto.getGenderTypeCode() != null && !transactionMemberDto.getGenderTypeCode().equals(accountMemberDto.getGenderTypeCode())){
+            accountMemberDto.setGenderTypeCode(transactionMemberDto.getGenderTypeCode());
+            memberUpdated = true;
+        }
+        // Check if the height of the member has changed
+        if(transactionMemberDto.getHeight() != 0.0 && !(transactionMemberDto.getHeight() == accountMemberDto.getHeight())){
+            accountMemberDto.setHeight(transactionMemberDto.getHeight());
+        }
+        // Check if the weight of the member has changed
+
         return memberUpdated;
     }
 }
