@@ -31,8 +31,8 @@ import java.util.stream.Collectors;
  * Project: Zeus
  * Package Name: com.brihaspathee.zeus.helper.impl
  * To change this template use File | Settings | File and Code Template
- * Nuclino: <a href="https://app.nuclino.com/Balaji-Inc/Engineering-Wiki/Add-Transaction-Helper-89637208-402f-469e-a399-3244d8f23b88>Nuclino</a>
- * Confluence: <a href="https://vbalaji.atlassian.net/wiki/spaces/ZEUS/pages/99876887/Add+Transaction+Helper>Confluence</a>
+ * Nuclino: https://app.nuclino.com/Balaji-Inc/Engineering-Wiki/Add-Transaction-Helper-89637208-402f-469e-a399-3244d8f23b88
+ * Confluence: https://vbalaji.atlassian.net/wiki/spaces/ZEUS/pages/99876887/Add+Transaction+Helper
  */
 @Slf4j
 @Component
