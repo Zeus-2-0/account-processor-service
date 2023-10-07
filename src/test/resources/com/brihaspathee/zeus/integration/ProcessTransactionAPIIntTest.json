@@ -1904,7 +1904,7 @@
                     "lastName": "Mohanakrishnan",
                     "tobaccoIndicator": "NONE",
                     "dateOfBirth": "1985-12-10",
-                    "genderTypeCode": "MALE",
+                    "genderTypeCode": "FEMALE",
                     "memberRate": 150.00,
                     "memberPhones": [
                       {
@@ -5618,6 +5618,2026 @@
                   "genderTypeCode": "MALE",
                   "height": 6.2,
                   "weight": 195.32
+                }
+              ]
+            }
+          }
+        },
+        {
+          "testData": {
+            "testCaseId": "ZEUS-APS-ACCT-Process-09",
+            "testCaseDescription": "Existing account, brand new Enrollment span created for next year. Member middle name and last name is updated",
+            "exceptionExpected": false,
+            "httpStatusCode": "200",
+            "accountProcessingRequest": {
+              "accountDto": {
+                "accountSK": "8a9dc9a8-ba59-45a3-9aa8-1acbfdee585a",
+                "accountNumber": "I5ZWRSWA7NVL330",
+                "lineOfBusinessTypeCode": "HIX",
+                "enrollmentSpans": [
+                  {
+                    "enrollmentSpanSK": "17ed8b5b-5105-4207-830d-ee6c17bcfa92",
+                    "accountSK": "8a9dc9a8-ba59-45a3-9aa8-1acbfdee585a",
+                    "enrollmentSpanCode": "JW3ACOM5Q94OPQD",
+                    "premiumSpans": [
+                      {
+                        "premiumSpanSK": "f203d69f-ac11-4efb-9f2e-3bb91ad4e0b5",
+                        "enrollmentSpanSK": "17ed8b5b-5105-4207-830d-ee6c17bcfa92",
+                        "ztcn": "D5KTTIHVOL42MEK",
+                        "premiumSpanCode": "WJPQQQY55UARNH7",
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "28e4f392-354d-44b9-b73c-e5c3efad31aa",
+                            "memberCode": "PE6E7I1LM4NVAY2",
+                            "memberSK": "9363227e-7c90-45e7-8699-9a29640144fd",
+                            "exchangeMemberId": "5346466301",
+                            "individualPremiumAmount": 150.00,
+                            "createdDate": "2023-06-05 06:14:56",
+                            "updatedDate": "2023-06-05 06:14:56"
+                          }
+                        ],
+                        "startDate": "2022-01-01",
+                        "endDate": "2022-12-31",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 150.00,
+                        "totalResponsibleAmount": 150.00,
+                        "aptcAmount": 0.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 10.00,
+                        "changed": null,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56"
+                      }
+                    ],
+                    "stateTypeCode": "FL",
+                    "marketplaceTypeCode": "FFM",
+                    "businessUnitTypeCode": "MP_FL",
+                    "startDate": "2022-01-01",
+                    "endDate": "2022-12-31",
+                    "exchangeSubscriberId": "53464663",
+                    "effectuationDate": "2021-12-20",
+                    "planId": "09643FL0234700",
+                    "groupPolicyId": "52362394",
+                    "productTypeCode": "HMO",
+                    "coverageTypeCode": "FAM",
+                    "delinqInd": false,
+                    "paidThroughDate": null,
+                    "claimPaidThroughDate": null,
+                    "statusTypeCode": "ENROLLED",
+                    "ztcn": "D5KTTIHVOL42MEK",
+                    "changed": null,
+                    "createdDate": "2023-06-05 06:14:56",
+                    "updatedDate": "2023-06-05 06:14:56"
+                  }
+                ],
+                "members": [
+                  {
+                    "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                    "accountSK": "8a9dc9a8-ba59-45a3-9aa8-1acbfdee585a",
+                    "memberCode": "PE6E7I1LM4NVAY2",
+                    "firstName": "Maria",
+                    "middleName": "K",
+                    "lastName": "Garcia",
+                    "relationshipTypeCode": "HOH",
+                    "dateOfBirth": "1987-03-10",
+                    "genderTypeCode": "FEMALE",
+                    "height": 5.2,
+                    "weight": 144.2,
+                    "changed": null,
+                    "memberAttributes": null,
+                    "memberAddresses": [
+                      {
+                        "memberAddressSK": "31b802c3-eb9a-4c94-8f39-869a034afed3",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberAddressCode": "A3I5PWYK8JJXRIE",
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "6346 Lake Blanche Drive",
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56"
+                      },
+                      {
+                        "memberAddressSK": "b787d0e6-38cb-45ad-b65f-308454ee40e1",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberAddressCode": "21Q33UOZJ3Y37X6",
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 52363",
+                        "addressLine2": null,
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56"
+                      }
+                    ],
+                    "memberIdentifiers": [
+                      {
+                        "memberIdentifierSK": "3249bb85-a30b-4ba4-8721-2a16bcdaa7cf",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberIdentifierCode": "1A31UOXT54CC9MP",
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "937-62-0352",
+                        "isActive": true,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56",
+                        "active": true
+                      },
+                      {
+                        "memberIdentifierSK": "f41bf8cd-14e2-4d0a-8804-66f522951ebc",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberIdentifierCode": "O3944SH4DG6W9S3",
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "53464663",
+                        "isActive": true,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56",
+                        "active": true
+                      },
+                      {
+                        "memberIdentifierSK": "8fe8dabe-8ea0-4bbc-a474-c7ba2545c656",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberIdentifierCode": "8R47SOVXFBOI3RD",
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "5346466301",
+                        "isActive": true,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56",
+                        "active": true
+                      }
+                    ],
+                    "memberLanguages": [
+                      {
+                        "memberLanguageSK": "a89a635b-4383-4a6a-8c47-d3d7ee5fa7f6",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberLanguageCode": "W7FL3MF7YO3N9VF",
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56"
+                      },
+                      {
+                        "memberLanguageSK": "28779a54-987c-4f19-913c-8939a2dfc3f7",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberLanguageCode": "GXI694KJGZTXM7O",
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56"
+                      }
+                    ],
+                    "memberPhones": [
+                      {
+                        "memberPhoneSK": "04a199cb-610c-4746-9872-78eaaf5e62f7",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberPhoneCode": "6V57NLFNQMO53YO",
+                        "phoneTypeCode": "MOBILE",
+                        "phoneNumber": "813-357-4234",
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56"
+                      }
+                    ],
+                    "memberEmails": [
+                      {
+                        "memberEmailSK": "be92f0a0-33df-4af6-8ccd-0d7a9785d958",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberEmailCode": "AVZCZZLHUJ5GJR3",
+                        "emailTypeCode": "WORK",
+                        "email": "maria.garcia@wellcare.com",
+                        "isPrimary": false,
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56",
+                        "primary": false
+                      },
+                      {
+                        "memberEmailSK": "9185623c-e0af-481c-aeaa-d37d18f7a245",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberEmailCode": "AZBADSPMF698JH9",
+                        "emailTypeCode": "PERSONAL",
+                        "email": "mariagarcia@gmail.com",
+                        "isPrimary": true,
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56",
+                        "primary": true
+                      }
+                    ],
+                    "alternateContacts": null,
+                    "memberPremiums": null,
+                    "createdDate": "2023-06-05 06:14:56",
+                    "updatedDate": "2023-06-05 06:14:56"
+                  }
+                ],
+                "brokers": null,
+                "sponsors": null,
+                "payers": null,
+                "accountAttributes": null,
+                "createdDate": "2023-06-05 06:14:56",
+                "updatedDate": "2023-06-05 06:14:56"
+              },
+              "transactionDto": {
+                "ztcn": "IDTINBCDZ8UJNH3",
+                "zfcn": "9KCF46OTAGO4TZ5",
+                "transactionReceivedDate": "2023-02-07T06:27:25.470Z",
+                "transactionSourceTypeCode": "MARKETPLACE",
+                "entityCodes": {
+                  "enrollmentSpanCode": ["M3YNIURHX4KJ493"],
+                  "premiumSpanCode": ["URZFISSOK4G4FPL"]
+                },
+                "transactionDetail": {
+                  "transactionTypeCode": "ADD",
+                  "coverageTypeCode": "FAM",
+                  "planId": "09643FL0234701",
+                  "csrVariant": "03",
+                  "groupPolicyId": "93562364",
+                  "effectiveDate": "2023-01-01"
+                },
+                "transactionAttributes": [
+                  {
+                    "transactionAttributeTypeCode": "RATINGAREA",
+                    "transactionAttributeValue": "R-FL043"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "SRCEXCHID",
+                    "transactionAttributeValue": "FL0"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "REQSBTTMS",
+                    "transactionAttributeValue": "20230207210516"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "APPID",
+                    "transactionAttributeValue": "3340286921-1"
+                  }
+                ],
+                "transactionRates": [
+                  {
+                    "rateTypeCode": "PREAMTTOT",
+                    "transactionRate": 150.00,
+                    "rateStartDate": "2023-01-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "TOTRESAMT",
+                    "transactionRate": 100.00,
+                    "rateStartDate": "2023-01-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "APTCAMT",
+                    "transactionRate": 50.00,
+                    "rateStartDate": "2023-01-01",
+                    "csrVariant": "03"
+                  }
+                ],
+                "tradingPartnerDto": {
+                  "tradingPartnerId": "21663",
+                  "lineOfBusinessTypeCode": "HIX",
+                  "businessTypeCode": "MP_FL",
+                  "marketplaceTypeCode": "FFM",
+                  "stateTypeCode": "FL"
+                },
+                "sponsor": {
+                  "sponsorName": "Maria Garcia",
+                  "sponsorId": "937-62-0352",
+                  "receivedDate": "2023-02-07T06:27:25.484Z"
+                },
+                "broker": {
+                  "brokerName": "Ben Stokes",
+                  "brokerId": "53234534",
+                  "agencyName": "Sapphire Brokers Inc.",
+                  "agencyId": "63363754",
+                  "accountNumber1": "523645-63456",
+                  "receivedDate": "2023-02-07T06:27:25.484Z"
+                },
+                "payer": {
+                  "payerName": "Zeus Health",
+                  "payerId": "5235343",
+                  "receivedDate": "2022-11-07T06:27:25.484Z"
+                },
+                "members": [
+                  {
+                    "transactionMemberCode": "BS8UYRF1QJ9XAJH",
+                    "transactionTypeCode": "ADD",
+                    "effectiveDate": "2023-01-01",
+                    "relationshipTypeCode": "HOH",
+                    "reasonTypeCode": "MBS",
+                    "firstName": "Maria",
+                    "middleName": "Y",
+                    "lastName": "Gonzalez",
+                    "tobaccoIndicator": "NONE",
+                    "dateOfBirth": "1987-03-10",
+                    "genderTypeCode": "FEMALE",
+                    "memberRate": 150.00,
+                    "memberPhones": [
+                      {
+                        "phoneTypeCode": "MOBILE",
+                        "phoneNumber": "813-357-4234",
+                        "receivedDate": "2022-11-07T06:27:25.562Z"
+                      }
+                    ],
+                    "memberAddresses": [
+                      {
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "6346 Lake Blanche Drive",
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "countyCode": "12101",
+                        "receivedDate": "2023-02-07T06:27:25.553Z"
+                      },
+                      {
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 52363",
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "countyCode": "12101",
+                        "receivedDate": "2023-02-07T06:27:25.553Z"
+                      }
+                    ],
+                    "identifiers": [
+                      {
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "53464663",
+                        "receivedDate": "2023-03-07T06:27:25.534Z"
+                      },
+                      {
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "5346466301",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      },
+                      {
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "937-62-0352",
+                        "receivedDate": "2022-11-07T06:27:25.553Z"
+                      }
+                    ],
+                    "emails": [
+                      {
+                        "email": "mariagarcia@gmail.com",
+                        "receivedDate": "2022-11-07T06:27:25.562Z"
+                      }
+                    ],
+                    "languages": [
+                      {
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "receivedDate": "2022-11-07T06:27:25.576Z"
+                      },
+                      {
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "receivedDate": "2022-11-07T06:27:25.584Z"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "expectedAccountDto": {
+              "accountSK": "8a9dc9a8-ba59-45a3-9aa8-1acbfdee585a",
+              "accountNumber": "I5ZWRSWA7NVL330",
+              "lineOfBusinessTypeCode": "HIX",
+              "enrollmentSpans": [
+                {
+                  "enrollmentSpanSK": "fd93d811-b6a0-47d1-a5a7-7e886208527d",
+                  "accountSK": "8a9dc9a8-ba59-45a3-9aa8-1acbfdee585a",
+                  "enrollmentSpanCode": "M3YNIURHX4KJ493",
+                  "premiumSpans": [
+                    {
+                      "premiumSpanSK": "9eefc9f4-f509-4225-9f9a-b902a00d19a1",
+                      "enrollmentSpanSK": "fd93d811-b6a0-47d1-a5a7-7e886208527d",
+                      "ztcn": "IDTINBCDZ8UJNH3",
+                      "premiumSpanCode": "URZFISSOK4G4FPL",
+                      "memberPremiumSpans": [
+                        {
+                          "memberPremiumSK": "215cbea8-dbd4-4fa8-9204-2c4c5efeb5e4",
+                          "memberCode": "PE6E7I1LM4NVAY2",
+                          "memberSK": "9363227e-7c90-45e7-8699-9a29640144fd",
+                          "exchangeMemberId": "5346466301",
+                          "individualPremiumAmount": 150.00,
+                          "createdDate": "2023-06-05 06:14:56",
+                          "updatedDate": "2023-06-05 06:14:56"
+                        }
+                      ],
+                      "startDate": "2023-01-01",
+                      "endDate": "2023-12-31",
+                      "statusTypeCode": "ACTIVE",
+                      "csrVariant": "03",
+                      "totalPremiumAmount": 150.00,
+                      "totalResponsibleAmount": 100.00,
+                      "aptcAmount": 50.00,
+                      "changed": true,
+                      "createdDate": "2023-06-05 06:14:56",
+                      "updatedDate": "2023-06-05 06:14:56"
+                    }
+                  ],
+                  "stateTypeCode": "FL",
+                  "marketplaceTypeCode": "FFM",
+                  "businessUnitTypeCode": "MP_FL",
+                  "startDate": "2023-01-01",
+                  "endDate": "2023-12-31",
+                  "exchangeSubscriberId": "53464663",
+                  "planId": "09643FL0234701",
+                  "groupPolicyId": "93562364",
+                  "productTypeCode": "HMO",
+                  "coverageTypeCode": "FAM",
+                  "delinqInd": false,
+                  "paidThroughDate": null,
+                  "claimPaidThroughDate": null,
+                  "statusTypeCode": "PRE_MEMBER",
+                  "ztcn": "IDTINBCDZ8UJNH3",
+                  "changed": null,
+                  "createdDate": "2023-06-05 06:14:56",
+                  "updatedDate": "2023-06-05 06:14:56"
+                }
+              ],
+              "members": [
+                {
+                  "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                  "accountSK": "8a9dc9a8-ba59-45a3-9aa8-1acbfdee585a",
+                  "memberCode": "PE6E7I1LM4NVAY2",
+                  "firstName": "Maria",
+                  "middleName": "Y",
+                  "lastName": "Gonzalez",
+                  "relationshipTypeCode": "HOH",
+                  "dateOfBirth": "1987-03-10",
+                  "genderTypeCode": "FEMALE",
+                  "height": 5.2,
+                  "weight": 144.2,
+                  "changed": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "testData": {
+            "testCaseId": "ZEUS-APS-ACCT-Process-10",
+            "testCaseDescription": "Existing account, brand new Enrollment span created for next year. New residential address is added",
+            "exceptionExpected": false,
+            "httpStatusCode": "200",
+            "accountProcessingRequest": {
+              "accountDto": {
+                "accountSK": "4f8f9e13-1315-427a-8b49-78890b0fd3b5",
+                "accountNumber": "AT8QRPA0Y44D5AJ",
+                "lineOfBusinessTypeCode": "HIX",
+                "enrollmentSpans": [
+                  {
+                    "enrollmentSpanSK": "32497e32-5b8f-4cf0-a771-b2e82fd981f6",
+                    "accountSK": "4f8f9e13-1315-427a-8b49-78890b0fd3b5",
+                    "enrollmentSpanCode": "RC8BRP41RU2OB18",
+                    "premiumSpans": [
+                      {
+                        "premiumSpanSK": "f6513115-de1b-4092-8a4f-ef8b2e2040fd",
+                        "enrollmentSpanSK": "32497e32-5b8f-4cf0-a771-b2e82fd981f6",
+                        "ztcn": "NHW5BIBQ2TSI65X",
+                        "premiumSpanCode": "X364XHKJT53J3B9",
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "855cb3b1-ca08-40ff-83dc-e6d2abb8ea47",
+                            "memberCode": "28WQR8REWXPEC3E",
+                            "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                            "exchangeMemberId": "8456744501",
+                            "individualPremiumAmount": 150.00
+                          }
+                        ],
+                        "startDate": "2022-01-01",
+                        "endDate": "2022-12-31",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 150.00,
+                        "totalResponsibleAmount": 150.00,
+                        "aptcAmount": 0.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 10.00,
+                        "changed": null
+                      }
+                    ],
+                    "stateTypeCode": "FL",
+                    "marketplaceTypeCode": "FFM",
+                    "businessUnitTypeCode": "MP_FL",
+                    "startDate": "2022-01-01",
+                    "endDate": "2022-12-31",
+                    "exchangeSubscriberId": "84567445",
+                    "effectuationDate": "2021-12-20",
+                    "planId": "09643FL0234705",
+                    "groupPolicyId": "34574574",
+                    "productTypeCode": "HMO",
+                    "coverageTypeCode": "FAM",
+                    "delinqInd": false,
+                    "paidThroughDate": null,
+                    "claimPaidThroughDate": null,
+                    "statusTypeCode": "ENROLLED",
+                    "ztcn": "NHW5BIBQ2TSI65X",
+                    "changed": null
+                  }
+                ],
+                "members": [
+                  {
+                    "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                    "accountSK": "4f8f9e13-1315-427a-8b49-78890b0fd3b5",
+                    "memberCode": "28WQR8REWXPEC3E",
+                    "firstName": "Mitchell",
+                    "middleName": "P",
+                    "lastName": "Santner",
+                    "relationshipTypeCode": "HOH",
+                    "dateOfBirth": "1985-02-28",
+                    "genderTypeCode": "MALE",
+                    "height": 5.9,
+                    "weight": 175.3,
+                    "changed": null,
+                    "memberAttributes": null,
+                    "memberAddresses": [
+                      {
+                        "memberAddressSK": "6641a1b8-a7c6-483a-a1c7-dc42e3f6edf1",
+                        "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                        "memberAddressCode": "Y2TA6BC76K09P3G",
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "5356 Batten Lane",
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "startDate": "2020-12-10",
+                        "endDate": null
+                      },
+                      {
+                        "memberAddressSK": "8e82d2e3-157a-425c-9caa-a465d389e6e3",
+                        "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                        "memberAddressCode": "5176U5S4X18QIR7",
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 53464",
+                        "addressLine2": null,
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "startDate": "2020-12-10",
+                        "endDate": null
+                      }
+                    ],
+                    "memberIdentifiers": [
+                      {
+                        "memberIdentifierSK": "19e3d54d-d1c0-4cee-965f-8d7cdf5011fe",
+                        "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                        "memberIdentifierCode": "D8GQC15Q1XIUR5Q",
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "523-74-7236",
+                        "isActive": true,
+                        "active": true
+                      },
+                      {
+                        "memberIdentifierSK": "fe4542e9-e9b6-44c2-9884-fccc4843613b",
+                        "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                        "memberIdentifierCode": "P6ITSKS2CP3CSNV",
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "84567445",
+                        "isActive": true,
+                        "active": true
+                      },
+                      {
+                        "memberIdentifierSK": "ab9e39f7-4430-4b36-bf92-d66ab7d1cb4b",
+                        "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                        "memberIdentifierCode": "38KJ5P5H5BQ67S2",
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "8456744501",
+                        "isActive": true,
+                        "active": true
+                      }
+                    ],
+                    "memberLanguages": [
+                      {
+                        "memberLanguageSK": "3662bcb5-7190-44ee-b2cc-d9d580f98f09",
+                        "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                        "memberLanguageCode": "XS9LPJ7VH35U9YJ",
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "startDate": "2020-12-10",
+                        "endDate": null
+                      },
+                      {
+                        "memberLanguageSK": "0096838f-28fb-43a5-bed1-3a4286b3d076",
+                        "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                        "memberLanguageCode": "7C41027NOOVHPS9",
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56"
+                      }
+                    ],
+                    "memberPhones": [
+                      {
+                        "memberPhoneSK": "4b5c7307-be9f-4915-8ae7-1946fff278bf",
+                        "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                        "memberPhoneCode": "URJLPT7PULPTYNI",
+                        "phoneTypeCode": "MOBILE",
+                        "phoneNumber": "813-357-6364",
+                        "startDate": "2020-12-10",
+                        "endDate": null
+                      }
+                    ],
+                    "memberEmails": [
+                      {
+                        "memberEmailSK": "8246a06a-be30-4296-afd3-b3badde1892c",
+                        "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                        "memberEmailCode": "D3BJHQ1O81YAK4K",
+                        "emailTypeCode": "WORK",
+                        "email": "mitchell.santner@wellcare.com",
+                        "isPrimary": false,
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "primary": false
+                      },
+                      {
+                        "memberEmailSK": "35362af1-8092-45ca-af3f-aaf80d05688b",
+                        "memberSK": "4be88c9a-cbf6-4a8c-9006-9c250e64211d",
+                        "memberEmailCode": "GFYIM10K2UUM991",
+                        "emailTypeCode": "PERSONAL",
+                        "email": "mitchell.santner@gmail.com",
+                        "isPrimary": true,
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "primary": true
+                      }
+                    ],
+                    "alternateContacts": null,
+                    "memberPremiums": null
+                  }
+                ],
+                "brokers": null,
+                "sponsors": null,
+                "payers": null,
+                "accountAttributes": null,
+                "createdDate": "2023-06-05 06:14:56",
+                "updatedDate": "2023-06-05 06:14:56"
+              },
+              "transactionDto": {
+                "ztcn": "ZY3HYL1P78AXVQW",
+                "zfcn": "EVQ0YC49O509GJE",
+                "transactionReceivedDate": "2023-02-07T06:27:25.470Z",
+                "transactionSourceTypeCode": "MARKETPLACE",
+                "entityCodes": {
+                  "enrollmentSpanCode": ["FQ7OHE3TB0ZBG7D"],
+                  "premiumSpanCode": ["DKD9K0O9VSK6WVW"]
+                },
+                "transactionDetail": {
+                  "transactionTypeCode": "ADD",
+                  "coverageTypeCode": "FAM",
+                  "planId": "09643FL0234707",
+                  "csrVariant": "03",
+                  "groupPolicyId": "73447573",
+                  "effectiveDate": "2023-01-01"
+                },
+                "transactionAttributes": [
+                  {
+                    "transactionAttributeTypeCode": "RATINGAREA",
+                    "transactionAttributeValue": "R-FL043"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "SRCEXCHID",
+                    "transactionAttributeValue": "FL0"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "REQSBTTMS",
+                    "transactionAttributeValue": "20230207210516"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "APPID",
+                    "transactionAttributeValue": "3340286921-1"
+                  }
+                ],
+                "transactionRates": [
+                  {
+                    "rateTypeCode": "PREAMTTOT",
+                    "transactionRate": 150.00,
+                    "rateStartDate": "2023-01-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "TOTRESAMT",
+                    "transactionRate": 100.00,
+                    "rateStartDate": "2023-01-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "APTCAMT",
+                    "transactionRate": 50.00,
+                    "rateStartDate": "2023-01-01",
+                    "csrVariant": "03"
+                  }
+                ],
+                "tradingPartnerDto": {
+                  "tradingPartnerId": "21663",
+                  "lineOfBusinessTypeCode": "HIX",
+                  "businessTypeCode": "MP_FL",
+                  "marketplaceTypeCode": "FFM",
+                  "stateTypeCode": "FL"
+                },
+                "sponsor": {
+                  "sponsorName": "Mitchell Santner",
+                  "sponsorId": "523-74-7236",
+                  "receivedDate": "2023-02-07T06:27:25.484Z"
+                },
+                "broker": {
+                  "brokerName": "Ben Stokes",
+                  "brokerId": "53234534",
+                  "agencyName": "Sapphire Brokers Inc.",
+                  "agencyId": "63363754",
+                  "accountNumber1": "523645-63456",
+                  "receivedDate": "2023-02-07T06:27:25.484Z"
+                },
+                "payer": {
+                  "payerName": "Zeus Health",
+                  "payerId": "5235343",
+                  "receivedDate": "2022-11-07T06:27:25.484Z"
+                },
+                "members": [
+                  {
+                    "transactionMemberCode": "A1Y6I2K0NUZUS81",
+                    "transactionTypeCode": "ADD",
+                    "effectiveDate": "2023-01-01",
+                    "relationshipTypeCode": "HOH",
+                    "reasonTypeCode": "MBS",
+                    "firstName": "Mitchell",
+                    "middleName": "P",
+                    "lastName": "Santner",
+                    "tobaccoIndicator": "NONE",
+                    "dateOfBirth": "1985-02-28",
+                    "genderTypeCode": "MALE",
+                    "memberRate": 150.00,
+                    "entityCodes": {
+                      "memberAddressCode": ["MOHIZXEGR7D6WY2", "N1KAYR41AG08TQH"]
+                    },
+                    "memberPhones": [
+                      {
+                        "phoneTypeCode": "MOBILE",
+                        "phoneNumber": "813-357-6364",
+                        "receivedDate": "2022-11-07T06:27:25.562Z"
+                      }
+                    ],
+                    "memberAddresses": [
+                      {
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "7674 Rangeland Blvd",
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "countyCode": "12101",
+                        "receivedDate": "2023-02-07T06:27:25.553Z"
+                      },
+                      {
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 03666",
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "countyCode": "12101",
+                        "receivedDate": "2023-02-07T06:27:25.553Z"
+                      }
+                    ],
+                    "identifiers": [
+                      {
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "84567445",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      },
+                      {
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "8456744501",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      },
+                      {
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "523-74-7236",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      }
+                    ],
+                    "emails": [
+                      {
+                        "email": "mitchell.santner@gmail.com",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      }
+                    ],
+                    "languages": [
+                      {
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      },
+                      {
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "expectedAccountDto": {
+              "accountSK": "4f8f9e13-1315-427a-8b49-78890b0fd3b5",
+              "accountNumber": "AT8QRPA0Y44D5AJ",
+              "lineOfBusinessTypeCode": "HIX",
+              "enrollmentSpans": [
+                {
+                  "enrollmentSpanSK": "2af29e6f-da63-45ab-9493-aeea09503c88",
+                  "accountSK": "4f8f9e13-1315-427a-8b49-78890b0fd3b5",
+                  "enrollmentSpanCode": "FQ7OHE3TB0ZBG7D",
+                  "premiumSpans": [
+                    {
+                      "premiumSpanSK": "d29ebdbd-44e1-4eee-9137-3050a9e05e8a",
+                      "enrollmentSpanSK": "2af29e6f-da63-45ab-9493-aeea09503c88",
+                      "ztcn": "ZY3HYL1P78AXVQW",
+                      "premiumSpanCode": "DKD9K0O9VSK6WVW",
+                      "memberPremiumSpans": [
+                        {
+                          "memberCode": "28WQR8REWXPEC3E",
+                          "exchangeMemberId": "8456744501",
+                          "individualPremiumAmount": 150.00
+                        }
+                      ],
+                      "startDate": "2023-01-01",
+                      "endDate": "2023-12-31",
+                      "statusTypeCode": "ACTIVE",
+                      "csrVariant": "03",
+                      "totalPremiumAmount": 150.00,
+                      "totalResponsibleAmount": 100.00,
+                      "aptcAmount": 50.00,
+                      "changed": true
+                    }
+                  ],
+                  "stateTypeCode": "FL",
+                  "marketplaceTypeCode": "FFM",
+                  "businessUnitTypeCode": "MP_FL",
+                  "startDate": "2023-01-01",
+                  "endDate": "2023-12-31",
+                  "exchangeSubscriberId": "84567445",
+                  "planId": "09643FL0234707",
+                  "groupPolicyId": "73447573",
+                  "productTypeCode": "HMO",
+                  "coverageTypeCode": "FAM",
+                  "delinqInd": false,
+                  "paidThroughDate": null,
+                  "claimPaidThroughDate": null,
+                  "statusTypeCode": "PRE_MEMBER",
+                  "ztcn": "ZY3HYL1P78AXVQW",
+                  "changed": true
+                }
+              ],
+              "members": [
+                {
+                  "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                  "accountSK": "4f8f9e13-1315-427a-8b49-78890b0fd3b5",
+                  "memberCode": "28WQR8REWXPEC3E",
+                  "firstName": "Mitchell",
+                  "middleName": "P",
+                  "lastName": "Santner",
+                  "relationshipTypeCode": "HOH",
+                  "dateOfBirth": "1985-02-28",
+                  "genderTypeCode": "MALE",
+                  "height": 5.9,
+                  "weight": 175.3,
+                  "memberAddresses": [
+                    {
+                      "memberAddressCode": "Y2TA6BC76K09P3G",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "5356 Batten Lane",
+                      "city": "Odessa",
+                      "stateTypeCode": "FL",
+                      "zipCode": "33556",
+                      "startDate": "2020-12-10",
+                      "endDate": "2023-02-06",
+                      "changed": true
+                    },
+                    {
+                      "memberAddressCode": "MOHIZXEGR7D6WY2",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "7674 Rangeland Blvd",
+                      "city": "Odessa",
+                      "stateTypeCode": "FL",
+                      "zipCode": "33556",
+                      "startDate": "2023-02-07",
+                      "endDate": null,
+                      "changed": true
+                    },
+                    {
+                      "memberAddressSK": "8e82d2e3-157a-425c-9caa-a465d389e6e3",
+                      "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                      "memberAddressCode": "5176U5S4X18QIR7",
+                      "addressTypeCode": "MAIL",
+                      "addressLine1": "P.O Box 53464",
+                      "addressLine2": null,
+                      "city": "Odessa",
+                      "stateTypeCode": "FL",
+                      "zipCode": "33556",
+                      "startDate": "2020-12-10",
+                      "endDate": "2023-02-06",
+                      "changed": true
+                    },
+                    {
+                      "memberAddressSK": "dae797a6-084f-4fa0-89bf-443dca995f69",
+                      "memberSK": "fad88251-8bc2-4cdd-a352-c858fdb92e6b",
+                      "memberAddressCode": "N1KAYR41AG08TQH",
+                      "addressTypeCode": "MAIL",
+                      "addressLine1": "P.O Box 03666",
+                      "addressLine2": null,
+                      "city": "Odessa",
+                      "stateTypeCode": "FL",
+                      "zipCode": "33556",
+                      "startDate": "2023-02-07",
+                      "endDate": null,
+                      "changed": true
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "testData": {
+            "testCaseId": "ZEUS-APS-ACCT-Process-11",
+            "testCaseDescription": "Existing account, new Enrollment span created for next year, all members addresses are updated.",
+            "exceptionExpected": false,
+            "httpStatusCode": "200",
+            "accountProcessingRequest": {
+              "accountDto": {
+                "accountSK": "4f259f96-3a4e-4cba-b353-d794019289fe",
+                "accountNumber": "LOOCHEZGKNEAO7N",
+                "lineOfBusinessTypeCode": "HIX",
+                "enrollmentSpans": [
+                  {
+                    "enrollmentSpanSK": "e3d46587-8d5e-4165-b118-2d2b658ea8f7",
+                    "accountSK": "4f259f96-3a4e-4cba-b353-d794019289fe",
+                    "enrollmentSpanCode": "TRZ2YSFK8WXPXTA",
+                    "premiumSpans": [
+                      {
+                        "premiumSpanSK": "e208117f-f5ce-4274-af2e-2c19dea65bed",
+                        "enrollmentSpanSK": "e3d46587-8d5e-4165-b118-2d2b658ea8f7",
+                        "ztcn": "ZONV9VDHQ4HPRR9",
+                        "premiumSpanCode": "9U2KPB5HL2FY16K",
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "691d4b7b-7bc9-4023-aea6-21909aea6aca",
+                            "memberCode": "BJQ0JEX9JKP63RZ",
+                            "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                            "exchangeMemberId": "6235663701",
+                            "individualPremiumAmount": 50.00,
+                            "createdDate": "2023-06-05 10:14:50",
+                            "updatedDate": "2023-06-05 10:14:50"
+                          },
+                          {
+                            "memberPremiumSK": "88e4b020-fba5-4cfa-b1c1-e953100b46ef",
+                            "memberCode": "DCKZFSI0PUY7514",
+                            "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                            "exchangeMemberId": "6235663702",
+                            "individualPremiumAmount": 100.00,
+                            "createdDate": "2023-06-05 10:14:50",
+                            "updatedDate": "2023-06-05 10:14:50"
+                          },
+                          {
+                            "memberPremiumSK": "88e4b020-fba5-4cfa-b1c1-e953100b46ef",
+                            "memberCode": "75CLJ5E470CWABJ",
+                            "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                            "exchangeMemberId": "6235663703",
+                            "individualPremiumAmount": 250.00,
+                            "createdDate": "2023-06-05 10:14:50",
+                            "updatedDate": "2023-06-05 10:14:50"
+                          }
+                        ],
+                        "startDate": "2022-01-01",
+                        "endDate": "2022-12-31",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 400.00,
+                        "totalResponsibleAmount": 250.00,
+                        "aptcAmount": 150.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 10.00,
+                        "changed": null,
+                        "createdDate": "2023-06-05 10:14:50",
+                        "updatedDate": "2023-06-05 10:14:50"
+                      }
+                    ],
+                    "stateTypeCode": "MA",
+                    "marketplaceTypeCode": "FFM",
+                    "businessUnitTypeCode": "MP_MA",
+                    "startDate": "2022-01-01",
+                    "endDate": "2022-12-31",
+                    "exchangeSubscriberId": "62356637",
+                    "effectuationDate": "2021-12-15",
+                    "planId": "74567MA6346645",
+                    "groupPolicyId": "34566740",
+                    "productTypeCode": "HMO",
+                    "coverageTypeCode": "FAM",
+                    "delinqInd": false,
+                    "paidThroughDate": null,
+                    "claimPaidThroughDate": null,
+                    "statusTypeCode": "ENROLLED",
+                    "ztcn": "ZONV9VDHQ4HPRR9"
+                  },
+                  {
+                    "enrollmentSpanSK": "7412b168-adf3-4c30-bb4d-a7013a211b5a",
+                    "accountSK": "4f259f96-3a4e-4cba-b353-d794019289fe",
+                    "enrollmentSpanCode": "BSZMSREHNOLCSP4",
+                    "premiumSpans": [
+                      {
+                        "premiumSpanSK": "ba7576c9-87d1-4df1-973b-7dde83d85018",
+                        "enrollmentSpanSK": "7412b168-adf3-4c30-bb4d-a7013a211b5a",
+                        "ztcn": "SO399GTH8LTQTRX",
+                        "premiumSpanCode": "V61X8ML5LP5ZD4O",
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "00920f7a-3d46-41bc-aa97-fbac370ecc06",
+                            "memberCode": "BJQ0JEX9JKP63RZ",
+                            "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                            "exchangeMemberId": "6235663701",
+                            "individualPremiumAmount": 250.00
+                          },
+                          {
+                            "memberPremiumSK": "d65b81b4-8c8e-4f11-b79a-d17fccc6f1d7",
+                            "memberCode": "DCKZFSI0PUY7514",
+                            "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                            "exchangeMemberId": "6235663702",
+                            "individualPremiumAmount": 50.00
+                          },
+                          {
+                            "memberPremiumSK": "502ef87a-9193-488c-918f-4734d91e8483",
+                            "memberCode": "75CLJ5E470CWABJ",
+                            "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                            "exchangeMemberId": "6235663703",
+                            "individualPremiumAmount": 100.00
+                          }
+                        ],
+                        "startDate": "2023-01-01",
+                        "endDate": "2023-12-31",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 400.00,
+                        "totalResponsibleAmount": 250.00,
+                        "aptcAmount": 150.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 50.00
+                      }
+                    ],
+                    "stateTypeCode": "MA",
+                    "marketplaceTypeCode": "FFM",
+                    "businessUnitTypeCode": "MP_MA",
+                    "startDate": "2023-01-01",
+                    "endDate": "2023-12-31",
+                    "exchangeSubscriberId": "62356637",
+                    "effectuationDate": "2022-12-21",
+                    "planId": "74567MA6346646",
+                    "groupPolicyId": "34566741",
+                    "productTypeCode": "HMO",
+                    "coverageTypeCode": "FAM",
+                    "delinqInd": false,
+                    "paidThroughDate": null,
+                    "claimPaidThroughDate": null,
+                    "statusTypeCode": "ENROLLED",
+                    "ztcn": "SO399GTH8LTQTRX"
+                  }
+                ],
+                "members": [
+                  {
+                    "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                    "accountSK": "4f259f96-3a4e-4cba-b353-d794019289fe",
+                    "memberCode": "BJQ0JEX9JKP63RZ",
+                    "firstName": "Josh",
+                    "middleName": "K",
+                    "lastName": "Inglis",
+                    "relationshipTypeCode": "HOH",
+                    "dateOfBirth": "1991-03-15",
+                    "genderTypeCode": "MALE",
+                    "height": 5.9,
+                    "weight": 165.43,
+                    "memberAddresses": [
+                      {
+                        "memberAddressSK": "b8e2dab3-b56c-437f-bfe7-794f903df33e",
+                        "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                        "memberAddressCode": "OJWZ6EVAJSXNOND",
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 56346",
+                        "addressLine2": null,
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "79456",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      },
+                      {
+                        "memberAddressSK": "1dd63ddd-deea-4a7e-8de4-09245cca7b47",
+                        "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                        "memberAddressCode": "0OYYM8ZF0YVBMPG",
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "8945 Woody Street",
+                        "addressLine2": "Apt 303",
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "78453",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      }
+                    ],
+                    "memberIdentifiers": [
+                      {
+                        "memberIdentifierSK": "8ce52afb-4fb3-4552-ac74-00048700a4f9",
+                        "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                        "memberIdentifierCode": "TCYGTO99WHHW1PD",
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "646-83-8458",
+                        "isActive": true,
+                        "createdDate": "2023-06-05 10:14:50",
+                        "updatedDate": "2023-06-05 10:14:50",
+                        "active": true
+                      }
+                    ],
+                    "memberLanguages": [
+                      {
+                        "memberLanguageSK": "b6ced944-8c57-4620-a8d7-09e46190d2fd",
+                        "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                        "memberLanguageCode": "QXAIFM7TI3A1UMP",
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      },
+                      {
+                        "memberLanguageSK": "7170f21b-4845-4d35-ac8d-7baf7248e399",
+                        "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                        "memberLanguageCode": "RJOLLWF6W2VJ81I",
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      }
+                    ],
+                    "memberPhones": [
+                      {
+                        "memberPhoneSK": "58be3539-6297-41cc-86c8-c78d25df8152",
+                        "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                        "memberPhoneCode": "XMZA0041VA1DO53",
+                        "phoneTypeCode": "MOBILE",
+                        "phoneNumber": "201-746-0367",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      }
+                    ],
+                    "memberEmails": [
+                      {
+                        "memberEmailSK": "95416b2b-6a5a-474c-a84d-d764b86d59a5",
+                        "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                        "memberEmailCode": "3F4UHPMGH2LUBKL",
+                        "emailTypeCode": "WORK",
+                        "email": "josh.inglis@wellcare.com",
+                        "isPrimary": false,
+                        "startDate": "2020-11-08",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 10:14:50",
+                        "updatedDate": "2023-06-05 10:14:50",
+                        "primary": false
+                      },
+                      {
+                        "memberEmailSK": "8fa5632b-3dda-4502-aa58-ab713d76079c",
+                        "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                        "memberEmailCode": "9B37UAGSQ4FD3FM",
+                        "emailTypeCode": "PERSONAL",
+                        "email": "joshinglis@gmail.com",
+                        "isPrimary": true,
+                        "startDate": "2020-11-08",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 10:14:50",
+                        "updatedDate": "2023-06-05 10:14:50",
+                        "primary": true
+                      }
+                    ]
+                  },
+                  {
+                    "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                    "accountSK": "4f259f96-3a4e-4cba-b353-d794019289fe",
+                    "memberCode": "DCKZFSI0PUY7514",
+                    "firstName": "Erin",
+                    "middleName": "L",
+                    "lastName": "Inglis",
+                    "relationshipTypeCode": "SPE",
+                    "dateOfBirth": "1995-05-12",
+                    "genderTypeCode": "FEMALE",
+                    "height": 5.3,
+                    "weight": 112.57,
+                    "changed": null,
+                    "memberAttributes": null,
+                    "memberAddresses": [
+                      {
+                        "memberAddressSK": "1c8e72ab-cb41-41ec-bcf2-4e28a20852c5",
+                        "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                        "memberAddressCode": "RTW16HBVETVT2YC",
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 56346",
+                        "addressLine2": null,
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "79456",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      },
+                      {
+                        "memberAddressSK": "13cb749c-de2e-48e3-bec1-77db1b349fa2",
+                        "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                        "memberAddressCode": "UTURAZ5AJ9T4JDA",
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "8945 Woody Street",
+                        "addressLine2": "Apt 303",
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "78453",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      }
+                    ],
+                    "memberIdentifiers": [
+                      {
+                        "memberIdentifierSK": "13fc2c60-7e7f-49fa-aa1d-176d09f5cef7",
+                        "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                        "memberIdentifierCode": "O1WQWIGLW7OQ4W9",
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "848-25-3646",
+                        "isActive": true,
+                        "createdDate": "2023-06-05 10:14:50",
+                        "updatedDate": "2023-06-05 10:14:50",
+                        "active": true
+                      }
+                    ],
+                    "memberLanguages": [
+                      {
+                        "memberLanguageSK": "04142fd4-259d-4fbd-9b8a-1a8f711fa898",
+                        "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                        "memberLanguageCode": "BP58ZI9V6INASHY",
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      },
+                      {
+                        "memberLanguageSK": "15b2d1d3-4c15-442d-b448-8080171f71f2",
+                        "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                        "memberLanguageCode": "0BZ5YQJQDWABIJO",
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      }
+                    ],
+                    "memberPhones": [
+                      {
+                        "memberPhoneSK": "e307ade9-f028-4be3-83db-195d38d6030f",
+                        "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                        "memberPhoneCode": "XD7BRS5VEYM5GDN",
+                        "phoneTypeCode": "MOBILE",
+                        "phoneNumber": "501-737-7245",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      }
+                    ],
+                    "memberEmails": [
+                      {
+                        "memberEmailSK": "7cb242e0-1359-46b1-8605-75e26d18db4d",
+                        "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                        "memberEmailCode": "7VCNSZPETX5I4KN",
+                        "emailTypeCode": "PERSONAL",
+                        "email": "erininglis@gmail.com",
+                        "isPrimary": true,
+                        "startDate": "2020-11-08",
+                        "endDate": null,
+                        "primary": true
+                      },
+                      {
+                        "memberEmailSK": "73f16b7f-c6bf-4acb-8f5d-2d2d58220e40",
+                        "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                        "memberEmailCode": "7VCNSZPETX5I4KN",
+                        "emailTypeCode": "WORK",
+                        "email": "erin.inglis@wellcare.com",
+                        "isPrimary": false,
+                        "startDate": "2020-11-08",
+                        "endDate": null,
+                        "primary": false
+                      }
+                    ]
+                  },
+                  {
+                    "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                    "accountSK": "4f259f96-3a4e-4cba-b353-d794019289fe",
+                    "memberCode": "75CLJ5E470CWABJ",
+                    "firstName": "Doug",
+                    "middleName": "P",
+                    "lastName": "Inglis",
+                    "relationshipTypeCode": "CHD",
+                    "dateOfBirth": "2015-03-14",
+                    "genderTypeCode": "MALE",
+                    "height": 4.8,
+                    "weight": 101.42,
+                    "changed": null,
+                    "memberAttributes": null,
+                    "memberAddresses": [
+                      {
+                        "memberAddressSK": "eafa11e2-582b-46aa-a69d-c528173e817b",
+                        "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                        "memberAddressCode": "NZJZ1HIIJ8XL7Z2",
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 56346",
+                        "addressLine2": null,
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "79456",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      },
+                      {
+                        "memberAddressSK": "965bb795-6fd7-4733-b512-8388d07cb829",
+                        "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                        "memberAddressCode": "XUAVWQBKZ0MTRIF",
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "8945 Woody Street",
+                        "addressLine2": "Apt 303",
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "78453",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      }
+                    ],
+                    "memberIdentifiers": [
+                      {
+                        "memberIdentifierSK": "f631ca16-aaa7-4352-8475-8e9b82b262a4",
+                        "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                        "memberIdentifierCode": "76RW03J3IK9LHNZ",
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "957-73-7472",
+                        "isActive": true,
+                        "active": true
+                      }
+                    ],
+                    "memberLanguages": [
+                      {
+                        "memberLanguageSK": "8271ada6-9f12-42c5-b32e-067410383855",
+                        "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                        "memberLanguageCode": "YHA3BDK0925RV6C",
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "startDate": "2020-11-08",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 10:14:50",
+                        "updatedDate": "2023-06-05 10:14:50"
+                      },
+                      {
+                        "memberLanguageSK": "dad39f5b-05f7-4049-b1a0-e47229ec8742",
+                        "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                        "memberLanguageCode": "TX4EPX33N168Z75",
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "startDate": "2020-11-08",
+                        "endDate": null,
+                        "createdDate": "2023-06-05 10:14:50",
+                        "updatedDate": "2023-06-05 10:14:50"
+                      }
+                    ],
+                    "memberPhones": [
+                      {
+                        "memberPhoneSK": "32474b68-b13e-4fe5-bf90-67bd33658863",
+                        "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                        "memberPhoneCode": "NYKJM6VK9KD3PO3",
+                        "phoneTypeCode": "MOBILE",
+                        "phoneNumber": "783-346-2646",
+                        "startDate": "2020-11-08",
+                        "endDate": null
+                      }
+                    ],
+                    "memberEmails": [
+                      {
+                        "memberEmailSK": "a4b65b51-de9e-4ba5-b907-7874a45730e0",
+                        "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                        "memberEmailCode": "2MI8O69UOELSZMM",
+                        "emailTypeCode": "PERSONAL",
+                        "email": "douginglis@gmail.com",
+                        "isPrimary": true,
+                        "startDate": "2020-11-08",
+                        "endDate": null,
+                        "primary": true
+                      },
+                      {
+                        "memberEmailSK": "eaf09d2d-decb-4e8c-898c-456c645bde17",
+                        "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                        "memberEmailCode": "6UUMM7QR61C0V2P",
+                        "emailTypeCode": "WORK",
+                        "email": "doug.inglis@wellcare.com",
+                        "isPrimary": false,
+                        "startDate": "2020-11-08",
+                        "endDate": null,
+                        "primary": false
+                      }
+                    ]
+                  }
+                ]
+              },
+              "transactionDto": {
+                "ztcn": "4LYRDWDBD3BR1IC",
+                "zfcn": "KWD1PC2JQJTZ1L1",
+                "transactionReceivedDate": "2023-10-05T06:27:25.470Z",
+                "transactionSourceTypeCode": "MARKETPLACE",
+                "entityCodes": {
+                  "enrollmentSpanCode": ["N9FDTVK9FV0GEBR"],
+                  "premiumSpanCode": ["6FDS16MHJTZSGMC"]
+                },
+                "transactionDetail": {
+                  "transactionTypeCode": "ADD",
+                  "coverageTypeCode": "FAM",
+                  "planId": "74567MA6346651",
+                  "csrVariant": "03",
+                  "groupPolicyId": "23452527",
+                  "effectiveDate": "2024-01-01"
+                },
+                "transactionAttributes": [
+                  {
+                    "transactionAttributeTypeCode": "RATINGAREA",
+                    "transactionAttributeValue": "R-MA043"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "SRCEXCHID",
+                    "transactionAttributeValue": "MA0"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "REQSBTTMS",
+                    "transactionAttributeValue": "20231003210516"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "APPID",
+                    "transactionAttributeValue": "3340286926-1"
+                  }
+                ],
+                "transactionRates": [
+                  {
+                    "rateTypeCode": "PREAMTTOT",
+                    "transactionRate": 400.00,
+                    "rateStartDate": "2024-01-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "TOTRESAMT",
+                    "transactionRate": 200.00,
+                    "rateStartDate": "2024-01-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "APTCAMT",
+                    "transactionRate": 200.00,
+                    "rateStartDate": "2024-01-01",
+                    "csrVariant": "03"
+                  },
+                  {
+                    "rateTypeCode": "CSRAMT",
+                    "transactionRate": 70.00,
+                    "rateStartDate": "2024-01-01",
+                    "csrVariant": "03"
+                  }
+                ],
+                "tradingPartnerDto": {
+                  "tradingPartnerId": "63734",
+                  "lineOfBusinessTypeCode": "HIX",
+                  "businessTypeCode": "MP_MA",
+                  "marketplaceTypeCode": "FFM",
+                  "stateTypeCode": "MA"
+                },
+                "sponsor": {
+                  "sponsorName": "Josh Inglis",
+                  "sponsorId": "646-83-8458",
+                  "receivedDate": "2023-10-05T06:27:25.484Z"
+                },
+                "broker": {
+                  "brokerName": "Ben Stokes",
+                  "brokerId": "53234534",
+                  "agencyName": "Sapphire Brokers Inc.",
+                  "agencyId": "63363754",
+                  "accountNumber1": "523645-63456",
+                  "receivedDate": "2023-02-07T06:27:25.484Z"
+                },
+                "payer": {
+                  "payerName": "Zeus Health",
+                  "payerId": "5235343",
+                  "receivedDate": "2022-11-07T06:27:25.484Z"
+                },
+                "members": [
+                  {
+                    "transactionMemberCode": "QNCHJOS97NXBDH4",
+                    "transactionTypeCode": "ADD",
+                    "effectiveDate": "2024-01-01",
+                    "relationshipTypeCode": "HOH",
+                    "reasonTypeCode": "MBS",
+                    "firstName": "Josh",
+                    "middleName": "K",
+                    "lastName": "Inglis",
+                    "tobaccoIndicator": "NONE",
+                    "dateOfBirth": "1991-03-15",
+                    "genderTypeCode": "MALE",
+                    "memberRate": 250.00,
+                    "entityCodes": {
+                      "memberAddressCode": ["G0ATNLC8EUOZOZA", "6HC0ZTMBQZLXI1T"]
+                    },
+                    "memberPhones": [
+                      {
+                        "phoneTypeCode": "MOBILE",
+                        "phoneNumber": "201-746-0367",
+                        "receivedDate": "2023-10-05T06:27:25.562Z"
+                      }
+                    ],
+                    "memberAddresses": [
+                      {
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "6375 Long Beach Blvd",
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "78453",
+                        "countyCode": "25009",
+                        "receivedDate": "2023-10-05T06:27:25.553Z"
+                      },
+                      {
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 63473",
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "79456",
+                        "countyCode": "25009",
+                        "receivedDate": "2023-10-05T06:27:25.553Z"
+                      }
+                    ],
+                    "identifiers": [
+                      {
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "62356637",
+                        "receivedDate": "2023-10-05T06:27:25.534Z"
+                      },
+                      {
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "6235663701",
+                        "receivedDate": "2023-10-05T06:27:25.534Z"
+                      },
+                      {
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "646-83-8458",
+                        "receivedDate": "2023-10-05T06:27:25.534Z"
+                      }
+                    ],
+                    "emails": [
+                      {
+                        "email": "joshinglis@gmail.com",
+                        "receivedDate": "2023-10-05T06:27:25.562Z"
+                      }
+                    ],
+                    "languages": [
+                      {
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "receivedDate": "2023-10-05T06:27:25.576Z"
+                      },
+                      {
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "receivedDate": "2023-10-05T06:27:25.584Z"
+                      }
+                    ]
+                  },
+                  {
+                    "transactionMemberCode": "CJ82UQBDRZ9Y8RY",
+                    "transactionTypeCode": "ADD",
+                    "effectiveDate": "2024-01-01",
+                    "relationshipTypeCode": "SPE",
+                    "reasonTypeCode": "MBS",
+                    "firstName": "Erin",
+                    "middleName": "L",
+                    "lastName": "Inglis",
+                    "tobaccoIndicator": "NONE",
+                    "dateOfBirth": "1995-05-12",
+                    "genderTypeCode": "FEMALE",
+                    "memberRate": 100.00,
+                    "entityCodes": {
+                      "memberAddressCode": ["UI9R6GUT1HDYA5C", "UBKZQYKJVDWOSMD"]
+                    },
+                    "memberPhones": [
+                      {
+                        "phoneTypeCode": "MOBILE",
+                        "phoneNumber": "501-737-7245",
+                        "receivedDate": "2023-10-05T06:27:25.562Z"
+                      }
+                    ],
+                    "memberAddresses": [
+                      {
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "6375 Long Beach Blvd",
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "78453",
+                        "countyCode": "25009",
+                        "receivedDate": "2023-10-05T06:27:25.553Z"
+                      },
+                      {
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 63473",
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "79456",
+                        "countyCode": "25009",
+                        "receivedDate": "2023-10-05T06:27:25.553Z"
+                      }
+                    ],
+                    "identifiers": [
+                      {
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "62356637",
+                        "receivedDate": "2023-10-05T06:27:25.534Z"
+                      },
+                      {
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "6235663702",
+                        "receivedDate": "2023-10-05T06:27:25.534Z"
+                      },
+                      {
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "848-25-3646",
+                        "receivedDate": "2023-10-05T06:27:25.534Z"
+                      }
+                    ],
+                    "emails": [
+                      {
+                        "email": "erininglis@gmail.com",
+                        "receivedDate": "2023-10-05T06:27:25.562Z"
+                      }
+                    ],
+                    "languages": [
+                      {
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "receivedDate": "2023-10-05T06:27:25.562Z"
+                      },
+                      {
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "receivedDate": "2023-10-05T06:27:25.562Z"
+                      }
+                    ]
+                  },
+                  {
+                    "transactionMemberCode": "8D0TYO2QJM6XXUM",
+                    "transactionTypeCode": "ADD",
+                    "effectiveDate": "2024-01-01",
+                    "relationshipTypeCode": "CHD",
+                    "reasonTypeCode": "MBS",
+                    "firstName": "Doug",
+                    "middleName": "P",
+                    "lastName": "Inglis",
+                    "tobaccoIndicator": "NONE",
+                    "dateOfBirth": "2015-03-14",
+                    "genderTypeCode": "MALE",
+                    "memberRate": 50.00,
+                    "entityCodes": {
+                      "memberAddressCode": ["FZGHXOCSNQLLJU4", "LY17BTIQW9HFIGX"]
+                    },
+                    "memberPhones": [
+                      {
+                        "phoneTypeCode": "MOBILE",
+                        "phoneNumber": "783-346-2646",
+                        "receivedDate": "2023-10-05T06:27:25.562Z"
+                      }
+                    ],
+                    "memberAddresses": [
+                      {
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "6375 Long Beach Blvd",
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "78453",
+                        "countyCode": "25009",
+                        "receivedDate": "2023-10-05T06:27:25.553Z"
+                      },
+                      {
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 63473",
+                        "city": "Salem",
+                        "stateTypeCode": "MA",
+                        "zipCode": "79456",
+                        "countyCode": "25009",
+                        "receivedDate": "2023-10-05T06:27:25.553Z"
+                      }
+                    ],
+                    "identifiers": [
+                      {
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "62356637",
+                        "receivedDate": "2023-10-05T06:27:25.534Z"
+                      },
+                      {
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "6235663703",
+                        "receivedDate": "2023-10-05T06:27:25.534Z"
+                      },
+                      {
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "957-73-7472",
+                        "receivedDate": "2023-10-05T06:27:25.534Z"
+                      }
+                    ],
+                    "emails": [
+                      {
+                        "email": "douginglis@gmail.com",
+                        "receivedDate": "2023-10-05T06:27:25.562Z"
+                      }
+                    ],
+                    "languages": [
+                      {
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "receivedDate": "2023-10-05T06:27:25.562Z"
+                      },
+                      {
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "receivedDate": "2023-10-05T06:27:25.562Z"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "expectedAccountDto": {
+              "accountNumber": "LOOCHEZGKNEAO7N",
+              "lineOfBusinessTypeCode": "HIX",
+              "enrollmentSpans": [
+                {
+                  "accountSK": "4f259f96-3a4e-4cba-b353-d794019289fe",
+                  "enrollmentSpanCode": "N9FDTVK9FV0GEBR",
+                  "premiumSpans": [
+                    {
+                      "ztcn": "4LYRDWDBD3BR1IC",
+                      "premiumSpanCode": "6FDS16MHJTZSGMC",
+                      "memberPremiumSpans": [
+                        {
+                          "memberCode": "BJQ0JEX9JKP63RZ",
+                          "exchangeMemberId": "6235663701",
+                          "individualPremiumAmount": 250.00
+                        },
+                        {
+                          "memberCode": "DCKZFSI0PUY7514",
+                          "exchangeMemberId": "6235663702",
+                          "individualPremiumAmount": 100.00
+                        },
+                        {
+                          "memberCode": "75CLJ5E470CWABJ",
+                          "exchangeMemberId": "6235663703",
+                          "individualPremiumAmount": 50.00
+                        }
+                      ],
+                      "startDate": "2024-01-01",
+                      "endDate": "2024-12-31",
+                      "statusTypeCode": "ACTIVE",
+                      "csrVariant": "03",
+                      "totalPremiumAmount": 400.00,
+                      "totalResponsibleAmount": 200.00,
+                      "aptcAmount": 200.00,
+                      "csrAmount": 70.00,
+                      "changed": true
+                    }
+                  ],
+                  "stateTypeCode": "MA",
+                  "marketplaceTypeCode": "FFM",
+                  "businessUnitTypeCode": "MP_MA",
+                  "startDate": "2024-01-01",
+                  "endDate": "2024-12-31",
+                  "exchangeSubscriberId": "62356637",
+                  "planId": "74567MA6346651",
+                  "groupPolicyId": "23452527",
+                  "productTypeCode": "HMO",
+                  "coverageTypeCode": "FAM",
+                  "delinqInd": false,
+                  "paidThroughDate": null,
+                  "claimPaidThroughDate": null,
+                  "statusTypeCode": "PRE_MEMBER",
+                  "ztcn": "4LYRDWDBD3BR1IC",
+                  "changed": true
+                }
+              ],
+              "members": [
+                {
+                  "memberSK": "e3eb490d-b0dd-4355-9440-9a0b607ab3f7",
+                  "accountSK": "4f259f96-3a4e-4cba-b353-d794019289fe",
+                  "memberCode": "BJQ0JEX9JKP63RZ",
+                  "firstName": "Josh",
+                  "middleName": "K",
+                  "lastName": "Inglis",
+                  "relationshipTypeCode": "HOH",
+                  "dateOfBirth": "1991-03-15",
+                  "genderTypeCode": "MALE",
+                  "height": 5.9,
+                  "weight": 165.43,
+                  "memberAddresses": [
+                    {
+                      "memberAddressSK": "b8e2dab3-b56c-437f-bfe7-794f903df33e",
+                      "memberAddressCode": "OJWZ6EVAJSXNOND",
+                      "addressTypeCode": "MAIL",
+                      "addressLine1": "P.O Box 56346",
+                      "addressLine2": null,
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "79456",
+                      "startDate": "2020-11-08",
+                      "endDate": "2023-10-04",
+                      "changed": true
+                    },
+                    {
+                      "memberAddressCode": "6HC0ZTMBQZLXI1T",
+                      "addressTypeCode": "MAIL",
+                      "addressLine1": "P.O Box 63473",
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "79456",
+                      "countyCode": "25009",
+                      "startDate": "2023-10-05",
+                      "endDate": null,
+                      "changed": true
+                    },
+                    {
+                      "memberAddressSK": "1dd63ddd-deea-4a7e-8de4-09245cca7b47",
+                      "memberAddressCode": "0OYYM8ZF0YVBMPG",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "8945 Woody Street",
+                      "addressLine2": "Apt 303",
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "78453",
+                      "startDate": "2020-11-08",
+                      "endDate": "2023-10-04",
+                      "changed": true
+                    },
+                    {
+                      "memberAddressCode": "G0ATNLC8EUOZOZA",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "6375 Long Beach Blvd",
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "78453",
+                      "countyCode": "25009",
+                      "startDate": "2023-10-05",
+                      "endDate": null,
+                      "changed": true
+                    }
+                  ]
+                },
+                {
+                  "memberSK": "1da5f5b1-4f04-4557-a3bc-db8291b3721d",
+                  "accountSK": "4f259f96-3a4e-4cba-b353-d794019289fe",
+                  "memberCode": "DCKZFSI0PUY7514",
+                  "firstName": "Erin",
+                  "middleName": "L",
+                  "lastName": "Inglis",
+                  "relationshipTypeCode": "SPE",
+                  "dateOfBirth": "1995-05-12",
+                  "genderTypeCode": "FEMALE",
+                  "height": 5.3,
+                  "weight": 112.57,
+                  "changed": null,
+                  "memberAttributes": null,
+                  "memberAddresses": [
+                    {
+                      "memberAddressSK": "1c8e72ab-cb41-41ec-bcf2-4e28a20852c5",
+                      "memberAddressCode": "RTW16HBVETVT2YC",
+                      "addressTypeCode": "MAIL",
+                      "addressLine1": "P.O Box 56346",
+                      "addressLine2": null,
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "79456",
+                      "startDate": "2020-11-08",
+                      "endDate": "2023-10-04",
+                      "changed": true
+                    },
+                    {
+                      "memberAddressCode": "UBKZQYKJVDWOSMD",
+                      "addressTypeCode": "MAIL",
+                      "addressLine1": "P.O Box 63473",
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "79456",
+                      "countyCode": "25009",
+                      "startDate": "2023-10-05",
+                      "endDate": null,
+                      "changed": true
+                    },
+                    {
+                      "memberAddressSK": "13cb749c-de2e-48e3-bec1-77db1b349fa2",
+                      "memberAddressCode": "UTURAZ5AJ9T4JDA",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "8945 Woody Street",
+                      "addressLine2": "Apt 303",
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "78453",
+                      "startDate": "2020-11-08",
+                      "endDate": "2023-10-04",
+                      "changed": true
+                    },
+                    {
+                      "memberAddressCode": "UI9R6GUT1HDYA5C",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "6375 Long Beach Blvd",
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "78453",
+                      "countyCode": "25009",
+                      "startDate": "2023-10-05",
+                      "endDate": null,
+                      "changed": true
+                    }
+                  ]
+                },
+                {
+                  "memberSK": "7608eb3b-ef66-4a6e-bb5c-a9b61f4ce5fb",
+                  "accountSK": "4f259f96-3a4e-4cba-b353-d794019289fe",
+                  "memberCode": "75CLJ5E470CWABJ",
+                  "firstName": "Doug",
+                  "middleName": "P",
+                  "lastName": "Inglis",
+                  "relationshipTypeCode": "CHD",
+                  "dateOfBirth": "2015-03-14",
+                  "genderTypeCode": "MALE",
+                  "height": 4.8,
+                  "weight": 101.42,
+                  "changed": null,
+                  "memberAttributes": null,
+                  "memberAddresses": [
+                    {
+                      "memberAddressCode": "FZGHXOCSNQLLJU4",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "6375 Long Beach Blvd",
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "78453",
+                      "countyCode": "25009",
+                      "startDate": "2023-10-05",
+                      "endDate": null,
+                      "changed": true
+                    },
+                    {
+                      "memberAddressSK": "965bb795-6fd7-4733-b512-8388d07cb829",
+                      "memberAddressCode": "XUAVWQBKZ0MTRIF",
+                      "addressTypeCode": "RESIDENCE",
+                      "addressLine1": "8945 Woody Street",
+                      "addressLine2": "Apt 303",
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "78453",
+                      "startDate": "2020-11-08",
+                      "endDate": "2023-10-04",
+                      "changed": true
+                    },
+                    {
+                      "memberAddressCode": "LY17BTIQW9HFIGX",
+                      "addressTypeCode": "MAIL",
+                      "addressLine1": "P.O Box 63473",
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "79456",
+                      "countyCode": "25009",
+                      "startDate": "2023-10-04",
+                      "endDate": null,
+                      "changed": true
+                    },
+                    {
+                      "memberAddressSK": "eafa11e2-582b-46aa-a69d-c528173e817b",
+                      "memberAddressCode": "NZJZ1HIIJ8XL7Z2",
+                      "addressTypeCode": "MAIL",
+                      "addressLine1": "P.O Box 56346",
+                      "addressLine2": null,
+                      "city": "Salem",
+                      "stateTypeCode": "MA",
+                      "zipCode": "79456",
+                      "startDate": "2020-11-08",
+                      "endDate": "2023-10-04",
+                      "changed": true
+                    }
+                  ]
                 }
               ]
             }

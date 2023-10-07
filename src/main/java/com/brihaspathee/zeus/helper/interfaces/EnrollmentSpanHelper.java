@@ -7,6 +7,7 @@ import com.brihaspathee.zeus.domain.repository.MemberEmailRepository;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 
 import java.time.LocalDate;
@@ -56,44 +57,12 @@ public interface EnrollmentSpanHelper {
     String determineEnrollmentSpanStatus(EnrollmentSpan currentEnrollmentSpan,
                                          List<EnrollmentSpanDto> priorEnrollmentSpans);
 
-    /**
-     * Get enrollment spans that are overlapping
-     * @param accountDto The account from which the overlapping enrollment spans are to be identfied
-     * @param effectiveStartDate the start date that is to be used
-     * @param effectiveEndDate the end date that is to be used
-     * @param coverageTypeCode identifies the type of coverage "FAM" or "DEP"
-     * @return return the enrollment spans that are overlapping with the dates that are passed
-     */
-    List<EnrollmentSpanDto> getOverlappingEnrollmentSpans(AccountDto accountDto,
-                                                          LocalDate effectiveStartDate,
-                                                          LocalDate effectiveEndDate,
-                                                          String coverageTypeCode);
 
     /**
-     * Identify the enrollment spans that overlap the dates and update the dtos appropriately
-     * @param overlappingEnrollmentSpans List of enrollment spans that overlap
-     * @param effectiveStartDate the dates when the enrollment spans are overlapping
-     * @param effectiveEndDate the dates when the enrollment spans are overlapping
-     * @return return the enrollment spans the need to be termed or canceled to avoid overlapping issues
+     * Update the impacted enrollment spans and create ones as needed
+     * @param accountDto
+     * @param transactionDto
+     * @param account
      */
-    List<EnrollmentSpanDto> updateOverlappingEnrollmentSpans(List<EnrollmentSpanDto> overlappingEnrollmentSpans,
-                                                            LocalDate effectiveStartDate,
-                                                            LocalDate effectiveEndDate);
-
-    /**
-     * Save the updated enrollment spans
-     * @param enrollmentSpanDtos enrollment spans that need to be saved
-     * @param account the account to which the enrollment spans belong
-     * @return saved enrollment spans
-     */
-    List<EnrollmentSpan> saveUpdatedEnrollmentSpans(List<EnrollmentSpanDto> enrollmentSpanDtos, Account account);
-
-    /**
-     * Get the enrollment spans that are immediately before the start date provided in the input
-     * @param accountDto the account dto that contains the enrollment spans
-     * @param startDate the start date before which the enrollment spans are requested
-     * @param matchCancelSpans boolean to indicate of cancel spans should be considered a match
-     * @return return the list of matched enrollment spans
-     */
-    List<EnrollmentSpanDto> getPriorEnrollmentSpans(AccountDto accountDto, LocalDate startDate, boolean matchCancelSpans);
+    void updateEnrollmentSpans(AccountDto accountDto, TransactionDto transactionDto, Account account);
 }

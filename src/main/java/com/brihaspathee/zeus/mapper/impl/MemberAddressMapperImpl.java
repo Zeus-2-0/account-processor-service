@@ -52,6 +52,32 @@ public class MemberAddressMapperImpl implements MemberAddressMapper {
     }
 
     /**
+     * Convert member address dto to member address entity
+     * @param memberAddressDto
+     * @return
+     */
+    @Override
+    public MemberAddress memberAddressDtoToMemberAddress(MemberAddressDto memberAddressDto) {
+        if(memberAddressDto == null){
+            return null;
+        }
+        MemberAddress memberAddress = MemberAddress.builder()
+                .memberAddressCode(memberAddressDto.getMemberAddressCode())
+                .addressTypeCode(memberAddressDto.getAddressTypeCode())
+                .addressLine1(memberAddressDto.getAddressLine1())
+                .addressLine2(memberAddressDto.getAddressLine2())
+                .city(memberAddressDto.getCity())
+                .stateTypeCode(memberAddressDto.getStateTypeCode())
+                .zipCode(memberAddressDto.getZipCode())
+                .startDate(memberAddressDto.getStartDate())
+                .endDate(memberAddressDto.getEndDate())
+                .createdDate(memberAddressDto.getCreatedDate())
+                .updatedDate(memberAddressDto.getUpdatedDate())
+                .build();
+        return memberAddress;
+    }
+
+    /**
      * Convert member address entities to member address dtos
      * @param memberAddresses
      * @return
@@ -59,5 +85,15 @@ public class MemberAddressMapperImpl implements MemberAddressMapper {
     @Override
     public List<MemberAddressDto> memberAddressesToMemberAddressDtos(List<MemberAddress> memberAddresses) {
         return memberAddresses.stream().map(this::memberAddressToMemberAddressDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert member address dtos to member address entities
+     * @param memberAddressDtos
+     * @return
+     */
+    @Override
+    public List<MemberAddress> memberAddressDtosToMemberAddresses(List<MemberAddressDto> memberAddressDtos) {
+        return memberAddressDtos.stream().map(this::memberAddressDtoToMemberAddress).collect(Collectors.toList());
     }
 }

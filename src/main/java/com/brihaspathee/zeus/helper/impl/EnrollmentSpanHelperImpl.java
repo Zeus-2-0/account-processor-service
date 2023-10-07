@@ -36,6 +36,8 @@ import java.util.stream.Collectors;
  * Project: Zeus
  * Package Name: com.brihaspathee.zeus.helper.impl
  * To change this template use File | Settings | File and Code Template
+ * Nuclino:<a href="https://app.nuclino.com/Balaji-Inc/Engineering-Wiki/Enrollment-Span-Helper-ad46155f-d182-4f92-b4ce-e835ad20c38f">Nuclino</a>
+ * Confluence: <a href="https://vbalaji.atlassian.net/wiki/spaces/ZEUS/pages/99745829/APS+-+Enrollment+Span+Helper">Confluence</a>
  */
 @Slf4j
 @Component
@@ -104,7 +106,7 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                 .changed(true)
                 .build();
         // Determine the enrollment span status
-        String spanStatus = determineEnrollmentSpanStatus(enrollmentSpan, null);
+        String spanStatus = determineEnrollmentSpanStatus(enrollmentSpan, priorEnrollmentSpans);
         enrollmentSpan.setStatusTypeCode(spanStatus);
         enrollmentSpan = enrollmentSpanRepository.save(enrollmentSpan);
         // Create the premium span
@@ -156,8 +158,7 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
      * @param coverageTypeCode identifies the type of coverage "FAM" or "DEP"
      * @return return the enrollment spans that are overlapping with the dates that are passed
      */
-    @Override
-    public List<EnrollmentSpanDto> getOverlappingEnrollmentSpans(AccountDto accountDto,
+    private List<EnrollmentSpanDto> getOverlappingEnrollmentSpans(AccountDto accountDto,
                                                                  LocalDate effectiveStartDate,
                                                                  LocalDate effectiveEndDate,
                                                                  String coverageTypeCode) {
@@ -206,8 +207,7 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
      * @param effectiveEndDate the dates when the enrollment spans are overlapping
      * @return return the enrollment spans the need to be termed or canceled to avoid overlapping issues
      */
-    @Override
-    public List<EnrollmentSpanDto> updateOverlappingEnrollmentSpans(List<EnrollmentSpanDto> overlappingEnrollmentSpans,
+    private List<EnrollmentSpanDto> updateOverlappingEnrollmentSpans(List<EnrollmentSpanDto> overlappingEnrollmentSpans,
                                                                     LocalDate effectiveStartDate,
                                                                     LocalDate effectiveEndDate) {
         // Check if there are any enrollment spans that need to be termed or canceled
@@ -267,8 +267,7 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
      * @param account the account to which the enrollment spans belong
      * @return saved enrollment spans
      */
-    @Override
-    public List<EnrollmentSpan> saveUpdatedEnrollmentSpans(List<EnrollmentSpanDto> enrollmentSpanDtos, Account account) {
+    private List<EnrollmentSpan> saveUpdatedEnrollmentSpans(List<EnrollmentSpanDto> enrollmentSpanDtos, Account account) {
         if(enrollmentSpanDtos != null && !enrollmentSpanDtos.isEmpty()){
             List<EnrollmentSpan> savedEnrollmentSpans = new ArrayList<>();
             enrollmentSpanDtos.forEach(enrollmentSpanDto -> {
@@ -299,8 +298,7 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
      * @param matchCancelSpans boolean to indicate of cancel spans should be considered a match
      * @return return the list of matched enrollment spans
      */
-    @Override
-    public List<EnrollmentSpanDto> getPriorEnrollmentSpans(AccountDto accountDto, LocalDate startDate, boolean matchCancelSpans) {
+    private List<EnrollmentSpanDto> getPriorEnrollmentSpans(AccountDto accountDto, LocalDate startDate, boolean matchCancelSpans) {
         List<EnrollmentSpanDto> enrollmentSpanDtos = accountDto.getEnrollmentSpans().stream().toList();
         enrollmentSpanDtos =
                 enrollmentSpanDtos.stream()
@@ -317,7 +315,10 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
         }
         if(enrollmentSpanDtos != null && !enrollmentSpanDtos.isEmpty()){
             LocalDate maxEndDate =
-                    enrollmentSpanDtos.stream().map(EnrollmentSpanDto::getEndDate).max(Comparator.naturalOrder()).get();
+                    enrollmentSpanDtos.stream()
+                            .map(EnrollmentSpanDto::getEndDate)
+                            .max(Comparator.naturalOrder())
+                            .get();
             List<EnrollmentSpanDto> priorYearEnrollmentSpans =
                     enrollmentSpanDtos.stream()
                             .takeWhile(
@@ -326,6 +327,50 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
             return priorYearEnrollmentSpans;
         }
         return null;
+    }
+
+    /**
+     * Update the impacted enrollment spans and create ones as needed
+     * @param accountDto
+     * @param transactionDto
+     * @param account
+     */
+    @Override
+    public void updateEnrollmentSpans(AccountDto accountDto, TransactionDto transactionDto, Account account) {
+        LocalDate effectiveStartDate = transactionDto.getTransactionDetail().getEffectiveDate();
+        LocalDate effectiveEndDate = transactionDto.getTransactionDetail().getEndDate();
+        if(effectiveEndDate == null){
+            effectiveEndDate = LocalDate.of(effectiveStartDate.getYear(), 12, 31);
+        }
+        // Get the enrollment span if any are affected
+        List<EnrollmentSpanDto> overlappingEnrollmentSpans = getOverlappingEnrollmentSpans(accountDto,
+                effectiveStartDate,
+                effectiveEndDate, transactionDto.getTransactionDetail().getCoverageTypeCode());
+        // Get the overlapping enrollment spans updated appropriately.
+        // Note this will just update within the DTO and not in the DB
+        overlappingEnrollmentSpans = updateOverlappingEnrollmentSpans(
+                overlappingEnrollmentSpans,
+                effectiveStartDate,
+                effectiveEndDate);
+        updateAccountDtoWithOverlappingSpans(accountDto, overlappingEnrollmentSpans);
+        List<EnrollmentSpan> updatedEnrollmentSpans = saveUpdatedEnrollmentSpans(overlappingEnrollmentSpans,
+                account);
+        if(updatedEnrollmentSpans == null){
+            updatedEnrollmentSpans = new ArrayList<>();
+        }
+        updatedEnrollmentSpans.forEach(enrollmentSpan -> {
+            log.info("Saved Enrollment span code before :{}", enrollmentSpan.getEnrollmentSpanCode());
+            log.info("Saved Enrollment span ztcn before:{}", enrollmentSpan.getZtcn());
+        });
+        EnrollmentSpan newEnrollmentSpan = createEnrollmentSpan(transactionDto,
+                account,
+                getPriorEnrollmentSpans(accountDto, effectiveStartDate, false));
+        updatedEnrollmentSpans.add(newEnrollmentSpan);
+        updatedEnrollmentSpans.forEach(enrollmentSpan -> {
+            log.info("Saved Enrollment span code after :{}", enrollmentSpan.getEnrollmentSpanCode());
+            log.info("Saved Enrollment span ztcn after:{}", enrollmentSpan.getZtcn());
+        });
+        account.setEnrollmentSpan(updatedEnrollmentSpans);
     }
 
     /**
@@ -350,7 +395,7 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
      * @param transactionDto
      * @return
      */
-    private TransactionMemberDto getPrimaryMember(TransactionDto transactionDto){
+    private TransactionMemberDto    getPrimaryMember(TransactionDto transactionDto){
         TransactionMemberDto primaryMember = transactionDto.getMembers().stream().filter(memberDto -> {
             return memberDto.getRelationshipTypeCode().equals("HOH");
         }).findFirst().get();
@@ -600,5 +645,31 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                                         .equals(EnrollmentSpanStatus.CANCELED))
                 .collect(Collectors.toList());
         return nonCanceledEnrollmentSpans;
+    }
+
+    /**
+     * The account dto object will be updated with the overlapping enrollment spans
+     * @param accountDto The account dto that is to be updated
+     * @param overlappingEnrollmentSpans the overlapping enrollment spans that needs to be added back to the account
+     */
+    private void updateAccountDtoWithOverlappingSpans(AccountDto accountDto,
+                                                      List<EnrollmentSpanDto> overlappingEnrollmentSpans) {
+        if(overlappingEnrollmentSpans == null || overlappingEnrollmentSpans.isEmpty()){
+            return;
+        }else{
+            // todo add the overlapping enrollment spans
+            Set<EnrollmentSpanDto> accountEnrollmentSpans = accountDto.getEnrollmentSpans();
+            overlappingEnrollmentSpans.forEach(enrollmentSpanDto -> {
+                Optional<EnrollmentSpanDto> optionalEnrollmentSpan = accountEnrollmentSpans.stream()
+                        .filter(
+                                accountEnrollmentSpan ->
+                                        accountEnrollmentSpan.getEnrollmentSpanCode().equals(
+                                                enrollmentSpanDto.getEnrollmentSpanCode()))
+                        .findFirst();
+                optionalEnrollmentSpan.ifPresent(accountEnrollmentSpans::remove);
+
+            });
+            accountEnrollmentSpans.addAll(overlappingEnrollmentSpans);
+        }
     }
 }
