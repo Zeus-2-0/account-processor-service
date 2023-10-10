@@ -24,9 +24,23 @@ public interface MemberLanguageMapper {
     MemberLanguageDto languageToLanguageDto(MemberLanguage language);
 
     /**
+     * Convert language dto to language entity
+     * @param languageDto
+     * @return
+     */
+    MemberLanguage languageDtoToLanguage(MemberLanguageDto languageDto);
+
+    /**
      *
      * @param languages
      * @return
      */
     List<MemberLanguageDto> languagesToLanguageDtos(List<MemberLanguage> languages);
+
+    /**
+     * Convert language dtos to language entities
+     * @param languageDtos
+     * @return
+     */
+    List<MemberLanguage> languageDtosToLanguages(List<MemberLanguageDto> languageDtos);
 }

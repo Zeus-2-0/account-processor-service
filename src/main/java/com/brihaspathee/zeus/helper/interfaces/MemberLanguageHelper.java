@@ -28,4 +28,12 @@ public interface MemberLanguageHelper {
      * @param member
      */
     void setMemberLanguage(MemberDto memberDto, Member member);
+
+    /**
+     * Match member language
+     * @param member
+     * @param memberDto
+     * @param transactionMemberDto
+     */
+    void matchMemberLanguage(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto);
 }

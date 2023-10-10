@@ -24,9 +24,23 @@ public interface MemberIdentifierMapper {
     MemberIdentifierDto identifierToIdentifierDto(MemberIdentifier identifier);
 
     /**
+     * Convert member identifier dto to member identifier entity
+     * @param memberIdentifierDto
+     * @return
+     */
+    MemberIdentifier identifierDtoToIdentifier(MemberIdentifierDto memberIdentifierDto);
+
+    /**
      * Convert identifier entities to member identifier dtos
      * @param identifiers
      * @return
      */
     List<MemberIdentifierDto> identifiersToIdentifierDtos(List<MemberIdentifier> identifiers);
+
+    /**
+     * Convert identifier dtos to identifier entities
+     * @param identifierDtos
+     * @return
+     */
+    List<MemberIdentifier> identifierDtosToIdentifiers(List<MemberIdentifierDto> identifierDtos);
 }

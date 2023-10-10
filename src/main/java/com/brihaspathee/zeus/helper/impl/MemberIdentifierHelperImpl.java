@@ -4,6 +4,7 @@ import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.entity.MemberIdentifier;
 import com.brihaspathee.zeus.domain.repository.MemberIdentifierRepository;
 import com.brihaspathee.zeus.dto.account.MemberDto;
+import com.brihaspathee.zeus.dto.account.MemberIdentifierDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberIdentifierDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberIdentifierHelper;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -92,5 +94,65 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
                             .collect(Collectors.toSet())
             );
         }
+    }
+
+    /**
+     * Match the SSN of the member from the transaction to see if they match with the SSN
+     * the member has in the account
+     * @param member - The member entity
+     * @param memberDto - The member dto
+     * @param transactionMemberDto - The member's transaction information
+     */
+    @Override
+    public void matchMemberIdentifier(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
+        log.info("Inside member match identifier");
+        // Check if the transaction has any addresses for the member
+        // If there are no addresses in the transaction then return
+
+        if(transactionMemberDto.getIdentifiers() == null ||
+            transactionMemberDto.getIdentifiers().isEmpty()){
+            return;
+        }
+        List<MemberIdentifier> identifiers = new ArrayList<>();
+        // Check if SSN is present in the transaction for the member
+        Optional<TransactionMemberIdentifierDto> optionalTransactionSSN = transactionMemberDto.getIdentifiers().stream()
+                .filter(
+                        transactionMemberIdentifierDto ->
+                                transactionMemberIdentifierDto.getIdentifierTypeCode().equals("SSN")
+                ).findFirst();
+        if(optionalTransactionSSN.isEmpty()){
+            return;
+        }
+        // If the control reaches here, it means that the transaction contains an active
+        // SSN for the member
+        String memberTransactionSSN = optionalTransactionSSN.get().getIdentifierValue();
+        Optional<MemberIdentifierDto> optionalAccountSSN = memberDto.getMemberIdentifiers().stream()
+                .filter(
+                        memberIdentifierDto -> memberIdentifierDto.getIdentifierTypeCode().equals("SSN") &&
+                                memberIdentifierDto.isActive()
+                ).findFirst();
+        if(optionalAccountSSN.isEmpty()){
+            // This means that there is no active SSN in the account for the member
+            // Hence create the SSN that was received in the transaction
+            createMemberIdentifier(member, transactionMemberDto);
+            return;
+        }
+        // if the control reaches here, means that there is a SSN for the member in the transaction
+        // and there is an active SSN for the member in the account
+        String memberAccountSSN = optionalAccountSSN.get().getIdentifierValue();
+        // Compare the two values to check if they are the same
+        if(!memberAccountSSN.equals(memberTransactionSSN)){
+            // If the SSNs are different then we needed to deactivate the previous SSN and activate the current SSN
+            // Hence create the SSN that was received in the transaction
+            createMemberIdentifier(member, transactionMemberDto);
+            MemberIdentifierDto memberIdentifierDto = optionalAccountSSN.get();
+            MemberIdentifier memberIdentifier = identifierMapper.identifierDtoToIdentifier(memberIdentifierDto);
+            memberIdentifier.setMemberAcctIdentifierSK(memberIdentifierDto.getMemberIdentifierSK());
+            // Set the active flag to false
+            memberIdentifier.setActive(false);
+            memberIdentifier = memberIdentifierRepository.save(memberIdentifier);
+            member.getMemberIdentifiers().add(memberIdentifier);
+        }
+        // If they are same then no action is needed
     }
 }

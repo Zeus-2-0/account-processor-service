@@ -49,6 +49,29 @@ public class MemberEmailMapperImpl implements MemberEmailMapper {
     }
 
     /**
+     * Convert email dto to email entity
+     * @param emailDto
+     * @return
+     */
+    @Override
+    public MemberEmail emailDtoToEmail(MemberEmailDto emailDto) {
+        if(emailDto == null){
+            return null;
+        }
+        MemberEmail email = MemberEmail.builder()
+                .memberEmailCode(emailDto.getMemberEmailCode())
+                .emailTypeCode(emailDto.getEmailTypeCode())
+                .email(emailDto.getEmail())
+                .isPrimary(emailDto.isPrimary())
+                .startDate(emailDto.getStartDate())
+                .endDate(emailDto.getEndDate())
+                .createdDate(emailDto.getCreatedDate())
+                .updatedDate(emailDto.getUpdatedDate())
+                .build();
+        return email;
+    }
+
+    /**
      * Convert email entities to email dtos
      * @param emails
      * @return
@@ -56,5 +79,15 @@ public class MemberEmailMapperImpl implements MemberEmailMapper {
     @Override
     public List<MemberEmailDto> emailsToEmailDtos(List<MemberEmail> emails) {
         return emails.stream().map(this::emailToEmailDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert email dtos to email entities
+     * @param emailDtos
+     * @return
+     */
+    @Override
+    public List<MemberEmail> emailDtosToEmails(List<MemberEmailDto> emailDtos) {
+        return emailDtos.stream().map(this::emailDtoToEmail).collect(Collectors.toList());
     }
 }

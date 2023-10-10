@@ -48,6 +48,28 @@ public class MemberLanguageMapperImpl implements MemberLanguageMapper {
     }
 
     /**
+     * Convert language dto to language entity
+     * @param languageDto
+     * @return
+     */
+    @Override
+    public MemberLanguage languageDtoToLanguage(MemberLanguageDto languageDto) {
+        if(languageDto == null){
+            return null;
+        }
+        MemberLanguage language = MemberLanguage.builder()
+                .memberLanguageCode(languageDto.getMemberLanguageCode())
+                .languageTypeCode(languageDto.getLanguageTypeCode())
+                .languageCode(languageDto.getLanguageCode())
+                .startDate(languageDto.getStartDate())
+                .endDate(languageDto.getEndDate())
+                .createdDate(languageDto.getCreatedDate())
+                .updatedDate(languageDto.getUpdatedDate())
+                .build();
+        return language;
+    }
+
+    /**
      * Convert language entities to language dtos
      * @param languages
      * @return
@@ -55,5 +77,15 @@ public class MemberLanguageMapperImpl implements MemberLanguageMapper {
     @Override
     public List<MemberLanguageDto> languagesToLanguageDtos(List<MemberLanguage> languages) {
         return languages.stream().map(this::languageToLanguageDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert language dtos to language entities
+     * @param languageDtos
+     * @return
+     */
+    @Override
+    public List<MemberLanguage> languageDtosToLanguages(List<MemberLanguageDto> languageDtos) {
+        return languageDtos.stream().map(this::languageDtoToLanguage).collect(Collectors.toList());
     }
 }

@@ -134,6 +134,7 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
             Optional<MemberAddressDto> optionalMemberAddressDto = memberDto.getMemberAddresses().stream()
                     .filter(
                             memberAddressDto ->
+                                    memberAddressDto.getAddressTypeCode().equals(addressTypeCode) &&
                                     memberAddressDto.getEndDate() == null
                     ).findFirst();
             if(optionalMemberAddressDto.isPresent()){
