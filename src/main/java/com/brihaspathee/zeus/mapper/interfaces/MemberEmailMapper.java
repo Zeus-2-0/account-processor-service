@@ -24,9 +24,23 @@ public interface MemberEmailMapper {
     MemberEmailDto emailToEmailDto(MemberEmail email);
 
     /**
+     * Convert email dto to email entity
+     * @param emailDto
+     * @return
+     */
+    MemberEmail emailDtoToEmail(MemberEmailDto emailDto);
+
+    /**
      * Convert email entities to email dtos
      * @param emails
      * @return
      */
     List<MemberEmailDto> emailsToEmailDtos(List<MemberEmail> emails);
+
+    /**
+     * Convert email dtos to email entities
+     * @param emailDtos
+     * @return
+     */
+    List<MemberEmail> emailDtosToEmails(List<MemberEmailDto> emailDtos);
 }

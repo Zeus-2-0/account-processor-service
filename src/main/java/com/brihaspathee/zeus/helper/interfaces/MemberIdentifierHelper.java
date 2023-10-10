@@ -28,4 +28,13 @@ public interface MemberIdentifierHelper {
      * @param member
      */
     void setMemberIdentifier(MemberDto memberDto, Member member);
+
+    /**
+     * Match the SSN of the member from the transaction to see if they match with the SSN
+     * the member has in the account
+     * @param member - The member entity
+     * @param memberDto - The member dto
+     * @param transactionMemberDto - The member's transaction information
+     */
+    void matchMemberIdentifier(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto);
 }

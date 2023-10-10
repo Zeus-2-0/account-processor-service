@@ -48,6 +48,28 @@ public class MemberPhoneMapperImpl implements MemberPhoneMapper {
     }
 
     /**
+     * Convert phone dto to phone entity
+     * @param phoneDto
+     * @return
+     */
+    @Override
+    public MemberPhone phoneDtoToPhone(MemberPhoneDto phoneDto) {
+        if(phoneDto == null){
+            return null;
+        }
+        MemberPhone phone = MemberPhone.builder()
+                .memberPhoneCode(phoneDto.getMemberPhoneCode())
+                .phoneTypeCode(phoneDto.getPhoneTypeCode())
+                .phoneNumber(phoneDto.getPhoneNumber())
+                .startDate(phoneDto.getStartDate())
+                .endDate(phoneDto.getEndDate())
+                .createdDate(phoneDto.getCreatedDate())
+                .updatedDate(phoneDto.getUpdatedDate())
+                .build();
+        return phone;
+    }
+
+    /**
      * Convert phone entities to phone dtos
      * @param phones
      * @return
@@ -55,5 +77,15 @@ public class MemberPhoneMapperImpl implements MemberPhoneMapper {
     @Override
     public List<MemberPhoneDto> phonesToPhoneDtos(List<MemberPhone> phones) {
         return phones.stream().map(this::phoneToPhoneDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert phone dtos to phone entities
+     * @param phoneDtos
+     * @return
+     */
+    @Override
+    public List<MemberPhone> phoneDtosToPhones(List<MemberPhoneDto> phoneDtos) {
+        return phoneDtos.stream().map(this::phoneDtoToPhone).collect(Collectors.toList());
     }
 }

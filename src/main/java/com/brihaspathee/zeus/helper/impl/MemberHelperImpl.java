@@ -150,6 +150,7 @@ public class MemberHelperImpl implements MemberHelper {
                     transactionMemberDto,
                     primarySubscriber);
             memberAddressHelper.matchMemberAddress(member, primarySubscriber, transactionMemberDto);
+            memberIdentifierHelper.matchMemberIdentifier(member, primarySubscriber, transactionMemberDto);
             account.setMembers(List.of(member));
         }else{
             // List to hold all the members from the transaction
@@ -170,6 +171,7 @@ public class MemberHelperImpl implements MemberHelper {
                             transactionMemberDto,
                             memberDto);
                     memberAddressHelper.matchMemberAddress(member, memberDto, transactionMemberDto);
+                    memberIdentifierHelper.matchMemberIdentifier(member, memberDto, transactionMemberDto);
                 }
                 // Add the member to the list
                 members.add(member);

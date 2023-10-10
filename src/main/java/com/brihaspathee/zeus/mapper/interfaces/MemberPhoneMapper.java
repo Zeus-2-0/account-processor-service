@@ -24,9 +24,23 @@ public interface MemberPhoneMapper {
     MemberPhoneDto phoneToPhoneDto(MemberPhone phone);
 
     /**
+     * Convert phone dto to phone entity
+     * @param phoneDto
+     * @return
+     */
+    MemberPhone phoneDtoToPhone(MemberPhoneDto phoneDto);
+
+    /**
      * Convert phone entities to phone dtos
      * @param phones
      * @return
      */
     List<MemberPhoneDto> phonesToPhoneDtos(List<MemberPhone> phones);
+
+    /**
+     * Convert phone dtos to phone entities
+     * @param phoneDtos
+     * @return
+     */
+    List<MemberPhone> phoneDtosToPhones(List<MemberPhoneDto> phoneDtos);
 }

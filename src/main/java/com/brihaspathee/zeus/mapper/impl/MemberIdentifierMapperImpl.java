@@ -47,6 +47,27 @@ public class MemberIdentifierMapperImpl implements MemberIdentifierMapper {
     }
 
     /**
+     * Convert member identifier dto to member identifier entity
+     * @param memberIdentifierDto
+     * @return
+     */
+    @Override
+    public MemberIdentifier identifierDtoToIdentifier(MemberIdentifierDto memberIdentifierDto) {
+        if(memberIdentifierDto == null){
+            return null;
+        }
+        MemberIdentifier identifier = MemberIdentifier.builder()
+                .memberIdentifierCode(memberIdentifierDto.getMemberIdentifierCode())
+                .identifierTypeCode(memberIdentifierDto.getIdentifierTypeCode())
+                .identifierValue(memberIdentifierDto.getIdentifierValue())
+                .active(memberIdentifierDto.isActive())
+                .createdDate(memberIdentifierDto.getCreatedDate())
+                .updatedDate(memberIdentifierDto.getUpdatedDate())
+                .build();
+        return identifier;
+    }
+
+    /**
      * Convert member identifier entities to member identifier dtos
      * @param identifiers
      * @return
@@ -54,5 +75,15 @@ public class MemberIdentifierMapperImpl implements MemberIdentifierMapper {
     @Override
     public List<MemberIdentifierDto> identifiersToIdentifierDtos(List<MemberIdentifier> identifiers) {
         return identifiers.stream().map(this::identifierToIdentifierDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert identifier dtos to identifier entities
+     * @param identifierDtos
+     * @return
+     */
+    @Override
+    public List<MemberIdentifier> identifierDtosToIdentifiers(List<MemberIdentifierDto> identifierDtos) {
+        return identifierDtos.stream().map(this::identifierDtoToIdentifier).collect(Collectors.toList());
     }
 }
