@@ -4,7 +4,9 @@ import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.entity.MemberPhone;
 import com.brihaspathee.zeus.domain.repository.MemberPhoneRepository;
 import com.brihaspathee.zeus.dto.account.MemberDto;
+import com.brihaspathee.zeus.dto.account.MemberPhoneDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
+import com.brihaspathee.zeus.dto.transaction.TransactionMemberPhoneDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberPhoneHelper;
 import com.brihaspathee.zeus.mapper.interfaces.MemberPhoneMapper;
 import com.brihaspathee.zeus.util.AccountProcessorUtil;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -77,6 +80,30 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
     }
 
     /**
+     * Create the member phone in the repository
+     * @param member
+     * @param transactionMemberPhoneDto
+     * @param memberPhoneCode
+     * @return
+     */
+    private MemberPhone createMemberPhone(Member member,
+                                          TransactionMemberPhoneDto transactionMemberPhoneDto,
+                                          String memberPhoneCode){
+        MemberPhone memberPhone = MemberPhone.builder()
+                .member(member)
+                .memberAcctPhoneSK(null)
+                .memberPhoneCode(memberPhoneCode)
+                .phoneTypeCode(transactionMemberPhoneDto.getPhoneTypeCode())
+                .phoneNumber(transactionMemberPhoneDto.getPhoneNumber())
+                .startDate(transactionMemberPhoneDto.getReceivedDate().toLocalDate())
+                .endDate(null)
+                .changed(true)
+                .build();
+        memberPhone = memberPhoneRepository.save(memberPhone);
+        return memberPhone;
+    }
+
+    /**
      * Set the member phone dto to  send to MMS
      * @param memberDto
      * @param member
@@ -91,6 +118,111 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
                             .stream()
                             .collect(Collectors.toSet())
             );
+        }
+    }
+
+    /**
+     * Match member phone from the transaction to the account
+     * @param member
+     * @param memberDto
+     * @param transactionMemberDto
+     */
+    @Override
+    public void matchMemberPhone(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
+        log.info("Inside member match phone");
+        // check if the transaction has any languages for the member
+        // if there are no languages in the transaction then return
+        if (transactionMemberDto.getMemberPhones() == null ||
+            transactionMemberDto.getMemberPhones().isEmpty()){
+            return;
+        }
+        // check for each phone types possible
+        matchMemberPhone("ALT", member, memberDto, transactionMemberDto);
+        matchMemberPhone("BEEPER", member, memberDto, transactionMemberDto);
+        matchMemberPhone("CELL", member, memberDto, transactionMemberDto);
+        matchMemberPhone("EXT", member, memberDto, transactionMemberDto);
+        matchMemberPhone("FAX", member, memberDto, transactionMemberDto);
+        matchMemberPhone("HOME", member, memberDto, transactionMemberDto);
+        matchMemberPhone("WORK", member, memberDto, transactionMemberDto);
+
+    }
+
+    /**
+     * Match the specific phone type
+     * @param phoneTypeCode
+     * @param member
+     * @param memberDto
+     * @param transactionMemberDto
+     */
+    private void matchMemberPhone(String phoneTypeCode,
+                                  Member member,
+                                  MemberDto memberDto,
+                                  TransactionMemberDto transactionMemberDto){
+        List<MemberPhone> phones = new ArrayList<>();
+        // Check if the transactions has the passed in phone type for the member
+        Optional<TransactionMemberPhoneDto> optionalTransactionPhoneDto = transactionMemberDto.getMemberPhones()
+                .stream()
+                .filter(
+                        transactionMemberPhoneDto ->
+                                transactionMemberPhoneDto.getPhoneTypeCode().equals(phoneTypeCode)
+                ).findFirst();
+        // if there are no phones of the passed in type, then return - nothing to compare here
+        if(optionalTransactionPhoneDto.isEmpty()){
+            return;
+        }
+        // if the control reaches here, then the transaction contains the phone of the passed type
+        TransactionMemberPhoneDto transactionPhoneDto = optionalTransactionPhoneDto.get();
+        // See if the account has the same phone type
+        Optional<MemberPhoneDto> optionalAccountPhoneDto = memberDto.getMemberPhones()
+                .stream()
+                .filter(
+                        phoneDto ->
+                                phoneDto.getPhoneTypeCode().equals(phoneTypeCode) &&
+                                        phoneDto.getEndDate() == null
+                ).findFirst();
+        if (optionalAccountPhoneDto.isEmpty()){
+            // this means that the account does not have that phone type
+            // create the phone received in the transaction
+            // since this will be a new phone create the phone code
+            String memberPhoneCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
+                    "memberPhoneCode");
+            MemberPhone memberPhone = createMemberPhone(member,
+                    transactionPhoneDto,
+                    memberPhoneCode);
+            phones.add(memberPhone);
+            return;
+        }
+        // if the control reaches here, then the transaction and the account has the same language
+        MemberPhoneDto accountPhoneDto = optionalAccountPhoneDto.get();
+        // compare the phone numbers
+        if (!transactionPhoneDto.getPhoneNumber()
+                .equals(accountPhoneDto.getPhoneNumber())){
+            // the phone numbers are different
+            // create the phone number as it is received in the transaction
+            String memberPhoneCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
+                    "memberPhoneCode");
+            MemberPhone memberPhone = createMemberPhone(member,
+                    transactionPhoneDto,
+                    memberPhoneCode);
+            phones.add(memberPhone);
+            // set the end date of the phone number in the account to one day prior to the
+            // transaction received date
+            accountPhoneDto.setEndDate(transactionPhoneDto.getReceivedDate().minusDays(1).toLocalDate());
+            MemberPhone updatedPhone = phoneMapper.phoneDtoToPhone(accountPhoneDto);
+            // set the phone sk of the phone in MMS
+            updatedPhone.setMemberAcctPhoneSK(accountPhoneDto.getMemberPhoneSK());
+            // set the changed flag to true
+            updatedPhone.setChanged(true);
+            // save the phone to the repository
+            updatedPhone = memberPhoneRepository.save(updatedPhone);
+            // add the phone to the list
+            phones.add(updatedPhone);
+        }
+        if(member.getMemberPhones() == null ||
+            member.getMemberPhones().isEmpty()){
+            member.setMemberPhones(phones);
+        }else{
+            member.getMemberPhones().addAll(phones);
         }
     }
 }

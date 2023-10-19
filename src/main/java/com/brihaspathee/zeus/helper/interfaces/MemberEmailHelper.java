@@ -28,4 +28,12 @@ public interface MemberEmailHelper {
      * @param member
      */
     void setMemberEmail(MemberDto memberDto, Member member);
+
+    /**
+     * Match the member's email in the account with the email from the transaction
+     * @param member
+     * @param memberDto
+     * @param transactionMemberDto
+     */
+    void matchMemberEmail(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto);
 }

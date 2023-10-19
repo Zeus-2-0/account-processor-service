@@ -4,7 +4,9 @@ import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.entity.MemberEmail;
 import com.brihaspathee.zeus.domain.repository.MemberEmailRepository;
 import com.brihaspathee.zeus.dto.account.MemberDto;
+import com.brihaspathee.zeus.dto.account.MemberEmailDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
+import com.brihaspathee.zeus.dto.transaction.TransactionMemberEmailDto;
 import com.brihaspathee.zeus.helper.interfaces.MemberEmailHelper;
 import com.brihaspathee.zeus.mapper.interfaces.MemberEmailMapper;
 import com.brihaspathee.zeus.util.AccountProcessorUtil;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -78,6 +81,31 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
     }
 
     /**
+     * Create the member email
+     * @param member
+     * @param transactionMemberEmailDto
+     * @param memberEmailCode
+     * @return
+     */
+    private MemberEmail createMemberEmail(Member member,
+                                          TransactionMemberEmailDto transactionMemberEmailDto,
+                                          String memberEmailCode){
+        MemberEmail memberEmail = MemberEmail.builder()
+                .member(member)
+                .memberAcctEmailSK(null)
+                .memberEmailCode(memberEmailCode)
+                .email(transactionMemberEmailDto.getEmail())
+                .emailTypeCode("PERSONAL")
+                .isPrimary(true)
+                .startDate(transactionMemberEmailDto.getReceivedDate().toLocalDate())
+                .endDate(null)
+                .changed(true)
+                .build();
+        memberEmail = memberEmailRepository.save(memberEmail);
+        return memberEmail;
+    }
+
+    /**
      * Set the member email dto to  send to MMS
      * @param memberDto
      * @param member
@@ -92,6 +120,94 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
                             .stream()
                             .collect(Collectors.toSet())
             );
+        }
+    }
+
+    /**
+     * Match the member's email from the account to the email in the transaction
+     * @param member
+     * @param memberDto
+     * @param transactionMemberDto
+     */
+    @Override
+    public void matchMemberEmail(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
+        log.info("Inside member match email");
+        // Check if the transaction has any emails for the member
+        // If there is no email in the transaction then return
+        if(transactionMemberDto.getEmails() == null ||
+                transactionMemberDto.getEmails().isEmpty()){
+            return;
+        }
+        // Compare the below email types
+        matchMemberEmail("PERSONAL", member, memberDto, transactionMemberDto);
+    }
+
+    /**
+     * Match member's specific email type
+     * @param emailTypeCode
+     * @param member
+     * @param memberDto
+     * @param transactionMemberDto
+     */
+    private void matchMemberEmail(String emailTypeCode, Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto){
+        List<MemberEmail> emails = new ArrayList<>();
+        // if there are no emails then return
+        if(transactionMemberDto.getEmails() == null ||
+                transactionMemberDto.getEmails().isEmpty()){
+            return;
+        }
+        // There can be only one email in the transaction get the first email from the list
+        TransactionMemberEmailDto transactionEmailDto = transactionMemberDto.getEmails().get(0);
+        // the email from the transaction has to be compared with the member's personal email
+        // See if the member has a personal email in the account
+        Optional<MemberEmailDto> optionalMemberEmailDto = memberDto.getMemberEmails()
+                .stream()
+                .filter(
+                        emailDto ->
+                                emailDto.getEmailTypeCode().equals(emailTypeCode) &&
+                                        emailDto.getEndDate() == null
+                ).findFirst();
+        if (optionalMemberEmailDto.isEmpty()){
+            // this meas that the account does not have a personal email
+            // create the personal email received in the transaction
+            // Since this will be a new email create the email code
+            String memberEmailCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
+                    "memberEmailCode");
+            MemberEmail memberEmail = createMemberEmail(member,
+                    transactionEmailDto,
+                    memberEmailCode);
+            emails.add(memberEmail);
+            return;
+        }
+        // if the control reaches here, then the transaction and the account have personal email
+        MemberEmailDto accountEmailDto = optionalMemberEmailDto.get();
+        // compare the emails
+        if (!transactionEmailDto.getEmail().equals(accountEmailDto.getEmail())){
+            // the personal emails are different
+            // create the language received in the transaction
+            String memberEmailCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
+                    "memberEmailCode");
+            MemberEmail memberEmail = createMemberEmail(member,
+                    transactionEmailDto,
+                    memberEmailCode);
+            emails.add(memberEmail);
+            // set the end date of the email in the account to one day prior to the
+            // transaction received date
+            accountEmailDto.setEndDate(transactionEmailDto.getReceivedDate().minusDays(1).toLocalDate());
+            MemberEmail updatedEmail = emailMapper.emailDtoToEmail(accountEmailDto);
+            // set the email sk of the email in MMS
+            updatedEmail.setMemberAcctEmailSK(accountEmailDto.getMemberEmailSK());
+            // set the changed flag to true
+            updatedEmail.setChanged(true);
+            // save the email to the repository
+            updatedEmail = memberEmailRepository.save(updatedEmail);
+            // add the language to the list
+            emails.add(updatedEmail);
+        }
+        if (member.getMemberEmails() == null || member.getMemberEmails().isEmpty()){
+            member.setMemberEmails(emails);
+        }else {
+            member.getMemberEmails().addAll(emails);
         }
     }
 }

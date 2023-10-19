@@ -28,4 +28,12 @@ public interface MemberPhoneHelper {
      * @param member
      */
     void setMemberPhone(MemberDto memberDto, Member member);
+
+    /**
+     * Match member phones from the transaction to the account
+     * @param member
+     * @param memberDto
+     * @param transactionMemberDto
+     */
+    void matchMemberPhone(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto);
 }
