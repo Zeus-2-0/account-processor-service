@@ -208,7 +208,7 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
             // add the language to the list
             languages.add(updatedLanguage);
         }
-        if(member.getMemberLanguages() == null || member.getMemberAddresses().isEmpty()){
+        if(member.getMemberLanguages() == null || member.getMemberLanguages().isEmpty()){
             member.setMemberLanguages(languages);
         }else{
             member.getMemberLanguages().addAll(languages);
