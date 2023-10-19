@@ -32,6 +32,7 @@ workflows:
   build:
     jobs:
       - build-and-test:
+          context: JIRA_WEBHOOK
           post-steps:
             - jira/notify
   sample:
