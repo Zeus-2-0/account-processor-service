@@ -52,15 +52,21 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
 
     @Override
     public void createMemberIdentifier(Member member, TransactionMemberDto transactionMemberDto) {
+        log.info("Inside create member identifier");
         if(transactionMemberDto.getIdentifiers() != null && transactionMemberDto.getIdentifiers().size() > 0){
             List<MemberIdentifier> identifiers = new ArrayList<>();
+            // Retrieve all identifiers of the member that are not "Exchange subscriber id and Exchange Member Id"
             List<TransactionMemberIdentifierDto> memberIdentifierDtos = transactionMemberDto.getIdentifiers().stream().filter(memberIdentifierDto -> {
-                return !memberIdentifierDto.getIdentifierTypeCode().equals("EXCHSUBID") ||
+                log.info("Identifier Value:{}", memberIdentifierDto.getIdentifierValue());
+                log.info("Identifier Type Code:{}", memberIdentifierDto.getIdentifierTypeCode());
+                return !memberIdentifierDto.getIdentifierTypeCode().equals("EXCHSUBID") &&
                         !memberIdentifierDto.getIdentifierTypeCode().equals("EXCHMEMID");
             }).collect(Collectors.toList());
+            log.info("Member identifiers size:{}", memberIdentifierDtos.size());
             memberIdentifierDtos.stream().forEach(memberIdentifierDto -> {
                 String memberIdentifierCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
                         "memberIdentifierCode");
+                log.info("Member Identifier Code created:{}", memberIdentifierCode);
                 MemberIdentifier memberIdentifier = MemberIdentifier.builder()
                         .member(member)
                         .memberAcctIdentifierSK(null)
@@ -120,17 +126,20 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
                         transactionMemberIdentifierDto ->
                                 transactionMemberIdentifierDto.getIdentifierTypeCode().equals("SSN")
                 ).findFirst();
+        log.info("Does the transaction have SSN:{}", optionalTransactionSSN.isEmpty());
         if(optionalTransactionSSN.isEmpty()){
             return;
         }
         // If the control reaches here, it means that the transaction contains an active
         // SSN for the member
         String memberTransactionSSN = optionalTransactionSSN.get().getIdentifierValue();
+        log.info("Transaction SSN:{}", memberTransactionSSN);
         Optional<MemberIdentifierDto> optionalAccountSSN = memberDto.getMemberIdentifiers().stream()
                 .filter(
                         memberIdentifierDto -> memberIdentifierDto.getIdentifierTypeCode().equals("SSN") &&
                                 memberIdentifierDto.isActive()
                 ).findFirst();
+        log.info("Does the account have SSN:{}", optionalAccountSSN.isEmpty());
         if(optionalAccountSSN.isEmpty()){
             // This means that there is no active SSN in the account for the member
             // Hence create the SSN that was received in the transaction
@@ -140,7 +149,9 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
         // if the control reaches here, means that there is a SSN for the member in the transaction
         // and there is an active SSN for the member in the account
         String memberAccountSSN = optionalAccountSSN.get().getIdentifierValue();
+        log.info("Account SSN:{}", memberAccountSSN);
         // Compare the two values to check if they are the same
+        log.info("Is the transaction and account SSN same:{}",memberAccountSSN.equals(memberTransactionSSN));
         if(!memberAccountSSN.equals(memberTransactionSSN)){
             // If the SSNs are different then we needed to deactivate the previous SSN and activate the current SSN
             // Hence create the SSN that was received in the transaction
@@ -150,6 +161,7 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
             memberIdentifier.setMemberAcctIdentifierSK(memberIdentifierDto.getMemberIdentifierSK());
             // Set the active flag to false
             memberIdentifier.setActive(false);
+            memberIdentifier.setChanged(true);
             memberIdentifier = memberIdentifierRepository.save(memberIdentifier);
             member.getMemberIdentifiers().add(memberIdentifier);
         }

@@ -151,6 +151,9 @@ public class MemberHelperImpl implements MemberHelper {
                     primarySubscriber);
             memberAddressHelper.matchMemberAddress(member, primarySubscriber, transactionMemberDto);
             memberIdentifierHelper.matchMemberIdentifier(member, primarySubscriber, transactionMemberDto);
+            memberPhoneHelper.matchMemberPhone(member,primarySubscriber,transactionMemberDto);
+            memberLanguageHelper.matchMemberLanguage(member,primarySubscriber,transactionMemberDto);
+            memberEmailHelper.matchMemberEmail(member,primarySubscriber,transactionMemberDto);
             account.setMembers(List.of(member));
         }else{
             // List to hold all the members from the transaction
@@ -172,6 +175,9 @@ public class MemberHelperImpl implements MemberHelper {
                             memberDto);
                     memberAddressHelper.matchMemberAddress(member, memberDto, transactionMemberDto);
                     memberIdentifierHelper.matchMemberIdentifier(member, memberDto, transactionMemberDto);
+                    memberPhoneHelper.matchMemberPhone(member,memberDto,transactionMemberDto);
+                    memberLanguageHelper.matchMemberLanguage(member,memberDto,transactionMemberDto);
+                    memberEmailHelper.matchMemberEmail(member,memberDto,transactionMemberDto);
                 }
                 // Add the member to the list
                 members.add(member);

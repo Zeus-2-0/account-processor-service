@@ -24,9 +24,23 @@ public interface SponsorMapper {
     SponsorDto sponsorToSponsorDto(Sponsor sponsor);
 
     /**
+     * Convert the sponsor dto entity to sponsor entity
+     * @param sponsorDto
+     * @return
+     */
+    Sponsor sponsorDtoToSponsor(SponsorDto sponsorDto);
+
+    /**
      * Convert the sponsor entities to sponsor dtos
      * @param sponsors
      * @return
      */
     List<SponsorDto> sponsorsToSponsorDtos(List<Sponsor> sponsors);
+
+    /**
+     * Convert the sponsor dtos at sponsor entities
+     * @param sponsorDtos
+     * @return
+     */
+    List<Sponsor> sponsorDtoToSponsor(List<SponsorDto> sponsorDtos);
 }

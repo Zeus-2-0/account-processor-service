@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +42,7 @@ public class MemberPhoneMapperImpl implements MemberPhoneMapper {
                 .phoneNumber(phone.getPhoneNumber())
                 .startDate(phone.getStartDate())
                 .endDate(phone.getEndDate())
+                .changed(new AtomicBoolean(phone.isChanged()))
                 .createdDate(phone.getCreatedDate())
                 .updatedDate(phone.getUpdatedDate())
                 .build();
@@ -66,6 +68,11 @@ public class MemberPhoneMapperImpl implements MemberPhoneMapper {
                 .createdDate(phoneDto.getCreatedDate())
                 .updatedDate(phoneDto.getUpdatedDate())
                 .build();
+        if (phoneDto.getChanged() != null){
+            phone.setChanged(phoneDto.getChanged().get());
+        } else {
+            phone.setChanged(false);
+        }
         return phone;
     }
 

@@ -98,7 +98,7 @@ public class ProcessTransactionAPIIntTest {
      * This method tests the processing of the transaction
      * @param repetitionInfo the repetition identifies the test iteration
      */
-    @RepeatedTest(11)
+    @RepeatedTest(12)
     @Order(1)
     void testProcessTransaction(RepetitionInfo repetitionInfo){
         log.info("Current Repetition:{}", repetitionInfo.getCurrentRepetition());

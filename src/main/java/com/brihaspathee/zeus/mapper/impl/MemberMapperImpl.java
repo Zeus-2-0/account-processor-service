@@ -54,6 +54,38 @@ public class MemberMapperImpl implements MemberMapper {
     }
 
     /**
+     * Convert member dto to member entity
+     * @param memberDto
+     * @return
+     */
+    @Override
+    public Member memberDtoToMember(MemberDto memberDto) {
+        if(memberDto == null){
+            return null;
+        }
+        Member member = Member.builder()
+                .memberSK(memberDto.getMemberSK())
+                .memberCode(memberDto.getMemberCode())
+                .firstName(memberDto.getFirstName())
+                .lastName(memberDto.getLastName())
+                .middleName(memberDto.getMiddleName())
+                .relationShipTypeCode(memberDto.getRelationshipTypeCode())
+                .dateOfBirth(memberDto.getDateOfBirth())
+                .genderTypeCode(memberDto.getGenderTypeCode())
+                .height(memberDto.getHeight())
+                .weight(memberDto.getWeight())
+                .createdDate(memberDto.getCreatedDate())
+                .updatedDate(memberDto.getUpdatedDate())
+                .build();
+        if (memberDto.getChanged() != null){
+            member.setChanged(memberDto.getChanged().get());
+        } else {
+            member.setChanged(false);
+        }
+        return member;
+    }
+
+    /**
      * Convert the member entities to member dtos
      * @param members
      * @return
@@ -61,5 +93,15 @@ public class MemberMapperImpl implements MemberMapper {
     @Override
     public List<MemberDto> membersToMemberDtos(List<Member> members) {
         return members.stream().map(this::memberToMemberDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert member dtos to member entities
+     * @param memberDtos
+     * @return
+     */
+    @Override
+    public List<Member> memberDtosToMembers(List<MemberDto> memberDtos) {
+        return memberDtos.stream().map(this::memberDtoToMember).collect(Collectors.toList());
     }
 }

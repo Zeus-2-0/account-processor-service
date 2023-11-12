@@ -199,6 +199,8 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
             updatedEmail.setMemberAcctEmailSK(accountEmailDto.getMemberEmailSK());
             // set the changed flag to true
             updatedEmail.setChanged(true);
+            // set the primary flag to false
+            updatedEmail.setPrimary(false);
             // save the email to the repository
             updatedEmail = memberEmailRepository.save(updatedEmail);
             // add the language to the list

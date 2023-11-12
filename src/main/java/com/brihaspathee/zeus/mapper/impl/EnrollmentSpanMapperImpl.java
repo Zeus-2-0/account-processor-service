@@ -104,6 +104,21 @@ public class EnrollmentSpanMapperImpl implements EnrollmentSpanMapper {
                 .createdDate(enrollmentSpanDto.getCreatedDate())
                 .updatedDate(enrollmentSpanDto.getUpdatedDate())
                 .build();
+        if(enrollmentSpanDto.getChanged() != null){
+            enrollmentSpanDto.setChanged(enrollmentSpanDto.getChanged());
+        } else {
+            enrollmentSpanDto.setChanged(new AtomicBoolean(false));
+        }
         return enrollmentSpan;
+    }
+
+    /**
+     * Convert enrollment span dtos to enrollment span entities
+     * @param enrollmentSpanDtos
+     * @return
+     */
+    @Override
+    public List<EnrollmentSpan> enrollmentSpanDtosToEnrollmentSpan(List<EnrollmentSpanDto> enrollmentSpanDtos) {
+        return enrollmentSpanDtos.stream().map(this::enrollmentSpanDtoToEnrollmentSpan).collect(Collectors.toList());
     }
 }

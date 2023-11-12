@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -41,10 +42,39 @@ public class SponsorMapperImpl implements SponsorMapper {
                 .sponsorName(sponsor.getSponsorName())
                 .startDate(sponsor.getStartDate())
                 .endDate(sponsor.getEndDate())
+                .changed(new AtomicBoolean(sponsor.isChanged()))
                 .createdDate(sponsor.getCreatedDate())
                 .updatedDate(sponsor.getUpdatedDate())
                 .build();
         return sponsorDto;
+    }
+
+    /**
+     * Convert sponsor dto to sponsor entities
+     * @param sponsorDto
+     * @return
+     */
+    @Override
+    public Sponsor sponsorDtoToSponsor(SponsorDto sponsorDto) {
+        if(sponsorDto == null){
+            return null;
+        }
+        Sponsor sponsor = Sponsor.builder()
+                .sponsorSK(sponsorDto.getSponsorSK())
+                .sponsorCode(sponsorDto.getSponsorCode())
+                .sponsorId(sponsorDto.getSponsorId())
+                .sponsorName(sponsorDto.getSponsorName())
+                .startDate(sponsorDto.getStartDate())
+                .endDate(sponsorDto.getEndDate())
+                .createdDate(sponsorDto.getCreatedDate())
+                .updatedDate(sponsorDto.getUpdatedDate())
+                .build();
+        if (sponsorDto.getChanged() != null){
+            sponsor.setChanged(sponsorDto.getChanged().get());
+        } else {
+            sponsor.setChanged(false);
+        }
+        return sponsor;
     }
 
     /**
@@ -55,5 +85,15 @@ public class SponsorMapperImpl implements SponsorMapper {
     @Override
     public List<SponsorDto> sponsorsToSponsorDtos(List<Sponsor> sponsors) {
         return sponsors.stream().map(this::sponsorToSponsorDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert sponsort dtos to sponsor entities
+     * @param sponsorDtos
+     * @return
+     */
+    @Override
+    public List<Sponsor> sponsorDtoToSponsor(List<SponsorDto> sponsorDtos) {
+        return null;
     }
 }

@@ -24,9 +24,23 @@ public interface AlternateContactMapper {
     AlternateContactDto alternateContactToAlternateContactDto(AlternateContact alternateContact);
 
     /**
+     * Convert alternate contact dto to alternate contact entity
+     * @param alternateContactDto
+     * @return
+     */
+    AlternateContact alternateContactDtoToAlternateContact(AlternateContactDto alternateContactDto);
+
+    /**
      * Convert alternate contact entities to alternate contact dtos
      * @param alternateContacts
      * @return
      */
     List<AlternateContactDto> alternateContactsToAlternateContactDtos(List<AlternateContact> alternateContacts);
+
+    /**
+     * Convert the alternate contact dtos to alternate contact entities
+     * @param alternateContactDtos
+     * @return
+     */
+    List<AlternateContact> alternateContactDtosToAlternateContacts(List<AlternateContactDto> alternateContactDtos);
 }

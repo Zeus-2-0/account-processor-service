@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +41,7 @@ public class MemberIdentifierMapperImpl implements MemberIdentifierMapper {
                 .identifierTypeCode(identifier.getIdentifierTypeCode())
                 .identifierValue(identifier.getIdentifierValue())
                 .isActive(identifier.isActive())
+                .changed(new AtomicBoolean(identifier.isChanged()))
                 .createdDate(identifier.getCreatedDate())
                 .updatedDate(identifier.getUpdatedDate())
                 .build();
@@ -64,6 +66,11 @@ public class MemberIdentifierMapperImpl implements MemberIdentifierMapper {
                 .createdDate(memberIdentifierDto.getCreatedDate())
                 .updatedDate(memberIdentifierDto.getUpdatedDate())
                 .build();
+        if (memberIdentifierDto.getChanged() != null){
+            identifier.setChanged(memberIdentifierDto.getChanged().get());
+        } else {
+            identifier.setChanged(false);
+        }
         return identifier;
     }
 
