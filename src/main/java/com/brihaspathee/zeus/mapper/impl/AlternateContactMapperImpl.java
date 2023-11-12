@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -53,10 +54,51 @@ public class AlternateContactMapperImpl implements AlternateContactMapper {
                 .zipCode(alternateContact.getZipCode())
                 .startDate(alternateContact.getStartDate())
                 .endDate(alternateContact.getEndDate())
+                .changed(new AtomicBoolean(alternateContact.isChanged()))
                 .createdDate(alternateContact.getCreatedDate())
                 .updatedDate(alternateContact.getUpdatedDate())
                 .build();
         return alternateContactDto;
+    }
+
+    /**
+     * Convert alternate contact dto to alternate contact entity
+     * @param alternateContactDto
+     * @return
+     */
+    @Override
+    public AlternateContact alternateContactDtoToAlternateContact(AlternateContactDto alternateContactDto) {
+        if(alternateContactDto == null){
+            return null;
+        }
+        AlternateContact alternateContact = AlternateContact.builder()
+                .alternateContactSK(alternateContactDto.getAlternateContactSK())
+                .alternateContactCode(alternateContactDto.getAlternateContactCode())
+                .alternateContactTypeCode(alternateContactDto.getAlternateContactTypeCode())
+                .firstName(alternateContactDto.getFirstName())
+                .middleName(alternateContactDto.getMiddleName())
+                .lastName(alternateContactDto.getLastName())
+                .identifierTypeCode(alternateContactDto.getIdentifierTypeCode())
+                .identifierValue(alternateContactDto.getIdentifierValue())
+                .phoneTypeCode(alternateContactDto.getPhoneTypeCode())
+                .phoneNumber(alternateContactDto.getPhoneNumber())
+                .email(alternateContactDto.getEmail())
+                .addressLine1(alternateContactDto.getAddressLine1())
+                .addressLine2(alternateContactDto.getAddressLine2())
+                .city(alternateContactDto.getCity())
+                .stateTypeCode(alternateContactDto.getStateTypeCode())
+                .zipCode(alternateContactDto.getZipCode())
+                .startDate(alternateContactDto.getStartDate())
+                .endDate(alternateContactDto.getEndDate())
+                .createdDate(alternateContactDto.getCreatedDate())
+                .updatedDate(alternateContactDto.getUpdatedDate())
+                .build();
+        if(alternateContactDto.getChanged() != null){
+            alternateContact.setChanged(alternateContactDto.getChanged().get());
+        } else {
+            alternateContact.setChanged(false);
+        }
+        return alternateContact;
     }
 
     /**
@@ -67,5 +109,15 @@ public class AlternateContactMapperImpl implements AlternateContactMapper {
     @Override
     public List<AlternateContactDto> alternateContactsToAlternateContactDtos(List<AlternateContact> alternateContacts) {
         return alternateContacts.stream().map(this::alternateContactToAlternateContactDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert alternate contact dtos to alternate contact entities
+     * @param alternateContactDtos
+     * @return
+     */
+    @Override
+    public List<AlternateContact> alternateContactDtosToAlternateContacts(List<AlternateContactDto> alternateContactDtos) {
+        return alternateContactDtos.stream().map(this::alternateContactDtoToAlternateContact).collect(Collectors.toList());
     }
 }

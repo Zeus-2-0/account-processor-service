@@ -24,9 +24,23 @@ public interface BrokerMapper {
     BrokerDto brokerToBrokerDto(Broker broker);
 
     /**
+     * Convert broker dto to broker entity
+     * @param brokerDto
+     * @return
+     */
+    Broker brokerDtoToBroker(BrokerDto brokerDto);
+
+    /**
      * Convert broker entities to broker dtos
      * @param brokers
      * @return
      */
     List<BrokerDto> brokersToBrokerDtos(List<Broker> brokers);
+
+    /**
+     * Convert broker dtos to broker entities
+     * @param brokerDtos
+     * @return
+     */
+    List<Broker> brokerDtosToBrokers(List<BrokerDto> brokerDtos);
 }

@@ -24,9 +24,23 @@ public interface MemberMapper {
     MemberDto memberToMemberDto(Member member);
 
     /**
+     * Convert member dto to member entity
+     * @param memberDto
+     * @return
+     */
+    Member memberDtoToMember(MemberDto memberDto);
+
+    /**
      * Convert the member entities to member dtos
      * @param members
      * @return
      */
     List<MemberDto> membersToMemberDtos(List<Member> members);
+
+    /**
+     * Convert member dtos to member entities
+     * @param memberDtos
+     * @return
+     */
+    List<Member> memberDtosToMembers(List<MemberDto> memberDtos);
 }

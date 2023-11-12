@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -41,10 +42,39 @@ public class PayerMapperImpl implements PayerMapper {
                 .payerName(payer.getPayerName())
                 .startDate(payer.getStartDate())
                 .endDate(payer.getEndDate())
+                .changed(new AtomicBoolean(payer.isChanged()))
                 .createdDate(payer.getCreatedDate())
                 .updatedDate(payer.getUpdatedDate())
                 .build();
         return payerDto;
+    }
+
+    /**
+     * Conver payer dto to payer entity
+     * @param payerDto
+     * @return
+     */
+    @Override
+    public Payer payerDtoToPayer(PayerDto payerDto) {
+        if(payerDto == null){
+            return null;
+        }
+        Payer payer = Payer.builder()
+                .payerSK(payerDto.getPayerSK())
+                .payerCode(payerDto.getPayerCode())
+                .payerId(payerDto.getPayerId())
+                .payerName(payerDto.getPayerName())
+                .startDate(payerDto.getStartDate())
+                .endDate(payerDto.getEndDate())
+                .createdDate(payerDto.getCreatedDate())
+                .updatedDate(payerDto.getUpdatedDate())
+                .build();
+        if (payerDto.getChanged() != null){
+            payer.setChanged(payerDto.getChanged().get());
+        } else {
+            payer.setChanged(false);
+        }
+        return payer;
     }
 
     /**
@@ -55,5 +85,15 @@ public class PayerMapperImpl implements PayerMapper {
     @Override
     public List<PayerDto> payersToPayerDtos(List<Payer> payers) {
         return payers.stream().map(this::payerToPayerDto).collect(Collectors.toList());
+    }
+
+    /**
+     * Convert payer dtos to payer entities
+     * @param payerDtos
+     * @return
+     */
+    @Override
+    public List<Payer> payerDtosToPayers(List<PayerDto> payerDtos) {
+        return payerDtos.stream().map(this::payerDtoToPayer).collect(Collectors.toList());
     }
 }

@@ -75,6 +75,11 @@ public class PremiumSpanMapperImpl implements PremiumSpanMapper {
                 .createdDate(premiumSpanDto.getCreatedDate())
                 .updatedDate(premiumSpanDto.getUpdatedDate())
                 .build();
+        if (premiumSpanDto.getChanged() != null){
+            premiumSpan.setChanged(premiumSpanDto.getChanged().get());
+        } else {
+            premiumSpan.setChanged(false);
+        }
         return premiumSpan;
     }
 

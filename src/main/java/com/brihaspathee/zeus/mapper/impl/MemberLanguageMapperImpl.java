@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +42,7 @@ public class MemberLanguageMapperImpl implements MemberLanguageMapper {
                 .languageCode(language.getLanguageCode())
                 .startDate(language.getStartDate())
                 .endDate(language.getEndDate())
+                .changed(new AtomicBoolean(language.isChanged()))
                 .createdDate(language.getCreatedDate())
                 .updatedDate(language.getUpdatedDate())
                 .build();
@@ -66,6 +68,11 @@ public class MemberLanguageMapperImpl implements MemberLanguageMapper {
                 .createdDate(languageDto.getCreatedDate())
                 .updatedDate(languageDto.getUpdatedDate())
                 .build();
+        if (languageDto.getChanged() != null){
+            language.setChanged(languageDto.getChanged().get());
+        } else {
+            language.setChanged(false);
+        }
         return language;
     }
 

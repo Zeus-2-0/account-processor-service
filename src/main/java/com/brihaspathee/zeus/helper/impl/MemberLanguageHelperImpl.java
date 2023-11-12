@@ -137,7 +137,7 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
         }
         // There are four types of languages possible "SPEAKING" and "WRITTEN"
         matchMemberLanguage("SPEAKING", member, memberDto, transactionMemberDto);
-        matchMemberLanguage("WRITTEN", member, memberDto, transactionMemberDto);
+        matchMemberLanguage("WRITING", member, memberDto, transactionMemberDto);
         matchMemberLanguage("READING", member, memberDto, transactionMemberDto);
         matchMemberLanguage("NATIVE", member, memberDto, transactionMemberDto);
     }

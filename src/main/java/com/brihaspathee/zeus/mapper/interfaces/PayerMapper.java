@@ -24,9 +24,23 @@ public interface PayerMapper {
     PayerDto payerToPayerDto(Payer payer);
 
     /**
+     * Convert payer dto to payer entity
+     * @param payerDto
+     * @return
+     */
+    Payer payerDtoToPayer(PayerDto payerDto);
+
+    /**
      * Convert payer entities to payer dtos
      * @param payers
      * @return
      */
     List<PayerDto> payersToPayerDtos(List<Payer> payers);
+
+    /**
+     * Convert payer dtos to payer entities
+     * @param payerDtos
+     * @return
+     */
+    List<Payer> payerDtosToPayers(List<PayerDto> payerDtos);
 }

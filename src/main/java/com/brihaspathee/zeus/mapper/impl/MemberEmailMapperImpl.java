@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +43,7 @@ public class MemberEmailMapperImpl implements MemberEmailMapper {
                 .isPrimary(email.isPrimary())
                 .startDate(email.getStartDate())
                 .endDate(email.getEndDate())
+                .changed(new AtomicBoolean(email.isChanged()))
                 .createdDate(email.getCreatedDate())
                 .updatedDate(email.getUpdatedDate())
                 .build();
@@ -68,6 +70,11 @@ public class MemberEmailMapperImpl implements MemberEmailMapper {
                 .createdDate(emailDto.getCreatedDate())
                 .updatedDate(emailDto.getUpdatedDate())
                 .build();
+        if (emailDto.getChanged() != null){
+            email.setChanged(emailDto.getChanged().get());
+        } else {
+            email.setChanged(false);
+        }
         return email;
     }
 

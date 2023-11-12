@@ -36,4 +36,11 @@ public interface EnrollmentSpanMapper {
      * @return
      */
     EnrollmentSpan enrollmentSpanDtoToEnrollmentSpan(EnrollmentSpanDto enrollmentSpanDto);
+
+    /**
+     * Convert enrollment span dtos to enrollment span entities
+     * @param enrollmentSpanDtos
+     * @return
+     */
+    List<EnrollmentSpan> enrollmentSpanDtosToEnrollmentSpan(List<EnrollmentSpanDto> enrollmentSpanDtos);
 }

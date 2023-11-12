@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +46,7 @@ public class MemberAddressMapperImpl implements MemberAddressMapper {
                 .zipCode(memberAddress.getZipCode())
                 .startDate(memberAddress.getStartDate())
                 .endDate(memberAddress.getEndDate())
+                .changed(new AtomicBoolean(memberAddress.isChanged()))
                 .createdDate(memberAddress.getCreatedDate())
                 .updatedDate(memberAddress.getUpdatedDate())
                 .build();
@@ -74,6 +76,11 @@ public class MemberAddressMapperImpl implements MemberAddressMapper {
                 .createdDate(memberAddressDto.getCreatedDate())
                 .updatedDate(memberAddressDto.getUpdatedDate())
                 .build();
+        if(memberAddressDto.getChanged() != null){
+            memberAddress.setChanged(memberAddressDto.getChanged().get());
+        }else {
+            memberAddress.setChanged(false);
+        }
         return memberAddress;
     }
 
