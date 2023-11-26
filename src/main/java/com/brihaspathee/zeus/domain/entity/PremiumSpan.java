@@ -121,6 +121,12 @@ public class PremiumSpan {
     private BigDecimal csrAmount;
 
     /**
+     * The sequence in which the premium span was created
+     */
+    @Column(name = "sequence", nullable = true)
+    private int sequence;
+
+    /**
      * List of members associated with the premium span
      */
     @OneToMany(mappedBy = "premiumSpan")
@@ -164,6 +170,7 @@ public class PremiumSpan {
                 ", aptcAmount=" + aptcAmount +
                 ", otherPayAmount=" + otherPayAmount +
                 ", csrAmount=" + csrAmount +
+                ", sequence=" + sequence +
                 ", memberPremiums=" + memberPremiums +
                 ", createdDate=" + createdDate +
                 ", updatedDate=" + updatedDate +

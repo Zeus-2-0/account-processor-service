@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `accountprocessordb`.`premium_span` (
     `aptc_amt` DECIMAL(10,2) NULL COMMENT 'Federal contribution towards the premium',
     `other_pay_amt` DECIMAL(10,2) NULL COMMENT 'The amounts contributed by other sources (like the state) towards the premium',
     `csr_amt` DECIMAL(10,2) NULL COMMENT 'The Cost Sharing Reduction amount',
+    `sequence` INT NOT NULL COMMENT 'The sequence in which the premium span is created',
     `changed` BOOLEAN NOT NULL COMMENT 'Indicates if entity was updated by the transaction',
     `created_date` DATETIME NULL COMMENT 'Date when the record was created',
     `updated_date` DATETIME NULL COMMENT 'Date when the record was updated',

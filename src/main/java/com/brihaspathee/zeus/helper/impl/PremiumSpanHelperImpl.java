@@ -10,18 +10,16 @@ import com.brihaspathee.zeus.helper.interfaces.MemberPremiumHelper;
 import com.brihaspathee.zeus.helper.interfaces.PremiumSpanHelper;
 import com.brihaspathee.zeus.mapper.interfaces.PremiumSpanMapper;
 import com.brihaspathee.zeus.util.AccountProcessorUtil;
-import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -213,9 +211,11 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
         List<TransactionRateDto> premiumRates = sortPremiumDates(transactionDto.getTransactionRates());
         log.info("Premium Rates:{}", premiumRates);
         List<PremiumSpan> premiumSpans = new ArrayList<>();
+        AtomicInteger premiumSpanSequence = new AtomicInteger(0);
         premiumRates.forEach(rateDto -> {
             String premiumSpanCode = accountProcessorUtil.generateUniqueCode(transactionDto.getEntityCodes(),
                     "premiumSpanCode");
+            premiumSpanSequence.set(premiumSpanSequence.get() + 1);
             PremiumSpan premiumSpan = PremiumSpan.builder()
                     .premiumSpanCode(premiumSpanCode)
                     .ztcn(transactionDto.getZtcn())
@@ -225,6 +225,7 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
                     .csrVariant(rateDto.getCsrVariant())
                     .acctPremiumSpanSK(null)
                     .totalPremAmount(rateDto.getTransactionRate())
+                    .sequence(premiumSpanSequence.get())
                     .changed(true)
                     .build();
             LocalDate endDate = rateDto.getRateEndDate();
