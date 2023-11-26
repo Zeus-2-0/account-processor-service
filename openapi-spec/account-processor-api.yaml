@@ -86,6 +86,8 @@ components:
     EnrollmentSpanDto:
       required:
       - businessUnitTypeCode
+      - changed
+      - coverageTypeCode
       - endDate
       - groupPolicyId
       - marketplaceTypeCode
@@ -156,6 +158,10 @@ components:
           type: string
           description: Product type code of the plan
           example: HMO
+        coverageTypeCode:
+          type: string
+          description: The type of coverage
+          example: "true"
         delinqInd:
           type: boolean
           description: Identifies if the enrollment span is delinquent or not
@@ -177,6 +183,20 @@ components:
           description: The zeus transaction control number of the transaction that
             created the enrollment span
           example: SDFG43456DFG23G
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the enrollment span was updated
+          example: false
         createdDate:
           type: string
           description: The date when the enrollment span was created
@@ -190,8 +210,10 @@ components:
       properties:
         currentEnrollmentSpan:
           $ref: '#/components/schemas/EnrollmentSpanDto'
-        priorEnrollmentSpan:
-          $ref: '#/components/schemas/EnrollmentSpanDto'
+        priorEnrollmentSpans:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnrollmentSpanDto'
     MemberPremiumDto:
       required:
       - exchangeMemberId
@@ -232,11 +254,13 @@ components:
           format: date-time
     PremiumSpanDto:
       required:
+      - changed
       - csrVariant
       - endDate
       - memberPremiumSpans
       - premiumSpanCode
       - startDate
+      - statusTypeCode
       - totalPremiumAmount
       - totalResponsibleAmount
       - ztcn
@@ -277,6 +301,10 @@ components:
           type: string
           description: The end date of the premium span
           format: date
+        statusTypeCode:
+          type: string
+          description: Status of the premim span
+          example: ACTIVE
         csrVariant:
           type: string
           description: The CSR Variant of the premium span
@@ -301,6 +329,20 @@ components:
           type: number
           description: The CSR amount period of the premium span
           example: 150.0
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the premium span was updated
+          example: false
         createdDate:
           type: string
           description: The date when the premium span was created
@@ -397,13 +439,951 @@ components:
           type: string
         response:
           type: string
+    AccountAttributeDto:
+      required:
+      - attributeSK
+      - attributeValue
+      type: object
+      properties:
+        accountAttributeSK:
+          type: string
+          description: Account Attribute SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        attributeSK:
+          type: string
+          description: Attribute SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        accountSK:
+          type: string
+          description: Account SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        attributeValue:
+          type: string
+          description: The value of the attribute
+          example: FFM-FL
+        createdDate:
+          type: string
+          description: The date when the account attribute was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the account attribute was updated
+          format: date-time
+    AccountDto:
+      required:
+      - accountNumber
+      - brokers
+      - enrollmentSpans
+      - lineOfBusinessTypeCode
+      - members
+      - payers
+      - sponsors
+      type: object
+      properties:
+        accountSK:
+          type: string
+          description: Account SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        accountNumber:
+          type: string
+          description: Account Number - Unique id that is assigned to the account
+          example: DFEV323455DE5S3
+        lineOfBusinessTypeCode:
+          type: string
+          description: Line of business of the account
+          example: HIX
+        enrollmentSpans:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/EnrollmentSpanDto'
+        members:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberDto'
+        brokers:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerDto'
+        sponsors:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/SponsorDto'
+        payers:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PayerDto'
+        accountAttributes:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountAttributeDto'
+        createdDate:
+          type: string
+          description: The date when the account was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the account was updated
+          format: date-time
     AccountProcessingRequest:
       type: object
       properties:
         accountNumber:
           type: string
+        accountDto:
+          $ref: '#/components/schemas/AccountDto'
         transactionDto:
           $ref: '#/components/schemas/TransactionDto'
+    AlternateContactDto:
+      required:
+      - addressLine2
+      - alternateContactCode
+      - alternateContactTypeCode
+      - changed
+      - lastName
+      - startDate
+      - stateTypeCode
+      type: object
+      properties:
+        alternateContactSK:
+          type: string
+          description: Alternate Contact SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberSK:
+          type: string
+          description: Member SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        alternateContactCode:
+          type: string
+          description: Alternate Contact Code - Unique id that is assigned to the
+            alternate contact in MMS
+          example: DFEV323455DE5S3
+        alternateContactTypeCode:
+          type: string
+          description: The type of alternate contact
+          example: RESPONSIBLE_PERSON
+        firstName:
+          type: string
+          description: The first name of the alternate contact
+          example: John
+        middleName:
+          type: string
+          description: The middle name of the alternate contact
+          example: Mosley
+        lastName:
+          type: string
+          description: The last name of the alternate contact
+          example: Doe
+        identifierTypeCode:
+          type: string
+          description: The identifier type code of the identifier
+          example: SSN
+        identifierValue:
+          type: string
+          description: The identifier of the alternate contact
+          example: 345-34-6434
+        phoneTypeCode:
+          type: string
+          description: The phone type code of the phone
+          example: MOBILE
+        phoneNumber:
+          type: string
+          description: The phone number of the member
+          example: 813-357-9150
+        email:
+          type: string
+          description: The email of the alternate contact
+          example: vbalaji215@gmail.com
+        addressLine1:
+          type: string
+          description: The address line 1 of the address
+          example: 123 Main Street
+        addressLine2:
+          type: string
+          description: The address line 2 of the address
+          example: Apt 301
+        city:
+          type: string
+          description: The city of the address
+          example: Tampa
+        stateTypeCode:
+          type: string
+          description: The state of the address
+          example: FL
+        zipCode:
+          type: string
+          description: The zipcode of the address
+          example: "33556"
+        startDate:
+          type: string
+          description: The start date of the alternate contact
+          format: date
+        endDate:
+          type: string
+          description: The end date of the alternate contact
+          format: date
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the alternate contact was updated
+          example: false
+        createdDate:
+          type: string
+          description: The date when the address was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the address was updated
+          format: date-time
+      description: The list of alternate contacts associated with the member
+    BrokerDto:
+      required:
+      - brokerCode
+      - brokerId
+      - brokerName
+      - changed
+      - startDate
+      type: object
+      properties:
+        brokerSK:
+          type: string
+          description: Broker SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        accountSK:
+          type: string
+          description: Account SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        brokerCode:
+          type: string
+          description: Broker Code - Unique id that is assigned to the broker in MMS
+          example: DFEV323455DE5S3
+        brokerName:
+          type: string
+          description: The name of the broker
+          example: John Doe
+        brokerId:
+          type: string
+          description: The id of the broker
+          example: 923-53-6234
+        agencyName:
+          type: string
+          description: The name of the agency
+          example: Broker Inc
+        agencyId:
+          type: string
+          description: The id of the agency
+          example: 923-53-6234
+        accountNumber1:
+          type: string
+          description: The account number 1 of the broker
+          example: "23452345562"
+        accountNumber2:
+          type: string
+          description: The account number 2 of the broker
+          example: "23452345562"
+        startDate:
+          type: string
+          description: Start date of the broker
+          format: date
+        endDate:
+          type: string
+          description: End date of the broker
+          format: date
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the broker was updated
+          example: false
+        createdDate:
+          type: string
+          description: The date when the account was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the account was updated
+          format: date-time
+    MemberAddressDto:
+      required:
+      - addressLine1
+      - addressLine2
+      - addressTypeCode
+      - changed
+      - city
+      - memberAddressCode
+      - startDate
+      - stateTypeCode
+      - zipCode
+      type: object
+      properties:
+        memberAddressSK:
+          type: string
+          description: Member Address SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberSK:
+          type: string
+          description: Member SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberAddressCode:
+          type: string
+          description: Member Address Code - Unique id that is assigned to the member
+            address in MMS
+          example: DFEV323455DE5S3
+        addressTypeCode:
+          type: string
+          description: The type of the address
+          example: Residential
+        addressLine1:
+          type: string
+          description: The address line 1 of the address
+          example: 123 Main Street
+        addressLine2:
+          type: string
+          description: The address line 2 of the address
+          example: Apt 301
+        city:
+          type: string
+          description: The city of the address
+          example: Tampa
+        stateTypeCode:
+          type: string
+          description: The state of the address
+          example: FL
+        zipCode:
+          type: string
+          description: The zipcode of the address
+          example: "33556"
+        startDate:
+          type: string
+          description: The start date of the address
+          format: date
+        endDate:
+          type: string
+          description: The end date of the address
+          format: date
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the address was updated
+          example: false
+        createdDate:
+          type: string
+          description: The date when the address was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the address was updated
+          format: date-time
+      description: The list of member addresses associated with the member
+    MemberAttributeDto:
+      required:
+      - attributeSK
+      - attributeValue
+      - changed
+      type: object
+      properties:
+        memberAttributeSK:
+          type: string
+          description: Member Attribute SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        attributeSK:
+          type: string
+          description: Attribute SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberSK:
+          type: string
+          description: Member SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        attributeValue:
+          type: string
+          description: The value of the attribute
+          example: FFM-FL
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the attribute was updated
+          example: false
+        createdDate:
+          type: string
+          description: The date when the attribute was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the attribute was updated
+          format: date-time
+      description: The list of member attributes associated with the member
+    MemberDto:
+      required:
+      - changed
+      - dateOfBirth
+      - firstName
+      - genderTypeCode
+      - lastName
+      - memberCode
+      - relationshipTypeCode
+      type: object
+      properties:
+        memberSK:
+          type: string
+          description: Member SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        accountSK:
+          type: string
+          description: Account SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberCode:
+          type: string
+          description: A unique member code
+          example: SDG3543SDFG23GF
+        firstName:
+          type: string
+          description: The first name of the member
+          example: John
+        middleName:
+          type: string
+          description: The middle name of the member
+          example: Mosley
+        lastName:
+          type: string
+          description: The last name of the member
+          example: Doe
+        relationshipTypeCode:
+          type: string
+          description: The relationship of the member with the head of the household
+          example: HOH
+        dateOfBirth:
+          type: string
+          description: The date of birth of the member
+          format: date
+        genderTypeCode:
+          type: string
+          description: The gender of the member
+          example: MALE
+        height:
+          type: number
+          description: The height of the member
+          format: double
+          example: 5.6
+        weight:
+          type: number
+          description: The weight of the member in pounds
+          format: double
+          example: 65.6
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the member was updated
+          example: false
+        memberAttributes:
+          uniqueItems: true
+          type: array
+          description: The list of member attributes associated with the member
+          items:
+            $ref: '#/components/schemas/MemberAttributeDto'
+        memberAddresses:
+          uniqueItems: true
+          type: array
+          description: The list of member addresses associated with the member
+          items:
+            $ref: '#/components/schemas/MemberAddressDto'
+        memberIdentifiers:
+          uniqueItems: true
+          type: array
+          description: The list of member identifiers associated with the member
+          items:
+            $ref: '#/components/schemas/MemberIdentifierDto'
+        memberLanguages:
+          uniqueItems: true
+          type: array
+          description: The list of member languages associated with the member
+          items:
+            $ref: '#/components/schemas/MemberLanguageDto'
+        memberPhones:
+          uniqueItems: true
+          type: array
+          description: The list of member phone numbers associated with the member
+          items:
+            $ref: '#/components/schemas/MemberPhoneDto'
+        memberEmails:
+          uniqueItems: true
+          type: array
+          description: The list of member emails associated with the member
+          items:
+            $ref: '#/components/schemas/MemberEmailDto'
+        alternateContacts:
+          uniqueItems: true
+          type: array
+          description: The list of alternate contacts associated with the member
+          items:
+            $ref: '#/components/schemas/AlternateContactDto'
+        memberPremiums:
+          uniqueItems: true
+          type: array
+          description: The list of premiums associated with the member
+          items:
+            $ref: '#/components/schemas/MemberPremiumDto'
+        createdDate:
+          type: string
+          description: The date when the member was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the member was updated
+          format: date-time
+    MemberEmailDto:
+      required:
+      - changed
+      - email
+      - emailTypeCode
+      - isPrimary
+      - memberEmailCode
+      - primary
+      - startDate
+      type: object
+      properties:
+        memberEmailSK:
+          type: string
+          description: Member Email SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberSK:
+          type: string
+          description: Member SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberEmailCode:
+          type: string
+          description: Member Email Code - Unique id that is assigned to the member
+            email in MMS
+          example: DFEV323455DE5S3
+        emailTypeCode:
+          type: string
+          description: The email type code of the email
+          example: PERSONAL
+        email:
+          type: string
+          description: The email of the member
+          example: vbalaji215@gmail.com
+        isPrimary:
+          type: boolean
+          description: Identifies if the email is the primary email
+          example: true
+        startDate:
+          type: string
+          description: The start date of the email
+          format: date
+        endDate:
+          type: string
+          description: The end date of the email
+          format: date
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the email was updated
+          example: false
+        createdDate:
+          type: string
+          description: The date when the email was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the email was updated
+          format: date-time
+        primary:
+          type: boolean
+      description: The list of member emails associated with the member
+    MemberIdentifierDto:
+      required:
+      - active
+      - changed
+      - identifierTypeCode
+      - identifierValue
+      - isActive
+      - memberIdentifierCode
+      type: object
+      properties:
+        memberIdentifierSK:
+          type: string
+          description: Member Identifier SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberSK:
+          type: string
+          description: Member SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberIdentifierCode:
+          type: string
+          description: Member Address Code - Unique id that is assigned to the member
+            address in MMS
+          example: DFEV323455DE5S3
+        identifierTypeCode:
+          type: string
+          description: The identifier type code of the identifier
+          example: SSN
+        identifierValue:
+          type: string
+          description: The identifier of the member
+          example: 345-34-6434
+        isActive:
+          type: boolean
+          description: Identifies if the identifier is active
+          example: true
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the identifier was updated
+          example: false
+        createdDate:
+          type: string
+          description: The date when the identifier was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the identifier was updated
+          format: date-time
+        active:
+          type: boolean
+      description: The list of member identifiers associated with the member
+    MemberLanguageDto:
+      required:
+      - changed
+      - endDate
+      - languageCode
+      - languageTypeCode
+      - memberLanguageCode
+      - startDate
+      type: object
+      properties:
+        memberLanguageSK:
+          type: string
+          description: Member Language SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberSK:
+          type: string
+          description: Member SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberLanguageCode:
+          type: string
+          description: Member Language Code - Unique id that is assigned to the member
+            address in MMS
+          example: DFEV323455DE5S3
+        languageTypeCode:
+          type: string
+          description: The language type code of the language
+          example: SPOKEN
+        languageCode:
+          type: string
+          description: The language of the member
+          example: ENG
+        startDate:
+          type: string
+          description: The start date of the language
+          format: date
+        endDate:
+          type: string
+          description: The end date of the language
+          format: date
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the language was updated
+          example: false
+        createdDate:
+          type: string
+          description: The date when the language was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the language was updated
+          format: date-time
+      description: The list of member languages associated with the member
+    MemberPhoneDto:
+      required:
+      - changed
+      - memberPhoneCode
+      - phoneNumber
+      - phoneTypeCode
+      - startDate
+      type: object
+      properties:
+        memberPhoneSK:
+          type: string
+          description: Member Phone SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberSK:
+          type: string
+          description: Member SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        memberPhoneCode:
+          type: string
+          description: Member Phone Code - Unique id that is assigned to the member
+            phone in MMS
+          example: DFEV323455DE5S3
+        phoneTypeCode:
+          type: string
+          description: The phone type code of the phone
+          example: MOBILE
+        phoneNumber:
+          type: string
+          description: The phone number of the member
+          example: 813-357-9150
+        startDate:
+          type: string
+          description: The start date of the phone
+          format: date
+        endDate:
+          type: string
+          description: The end date of the phone
+          format: date
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the phone was updated
+          example: false
+        createdDate:
+          type: string
+          description: The date when the phone number was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the phone number was updated
+          format: date-time
+      description: The list of member phone numbers associated with the member
+    PayerDto:
+      required:
+      - changed
+      - payerCode
+      - payerId
+      - payerName
+      - startDate
+      type: object
+      properties:
+        payerSK:
+          type: string
+          description: Payer SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        accountSK:
+          type: string
+          description: Account SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        payerCode:
+          type: string
+          description: Payer Code - Unique id that is assigned to the payer in MMS
+          example: DFEV323455DE5S3
+        payerName:
+          type: string
+          description: The name of the payer
+          example: John Doe
+        payerId:
+          type: string
+          description: The id of the payer
+          example: 923-53-6234
+        startDate:
+          type: string
+          description: Start date of the payer
+          format: date
+        endDate:
+          type: string
+          description: End date of the payer
+          format: date
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the payer was updated
+          example: false
+        createdDate:
+          type: string
+          description: The date when the account was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the account was updated
+          format: date-time
+    SponsorDto:
+      required:
+      - changed
+      - sponsorCode
+      - sponsorId
+      - sponsorName
+      - startDate
+      type: object
+      properties:
+        sponsorSK:
+          type: string
+          description: Sponsor SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        sponsorCode:
+          type: string
+          description: Sponsor Code - Unique id that is assigned to the sponsor in
+            MMS
+          example: DFEV323455DE5S3
+        accountSK:
+          type: string
+          description: Account SK - This is a UUID value
+          format: uuid
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        sponsorId:
+          type: string
+          description: The id of the sponsor
+          example: 923-53-6234
+        sponsorName:
+          type: string
+          description: The name of the sponsor
+          example: John Doe
+        startDate:
+          type: string
+          description: Start date of the sponsor
+          format: date
+        endDate:
+          type: string
+          description: End date of the sponsor
+          format: date
+        changed:
+          type: object
+          properties:
+            opaque:
+              type: boolean
+            acquire:
+              type: boolean
+            release:
+              type: boolean
+              writeOnly: true
+            plain:
+              type: boolean
+          description: Identifies if the sponsor was updated
+          example: false
+        createdDate:
+          type: string
+          description: The date when the account was created
+          format: date-time
+        updatedDate:
+          type: string
+          description: The date when the account was updated
+          format: date-time
     TransactionAlternateContactDto:
       required:
       - alternateContactTypeCode
@@ -578,11 +1558,10 @@ components:
           format: date-time
     TransactionDetailDto:
       required:
+      - coverageTypeCode
       - csrVariant
       - effectiveDate
-      - endDate
       - groupPolicyId
-      - maintenanceEffectiveDate
       - planId
       - transaction
       - transactionTypeCode
@@ -600,6 +1579,10 @@ components:
           type: string
           description: The type of transaction
           example: ADD
+        coverageTypeCode:
+          type: string
+          description: The type of coverage
+          example: "true"
         planId:
           type: string
           description: The plan id received in the transaction
@@ -701,6 +1684,18 @@ components:
           type: string
           description: The date when the transaction was updated
           format: date-time
+        entityCodes:
+          type: object
+          additionalProperties:
+            type: array
+            description: Map of the codes to be used for entities for an account
+            readOnly: true
+            items:
+              type: string
+              description: Map of the codes to be used for entities for an account
+              readOnly: true
+          description: Map of the codes to be used for entities for an account
+          readOnly: true
     TransactionMemberAddressDto:
       required:
       - addressLine1
@@ -837,6 +1832,16 @@ components:
           type: number
           description: The rate received for the member in the transaction
           example: 115.35
+        height:
+          type: number
+          description: The height of the member in the transaction
+          format: double
+          example: 125
+        weight:
+          type: number
+          description: The weight of the member in the transaction
+          format: double
+          example: 135.65
         productCatalogRate:
           type: number
           description: The product catalog rate received for the member
@@ -873,6 +1878,18 @@ components:
           type: string
           description: The date when the transaction was updated
           format: date-time
+        entityCodes:
+          type: object
+          additionalProperties:
+            type: array
+            description: Map of the codes to be used for entities within a member
+            readOnly: true
+            items:
+              type: string
+              description: Map of the codes to be used for entities within a member
+              readOnly: true
+          description: Map of the codes to be used for entities within a member
+          readOnly: true
     TransactionMemberEmailDto:
       required:
       - email

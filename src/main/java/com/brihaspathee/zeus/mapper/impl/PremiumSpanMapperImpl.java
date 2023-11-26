@@ -48,6 +48,7 @@ public class PremiumSpanMapperImpl implements PremiumSpanMapper {
                 .aptcAmount(premiumSpan.getAptcAmount())
                 .otherPayAmount(premiumSpan.getOtherPayAmount())
                 .csrAmount(premiumSpan.getCsrAmount())
+                .sequence(premiumSpan.getSequence())
                 .changed(new AtomicBoolean(premiumSpan.isChanged()))
                 .createdDate(premiumSpan.getCreatedDate())
                 .updatedDate(premiumSpan.getUpdatedDate())
@@ -72,6 +73,7 @@ public class PremiumSpanMapperImpl implements PremiumSpanMapper {
                 .aptcAmount(premiumSpanDto.getAptcAmount())
                 .otherPayAmount(premiumSpanDto.getOtherPayAmount())
                 .csrAmount(premiumSpanDto.getCsrAmount())
+                .sequence(premiumSpanDto.getSequence())
                 .createdDate(premiumSpanDto.getCreatedDate())
                 .updatedDate(premiumSpanDto.getUpdatedDate())
                 .build();

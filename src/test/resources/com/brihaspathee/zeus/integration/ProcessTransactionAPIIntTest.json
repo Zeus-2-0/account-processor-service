@@ -7,7 +7,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-01",
-            "testCaseDescription": "New Account is created, only one premium span is created for the enrollment span",
+            "testCaseDescription": "ADD Transaction - New Account is created, only one premium span is created for the enrollment span",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -274,6 +274,7 @@
                       "aptcAmount": 1176.55,
                       "otherPayAmount": null,
                       "csrAmount": null,
+                      "sequence": 1,
                       "changed": true
                     }
                   ]
@@ -437,7 +438,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-02",
-            "testCaseDescription": "New Account is created, multiple premium spans are created for the enrollment span",
+            "testCaseDescription": "ADD Transaction - New Account is created, multiple premium spans are created for the enrollment span",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -729,6 +730,33 @@
                   "changed": true,
                   "premiumSpans": [
                     {
+                      "premiumSpanCode": "8MIZK6SEHXUJ8UV",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "memberPremiumSpans": [
+                        {
+                          "memberCode": "SX7ITLA0N4YMIW2",
+                          "exchangeMemberId": "0008700676",
+                          "individualPremiumAmount": 640.44
+                        },
+                        {
+                          "memberCode": "Y2PYDI8D9OT7V5A",
+                          "exchangeMemberId": "0009185554",
+                          "individualPremiumAmount": 536.11
+                        }
+                      ],
+                      "startDate": "2020-03-01",
+                      "endDate": "2020-04-30",
+                      "statusTypeCode": "ACTIVE",
+                      "csrVariant": "01",
+                      "totalPremiumAmount": 1176.55,
+                      "totalResponsibleAmount": 0.0,
+                      "aptcAmount": 1176.55,
+                      "otherPayAmount": null,
+                      "csrAmount": null,
+                      "sequence": 1,
+                      "changed": true
+                    },
+                    {
                       "premiumSpanCode": "AMDRY2TTLOLU15M",
                       "ztcn": "HW0VQ1NBEUJAID9",
                       "memberPremiumSpans": [
@@ -752,6 +780,7 @@
                       "aptcAmount": 1076.55,
                       "otherPayAmount": null,
                       "csrAmount": null,
+                      "sequence": 2,
                       "changed": true
                     },
                     {
@@ -778,32 +807,7 @@
                       "aptcAmount": 976.55,
                       "otherPayAmount": 100.00,
                       "csrAmount": null,
-                      "changed": true
-                    },
-                    {
-                      "premiumSpanCode": "8MIZK6SEHXUJ8UV",
-                      "ztcn": "HW0VQ1NBEUJAID9",
-                      "memberPremiumSpans": [
-                        {
-                          "memberCode": "SX7ITLA0N4YMIW2",
-                          "exchangeMemberId": "0008700676",
-                          "individualPremiumAmount": 640.44
-                        },
-                        {
-                          "memberCode": "Y2PYDI8D9OT7V5A",
-                          "exchangeMemberId": "0009185554",
-                          "individualPremiumAmount": 536.11
-                        }
-                      ],
-                      "startDate": "2020-03-01",
-                      "endDate": "2020-04-30",
-                      "statusTypeCode": "ACTIVE",
-                      "csrVariant": "01",
-                      "totalPremiumAmount": 1176.55,
-                      "totalResponsibleAmount": 0.0,
-                      "aptcAmount": 1176.55,
-                      "otherPayAmount": null,
-                      "csrAmount": null,
+                      "sequence": 3,
                       "changed": true
                     }
                   ]
@@ -971,7 +975,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-03",
-            "testCaseDescription": "New Enrollment span created for an existing account.",
+            "testCaseDescription": "ADD Transaction - New Enrollment span created for an existing account.",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -985,35 +989,6 @@
                     "accountSK": "e29f6d8d-51c8-4259-b789-1aac0e5fcfe7",
                     "enrollmentSpanCode": "I5LXC5ELIEO0G2O",
                     "premiumSpans": [
-                      {
-                        "premiumSpanSK": "96aedae2-95b1-4181-bd2b-cfc26179e044",
-                        "enrollmentSpanSK": "1f4684b7-834d-41ad-a150-658da294c54c",
-                        "ztcn": "55UCZGSHBH98VKM",
-                        "premiumSpanCode": "GT5PSZ6FBWEOH69",
-                        "memberPremiumSpans": [
-                          {
-                            "memberPremiumSK": "d421d90b-74a9-4df9-add9-a1f84ef9908f",
-                            "memberCode": "G8RKJY77IYPBYXU",
-                            "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
-                            "exchangeMemberId": "24524734501",
-                            "individualPremiumAmount": 150.00,
-                            "createdDate": "2023-06-03 01:51:17",
-                            "updatedDate": "2023-06-03 01:51:17"
-                          }
-                        ],
-                        "startDate": "2022-07-01",
-                        "endDate": "2022-12-31",
-                        "statusTypeCode": "ACTIVE",
-                        "csrVariant": "03",
-                        "totalPremiumAmount": 150.00,
-                        "totalResponsibleAmount": 150.00,
-                        "aptcAmount": 0.00,
-                        "otherPayAmount": 0.00,
-                        "csrAmount": 20.00,
-                        "changed": null,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17"
-                      },
                       {
                         "premiumSpanSK": "12573e17-7244-4e49-a152-38d59b03e2f6",
                         "enrollmentSpanSK": "1f4684b7-834d-41ad-a150-658da294c54c",
@@ -1039,6 +1014,37 @@
                         "aptcAmount": 0.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
+                        "sequence": 1,
+                        "changed": null,
+                        "createdDate": "2023-06-03 01:51:17",
+                        "updatedDate": "2023-06-03 01:51:17"
+                      },
+                      {
+                        "premiumSpanSK": "96aedae2-95b1-4181-bd2b-cfc26179e044",
+                        "enrollmentSpanSK": "1f4684b7-834d-41ad-a150-658da294c54c",
+                        "ztcn": "55UCZGSHBH98VKM",
+                        "premiumSpanCode": "GT5PSZ6FBWEOH69",
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "d421d90b-74a9-4df9-add9-a1f84ef9908f",
+                            "memberCode": "G8RKJY77IYPBYXU",
+                            "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
+                            "exchangeMemberId": "24524734501",
+                            "individualPremiumAmount": 150.00,
+                            "createdDate": "2023-06-03 01:51:17",
+                            "updatedDate": "2023-06-03 01:51:17"
+                          }
+                        ],
+                        "startDate": "2022-07-01",
+                        "endDate": "2022-12-31",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 150.00,
+                        "totalResponsibleAmount": 150.00,
+                        "aptcAmount": 0.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 20.00,
+                        "sequence": 2,
                         "changed": null,
                         "createdDate": "2023-06-03 01:51:17",
                         "updatedDate": "2023-06-03 01:51:17"
@@ -1428,6 +1434,7 @@
                       "totalPremiumAmount": 150.00,
                       "totalResponsibleAmount": 150.00,
                       "aptcAmount": 0.00,
+                      "sequence": 1,
                       "changed": true
                     }
                   ],
@@ -1469,7 +1476,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-04",
-            "testCaseDescription": "Existing account, new Enrollment span created and an existing enrollment span canceled.",
+            "testCaseDescription": "ADD Transaction - Existing account, new Enrollment span created and an existing enrollment span canceled.",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -1508,6 +1515,7 @@
                         "aptcAmount": 0.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
+                        "sequence": 1,
                         "changed": null,
                         "createdDate": "2023-06-05 06:14:56",
                         "updatedDate": "2023-06-05 06:14:56"
@@ -1539,35 +1547,6 @@
                     "enrollmentSpanCode": "WU5ZTKX5XHMTLWG",
                     "premiumSpans": [
                       {
-                        "premiumSpanSK": "0ef78434-95cc-4063-add0-41fda59c2ead",
-                        "enrollmentSpanSK": "be2a834b-8718-48c7-a3fa-a2aeef9162db",
-                        "ztcn": "00LS0O6YGQPMC5G",
-                        "premiumSpanCode": "9T2QLZYA302OHB0",
-                        "memberPremiumSpans": [
-                          {
-                            "memberPremiumSK": "d30feb25-9c0e-4190-88d3-f7a65d370448",
-                            "memberCode": "KMOO76CXLXGGSB4",
-                            "memberSK": "2fca4989-037a-496f-9b59-cffd3990a5dd",
-                            "exchangeMemberId": "6457457301",
-                            "individualPremiumAmount": 150.00,
-                            "createdDate": "2023-06-05 06:14:56",
-                            "updatedDate": "2023-06-05 06:14:56"
-                          }
-                        ],
-                        "startDate": "2023-07-01",
-                        "endDate": "2023-12-31",
-                        "statusTypeCode": "ACTIVE",
-                        "csrVariant": "03",
-                        "totalPremiumAmount": 150.00,
-                        "totalResponsibleAmount": 125.00,
-                        "aptcAmount": 25.00,
-                        "otherPayAmount": 0.00,
-                        "csrAmount": 20.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
-                      },
-                      {
                         "premiumSpanSK": "088d7dc1-beee-4fb6-987e-4b4447942de3",
                         "enrollmentSpanSK": "be2a834b-8718-48c7-a3fa-a2aeef9162db",
                         "ztcn": "DXB424JH4JXTZWT",
@@ -1592,6 +1571,37 @@
                         "aptcAmount": 50.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
+                        "changed": null,
+                        "sequence": 1,
+                        "createdDate": "2023-06-05 06:14:56",
+                        "updatedDate": "2023-06-05 06:14:56"
+                      },
+                      {
+                        "premiumSpanSK": "0ef78434-95cc-4063-add0-41fda59c2ead",
+                        "enrollmentSpanSK": "be2a834b-8718-48c7-a3fa-a2aeef9162db",
+                        "ztcn": "00LS0O6YGQPMC5G",
+                        "premiumSpanCode": "9T2QLZYA302OHB0",
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "d30feb25-9c0e-4190-88d3-f7a65d370448",
+                            "memberCode": "KMOO76CXLXGGSB4",
+                            "memberSK": "2fca4989-037a-496f-9b59-cffd3990a5dd",
+                            "exchangeMemberId": "6457457301",
+                            "individualPremiumAmount": 150.00,
+                            "createdDate": "2023-06-05 06:14:56",
+                            "updatedDate": "2023-06-05 06:14:56"
+                          }
+                        ],
+                        "startDate": "2023-07-01",
+                        "endDate": "2023-12-31",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 150.00,
+                        "totalResponsibleAmount": 125.00,
+                        "aptcAmount": 25.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 20.00,
+                        "sequence": 2,
                         "changed": null,
                         "createdDate": "2023-06-05 06:14:56",
                         "updatedDate": "2023-06-05 06:14:56"
@@ -1948,20 +1958,6 @@
                   "enrollmentSpanCode": "WU5ZTKX5XHMTLWG",
                   "premiumSpans": [
                     {
-                      "ztcn": "00LS0O6YGQPMC5G",
-                      "premiumSpanCode": "9T2QLZYA302OHB0",
-                      "startDate": "2023-07-01",
-                      "endDate": "2023-07-01",
-                      "statusTypeCode": "CANCELED",
-                      "csrVariant": "03",
-                      "totalPremiumAmount": 150.00,
-                      "totalResponsibleAmount": 125.00,
-                      "aptcAmount": 25.00,
-                      "otherPayAmount": 0.00,
-                      "csrAmount": 20.00,
-                      "changed": true
-                    },
-                    {
                       "ztcn": "DXB424JH4JXTZWT",
                       "premiumSpanCode": "174GMP35EQZLOE0",
                       "startDate": "2023-01-01",
@@ -1973,6 +1969,22 @@
                       "aptcAmount": 50.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 10.00,
+                      "sequence": 1,
+                      "changed": true
+                    },
+                    {
+                      "ztcn": "00LS0O6YGQPMC5G",
+                      "premiumSpanCode": "9T2QLZYA302OHB0",
+                      "startDate": "2023-07-01",
+                      "endDate": "2023-07-01",
+                      "statusTypeCode": "CANCELED",
+                      "csrVariant": "03",
+                      "totalPremiumAmount": 150.00,
+                      "totalResponsibleAmount": 125.00,
+                      "aptcAmount": 25.00,
+                      "otherPayAmount": 0.00,
+                      "csrAmount": 20.00,
+                      "sequence": 2,
                       "changed": true
                     }
                   ],
@@ -2014,6 +2026,7 @@
                       "totalPremiumAmount": 150.00,
                       "totalResponsibleAmount": 125.00,
                       "aptcAmount": 25.00,
+                      "sequence": 1,
                       "changed": true
                     }
                   ],
@@ -2055,7 +2068,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-05",
-            "testCaseDescription": "Existing account, new Enrollment span created and existing enrollment spans canceled.",
+            "testCaseDescription": "ADD Transaction - Existing account, new Enrollment span created and existing enrollment spans canceled.",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -2112,9 +2125,7 @@
                         "aptcAmount": 150.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
+                        "sequence": 1
                       },
                       {
                         "premiumSpanSK": "29cab3e7-b919-4e76-9427-1abed999d214",
@@ -2159,9 +2170,7 @@
                         "aptcAmount": 100.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 20.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
+                        "sequence": 2
                       }
                     ],
                     "stateTypeCode": "MA",
@@ -2189,6 +2198,51 @@
                     "accountSK": "66097166-c971-4d99-83b1-0086b8ec6f4e",
                     "enrollmentSpanCode": "KHEBBHBIZIFZWBK",
                     "premiumSpans": [
+                      {
+                        "premiumSpanSK": "75d161c4-8bed-4bfd-a67e-65c613cfc4d7",
+                        "enrollmentSpanSK": "db427035-8db3-40ca-8843-d9b5db7a7b45",
+                        "ztcn": "4HSM54WFZKETCFS",
+                        "premiumSpanCode": "3SKS1M2QI5AA7GV",
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "927c0a2d-f0fc-4b1f-8f41-b5848d1558f2",
+                            "memberCode": "IK6S1UU7F2WZJYP",
+                            "memberSK": "02fe5093-5581-4e6d-8bfe-48055add707c",
+                            "exchangeMemberId": "5345634502",
+                            "individualPremiumAmount": 100.00,
+                            "createdDate": "2023-06-05 10:14:50",
+                            "updatedDate": "2023-06-05 10:14:50"
+                          },
+                          {
+                            "memberPremiumSK": "e405fdc5-6fbb-4865-8134-17c3d7658bb7",
+                            "memberCode": "L2U3HF42S0YA9E8",
+                            "memberSK": "0b21b364-b21c-4d06-914a-13089e063424",
+                            "exchangeMemberId": "5345634503",
+                            "individualPremiumAmount": 50.00,
+                            "createdDate": "2023-06-05 10:14:50",
+                            "updatedDate": "2023-06-05 10:14:50"
+                          },
+                          {
+                            "memberPremiumSK": "da8c9a66-4c12-4ad5-9edd-76db68c07b32",
+                            "memberCode": "J11WCUSYKYV5B7S",
+                            "memberSK": "8de41197-dfb3-4f1a-93ed-2fb034b8ce87",
+                            "exchangeMemberId": "5345634501",
+                            "individualPremiumAmount": 200.00,
+                            "createdDate": "2023-06-05 10:14:50",
+                            "updatedDate": "2023-06-05 10:14:50"
+                          }
+                        ],
+                        "startDate": "2021-01-01",
+                        "endDate": "2021-04-30",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 350.00,
+                        "totalResponsibleAmount": 250.00,
+                        "aptcAmount": 100.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 10.00,
+                        "sequence": 1
+                      },
                       {
                         "premiumSpanSK": "d575815a-f873-4b40-95e1-62bdf96d0e0f",
                         "enrollmentSpanSK": "db427035-8db3-40ca-8843-d9b5db7a7b45",
@@ -2232,9 +2286,7 @@
                         "aptcAmount": 125.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 20.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
+                        "sequence": 2
                       },
                       {
                         "premiumSpanSK": "a0f609d1-3c68-48dc-afed-7ce98ef67c8c",
@@ -2279,56 +2331,7 @@
                         "aptcAmount": 75.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 30.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
-                      },
-                      {
-                        "premiumSpanSK": "75d161c4-8bed-4bfd-a67e-65c613cfc4d7",
-                        "enrollmentSpanSK": "db427035-8db3-40ca-8843-d9b5db7a7b45",
-                        "ztcn": "4HSM54WFZKETCFS",
-                        "premiumSpanCode": "3SKS1M2QI5AA7GV",
-                        "memberPremiumSpans": [
-                          {
-                            "memberPremiumSK": "927c0a2d-f0fc-4b1f-8f41-b5848d1558f2",
-                            "memberCode": "IK6S1UU7F2WZJYP",
-                            "memberSK": "02fe5093-5581-4e6d-8bfe-48055add707c",
-                            "exchangeMemberId": "5345634502",
-                            "individualPremiumAmount": 100.00,
-                            "createdDate": "2023-06-05 10:14:50",
-                            "updatedDate": "2023-06-05 10:14:50"
-                          },
-                          {
-                            "memberPremiumSK": "e405fdc5-6fbb-4865-8134-17c3d7658bb7",
-                            "memberCode": "L2U3HF42S0YA9E8",
-                            "memberSK": "0b21b364-b21c-4d06-914a-13089e063424",
-                            "exchangeMemberId": "5345634503",
-                            "individualPremiumAmount": 50.00,
-                            "createdDate": "2023-06-05 10:14:50",
-                            "updatedDate": "2023-06-05 10:14:50"
-                          },
-                          {
-                            "memberPremiumSK": "da8c9a66-4c12-4ad5-9edd-76db68c07b32",
-                            "memberCode": "J11WCUSYKYV5B7S",
-                            "memberSK": "8de41197-dfb3-4f1a-93ed-2fb034b8ce87",
-                            "exchangeMemberId": "5345634501",
-                            "individualPremiumAmount": 200.00,
-                            "createdDate": "2023-06-05 10:14:50",
-                            "updatedDate": "2023-06-05 10:14:50"
-                          }
-                        ],
-                        "startDate": "2021-01-01",
-                        "endDate": "2021-04-30",
-                        "statusTypeCode": "ACTIVE",
-                        "csrVariant": "03",
-                        "totalPremiumAmount": 350.00,
-                        "totalResponsibleAmount": 250.00,
-                        "aptcAmount": 100.00,
-                        "otherPayAmount": 0.00,
-                        "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
+                        "sequence": 3
                       }
                     ],
                     "stateTypeCode": "MA",
@@ -2356,53 +2359,6 @@
                     "accountSK": "66097166-c971-4d99-83b1-0086b8ec6f4e",
                     "enrollmentSpanCode": "LAALVUSCQT8DXBR",
                     "premiumSpans": [
-                      {
-                        "premiumSpanSK": "9cd2614c-2002-4a30-ade1-92a7c38ca424",
-                        "enrollmentSpanSK": "5ae71640-e272-4e65-ba2d-c3219a28ff3c",
-                        "ztcn": "OQN31R4GOEKZE0F",
-                        "premiumSpanCode": "N6D19DEW08JSQQG",
-                        "memberPremiumSpans": [
-                          {
-                            "memberPremiumSK": "dfaf9a64-a6a3-4518-ad56-adc4cd3ce125",
-                            "memberCode": "L2U3HF42S0YA9E8",
-                            "memberSK": "0b21b364-b21c-4d06-914a-13089e063424",
-                            "exchangeMemberId": "5345634503",
-                            "individualPremiumAmount": 50.00,
-                            "createdDate": "2023-06-05 10:14:50",
-                            "updatedDate": "2023-06-05 10:14:50"
-                          },
-                          {
-                            "memberPremiumSK": "7d2c6b7c-b9ff-4fd8-8237-12acd6330136",
-                            "memberCode": "J11WCUSYKYV5B7S",
-                            "memberSK": "8de41197-dfb3-4f1a-93ed-2fb034b8ce87",
-                            "exchangeMemberId": "5345634501",
-                            "individualPremiumAmount": 250.00,
-                            "createdDate": "2023-06-05 10:14:50",
-                            "updatedDate": "2023-06-05 10:14:50"
-                          },
-                          {
-                            "memberPremiumSK": "30945765-1b27-47a6-b44f-97bb24d97d4b",
-                            "memberCode": "IK6S1UU7F2WZJYP",
-                            "memberSK": "02fe5093-5581-4e6d-8bfe-48055add707c",
-                            "exchangeMemberId": "5345634502",
-                            "individualPremiumAmount": 100.00,
-                            "createdDate": "2023-06-05 10:14:50",
-                            "updatedDate": "2023-06-05 10:14:50"
-                          }
-                        ],
-                        "startDate": "2023-08-01",
-                        "endDate": "2023-09-30",
-                        "statusTypeCode": "ACTIVE",
-                        "csrVariant": "03",
-                        "totalPremiumAmount": 400.00,
-                        "totalResponsibleAmount": 300.00,
-                        "aptcAmount": 100.00,
-                        "otherPayAmount": 0.00,
-                        "csrAmount": 40.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
-                      },
                       {
                         "premiumSpanSK": "0525a212-d8ec-4418-923f-b856bc541338",
                         "enrollmentSpanSK": "5ae71640-e272-4e65-ba2d-c3219a28ff3c",
@@ -2446,9 +2402,52 @@
                         "aptcAmount": 150.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 30.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
+                        "sequence": 1
+                      },
+                      {
+                        "premiumSpanSK": "9cd2614c-2002-4a30-ade1-92a7c38ca424",
+                        "enrollmentSpanSK": "5ae71640-e272-4e65-ba2d-c3219a28ff3c",
+                        "ztcn": "OQN31R4GOEKZE0F",
+                        "premiumSpanCode": "N6D19DEW08JSQQG",
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "dfaf9a64-a6a3-4518-ad56-adc4cd3ce125",
+                            "memberCode": "L2U3HF42S0YA9E8",
+                            "memberSK": "0b21b364-b21c-4d06-914a-13089e063424",
+                            "exchangeMemberId": "5345634503",
+                            "individualPremiumAmount": 50.00,
+                            "createdDate": "2023-06-05 10:14:50",
+                            "updatedDate": "2023-06-05 10:14:50"
+                          },
+                          {
+                            "memberPremiumSK": "7d2c6b7c-b9ff-4fd8-8237-12acd6330136",
+                            "memberCode": "J11WCUSYKYV5B7S",
+                            "memberSK": "8de41197-dfb3-4f1a-93ed-2fb034b8ce87",
+                            "exchangeMemberId": "5345634501",
+                            "individualPremiumAmount": 250.00,
+                            "createdDate": "2023-06-05 10:14:50",
+                            "updatedDate": "2023-06-05 10:14:50"
+                          },
+                          {
+                            "memberPremiumSK": "30945765-1b27-47a6-b44f-97bb24d97d4b",
+                            "memberCode": "IK6S1UU7F2WZJYP",
+                            "memberSK": "02fe5093-5581-4e6d-8bfe-48055add707c",
+                            "exchangeMemberId": "5345634502",
+                            "individualPremiumAmount": 100.00,
+                            "createdDate": "2023-06-05 10:14:50",
+                            "updatedDate": "2023-06-05 10:14:50"
+                          }
+                        ],
+                        "startDate": "2023-08-01",
+                        "endDate": "2023-09-30",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 400.00,
+                        "totalResponsibleAmount": 300.00,
+                        "aptcAmount": 100.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 40.00,
+                        "sequence": 2
                       }
                     ],
                     "stateTypeCode": "MA",
@@ -2519,9 +2518,7 @@
                         "aptcAmount": 150.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
+                        "sequence": 1
                       },
                       {
                         "premiumSpanSK": "bee9bec6-8656-4a77-8b2c-f0310456b3f6",
@@ -2566,9 +2563,7 @@
                         "aptcAmount": 100.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 20.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
+                        "sequence": 2
                       }
                     ],
                     "stateTypeCode": "MA",
@@ -2639,9 +2634,7 @@
                         "aptcAmount": 150.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 50.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
+                        "sequence": 1
                       },
                       {
                         "premiumSpanSK": "57f91f13-6614-4ea0-aea3-7027515e8e55",
@@ -2686,9 +2679,7 @@
                         "aptcAmount": 100.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 60.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
+                        "sequence": 2
                       }
                     ],
                     "stateTypeCode": "MA",
@@ -3437,20 +3428,6 @@
                   "enrollmentSpanCode": "LAALVUSCQT8DXBR",
                   "premiumSpans": [
                     {
-                      "ztcn": "OQN31R4GOEKZE0F",
-                      "premiumSpanCode": "N6D19DEW08JSQQG",
-                      "startDate": "2023-08-01",
-                      "endDate": "2023-08-01",
-                      "statusTypeCode": "CANCELED",
-                      "csrVariant": "03",
-                      "totalPremiumAmount": 400.00,
-                      "totalResponsibleAmount": 300.00,
-                      "aptcAmount": 100.00,
-                      "otherPayAmount": 0.00,
-                      "csrAmount": 40.00,
-                      "changed": true
-                    },
-                    {
                       "ztcn": "K1QGTY05LJ9S3WT",
                       "premiumSpanCode": "U426AQM7XNP4TYY",
                       "startDate": "2023-06-01",
@@ -3462,6 +3439,22 @@
                       "aptcAmount": 150.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 30.00,
+                      "sequence": 1,
+                      "changed": true
+                    },
+                    {
+                      "ztcn": "OQN31R4GOEKZE0F",
+                      "premiumSpanCode": "N6D19DEW08JSQQG",
+                      "startDate": "2023-08-01",
+                      "endDate": "2023-08-01",
+                      "statusTypeCode": "CANCELED",
+                      "csrVariant": "03",
+                      "totalPremiumAmount": 400.00,
+                      "totalResponsibleAmount": 300.00,
+                      "aptcAmount": 100.00,
+                      "otherPayAmount": 0.00,
+                      "csrAmount": 40.00,
+                      "sequence": 2,
                       "changed": true
                     }
                   ],
@@ -3498,7 +3491,8 @@
                       "aptcAmount": 150.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 10.00,
-                      "changed": true
+                      "changed": true,
+                      "sequence": 1
                     },
                     {
                       "ztcn": "CYBUVKRQSKX7C82",
@@ -3512,7 +3506,8 @@
                       "aptcAmount": 100.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 20.00,
-                      "changed": true
+                      "changed": true,
+                      "sequence": 2
                     }
                   ],
                   "stateTypeCode": "MA",
@@ -3546,6 +3541,7 @@
                       "aptcAmount": 150.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 50.00,
+                      "sequence": 1,
                       "changed": true
                     },
                     {
@@ -3560,6 +3556,7 @@
                       "aptcAmount": 100.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 60.00,
+                      "sequence": 2,
                       "changed": true
                     }
                   ],
@@ -3610,6 +3607,7 @@
                       "totalResponsibleAmount": 200.00,
                       "aptcAmount": 200.00,
                       "csrAmount": 70.00,
+                      "sequence": 1,
                       "changed": true
                     }
                   ],
@@ -3679,7 +3677,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-06",
-            "testCaseDescription": "Existing account, new Enrollment span created and an existing enrollment span termed and one canceled.",
+            "testCaseDescription": "ADD Transaction - Existing account, new Enrollment span created and an existing enrollment span termed and one canceled.",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -3718,9 +3716,7 @@
                         "aptcAmount": 0.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 1
                       }
                     ],
                     "stateTypeCode": "FL",
@@ -3773,9 +3769,7 @@
                         "aptcAmount": 25.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 20.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 1
                       },
                       {
                         "premiumSpanSK": "f5bd6d76-0b58-4733-a458-f70f2c8fa8d4",
@@ -3802,9 +3796,7 @@
                         "aptcAmount": 50.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 2
                       }
                     ],
                     "stateTypeCode": "FL",
@@ -4137,7 +4129,8 @@
                       "aptcAmount": 0.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 10.00,
-                      "changed": true
+                      "changed": true,
+                      "sequence": 1
                     }
                   ],
                   "stateTypeCode": "FL",
@@ -4171,7 +4164,8 @@
                       "aptcAmount": 25.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 20.00,
-                      "changed": true
+                      "changed": true,
+                      "sequence": 1
                     },
                     {
                       "ztcn": "3IE7T5LROMXCKX2",
@@ -4185,7 +4179,8 @@
                       "otherPayAmount": 0.00,
                       "aptcAmount": 50.00,
                       "csrAmount": 10.00,
-                      "changed": true
+                      "changed": true,
+                      "sequence": 2
                     }
                   ],
                   "stateTypeCode": "FL",
@@ -4225,7 +4220,8 @@
                       "totalResponsibleAmount": 100.00,
                       "aptcAmount": 50.00,
                       "csrAmount": 20.00,
-                      "changed": true
+                      "changed": true,
+                      "sequence": 1
                     }
                   ],
                   "stateTypeCode": "FL",
@@ -4264,7 +4260,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-07",
-            "testCaseDescription": "Existing account, new Enrollment span created and an existing enrollment span termed and one canceled. Gap between existing enrollment spans",
+            "testCaseDescription": "ADD Transaction - Existing account, new Enrollment span created and an existing enrollment span termed and one canceled. Gap between existing enrollment spans",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -4303,9 +4299,7 @@
                         "aptcAmount": 0.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 1
                       }
                     ],
                     "stateTypeCode": "FL",
@@ -4358,9 +4352,7 @@
                         "aptcAmount": 25.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 20.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 1
                       },
                       {
                         "premiumSpanSK": "75aaf43b-1513-4b88-9315-1faca52edc14",
@@ -4387,9 +4379,7 @@
                         "aptcAmount": 50.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 2
                       }
                     ],
                     "stateTypeCode": "FL",
@@ -4722,7 +4712,8 @@
                       "aptcAmount": 0.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 10.00,
-                      "changed": true
+                      "changed": true,
+                      "sequence": 1
                     }
                   ],
                   "stateTypeCode": "FL",
@@ -4756,6 +4747,7 @@
                       "aptcAmount": 25.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 20.00,
+                      "sequence": 1,
                       "changed": true
                     },
                     {
@@ -4770,6 +4762,7 @@
                       "aptcAmount": 50.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 10.00,
+                      "sequence": 2,
                       "changed": true
                     }
                   ],
@@ -4812,6 +4805,7 @@
                       "totalResponsibleAmount": 140.00,
                       "aptcAmount": 10.00,
                       "csrAmount": 30.00,
+                      "sequence": 1,
                       "changed": true
                     }
                   ],
@@ -4853,7 +4847,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-08",
-            "testCaseDescription": "Existing account, contains multiple enrollment spans. New span is created in between the existing enrollment spans",
+            "testCaseDescription": "ADD Transaction - Existing account, contains multiple enrollment spans. New span is created in between the existing enrollment spans",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -4892,9 +4886,7 @@
                         "aptcAmount": 0.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 1
                       }
                     ],
                     "stateTypeCode": "FL",
@@ -4947,9 +4939,7 @@
                         "aptcAmount": 25.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 20.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 1
                       },
                       {
                         "premiumSpanSK": "9a12e23e-0ee5-4553-aacc-ea23fe042c79",
@@ -4976,9 +4966,7 @@
                         "aptcAmount": 50.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 2
                       }
                     ],
                     "stateTypeCode": "FL",
@@ -5031,9 +5019,7 @@
                         "aptcAmount": 0.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 1
                       }
                     ],
                     "stateTypeCode": "FL",
@@ -5086,9 +5072,7 @@
                         "aptcAmount": 25.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 20.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 1
                       },
                       {
                         "premiumSpanSK": "ab03aeee-a1b1-40fa-a462-0860677e60ef",
@@ -5115,9 +5099,7 @@
                         "aptcAmount": 50.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 2
                       }
                     ],
                     "stateTypeCode": "FL",
@@ -5456,6 +5438,7 @@
                       "aptcAmount": 25.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 20.00,
+                      "sequence": 1,
                       "changed": true
                     },
                     {
@@ -5470,6 +5453,7 @@
                       "aptcAmount": 50.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 10.00,
+                      "sequence": 2,
                       "changed": true
                     }
                   ],
@@ -5506,6 +5490,7 @@
                       "aptcAmount": 0.00,
                       "otherPayAmount": 0.00,
                       "csrAmount": 10.00,
+                      "sequence": 1,
                       "changed": true
                     }
                   ],
@@ -5548,6 +5533,7 @@
                       "totalResponsibleAmount": 135.00,
                       "aptcAmount": 15.00,
                       "csrAmount": 50.00,
+                      "sequence": 1,
                       "changed": true
                     }
                   ],
@@ -5589,7 +5575,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-09",
-            "testCaseDescription": "Existing account, brand new Enrollment span created for next year. Member middle name and last name is updated",
+            "testCaseDescription": "ADD Transaction - Existing account, brand new Enrollment span created for next year. Member middle name and last name is updated",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -5628,9 +5614,7 @@
                         "aptcAmount": 0.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 06:14:56",
-                        "updatedDate": "2023-06-05 06:14:56"
+                        "sequence": 1
                       }
                     ],
                     "stateTypeCode": "FL",
@@ -6006,6 +5990,7 @@
                       "totalPremiumAmount": 150.00,
                       "totalResponsibleAmount": 100.00,
                       "aptcAmount": 50.00,
+                      "sequence": 1,
                       "changed": true
                     }
                   ],
@@ -6049,7 +6034,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-10",
-            "testCaseDescription": "Existing account, brand new Enrollment span created for next year. New residential address is added",
+            "testCaseDescription": "ADD Transaction - Existing account, brand new Enrollment span created for next year. New residential address is added",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -6086,6 +6071,7 @@
                         "aptcAmount": 0.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
+                        "sequence": 1,
                         "changed": null
                       }
                     ],
@@ -6439,6 +6425,7 @@
                       "totalPremiumAmount": 150.00,
                       "totalResponsibleAmount": 100.00,
                       "aptcAmount": 50.00,
+                      "sequence": 1,
                       "changed": true
                     }
                   ],
@@ -6533,7 +6520,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-11",
-            "testCaseDescription": "Existing account, new Enrollment span created for next year, all members addresses are updated.",
+            "testCaseDescription": "ADD Transaction - Existing account, new Enrollment span created for next year, all members addresses are updated.",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -6590,9 +6577,7 @@
                         "aptcAmount": 150.00,
                         "otherPayAmount": 0.00,
                         "csrAmount": 10.00,
-                        "changed": null,
-                        "createdDate": "2023-06-05 10:14:50",
-                        "updatedDate": "2023-06-05 10:14:50"
+                        "sequence": 1
                       }
                     ],
                     "stateTypeCode": "MA",
@@ -6653,7 +6638,8 @@
                         "totalResponsibleAmount": 250.00,
                         "aptcAmount": 150.00,
                         "otherPayAmount": 0.00,
-                        "csrAmount": 50.00
+                        "csrAmount": 50.00,
+                        "sequence": 1
                       }
                     ],
                     "stateTypeCode": "MA",
@@ -7377,7 +7363,8 @@
                       "totalResponsibleAmount": 200.00,
                       "aptcAmount": 200.00,
                       "csrAmount": 70.00,
-                      "changed": true
+                      "changed": true,
+                      "sequence": 1
                     }
                   ],
                   "stateTypeCode": "MA",
@@ -7606,7 +7593,7 @@
         {
           "testData": {
             "testCaseId": "ZEUS-APS-ACCT-Process-12",
-            "testCaseDescription": "Existing account, brand new Enrollment span created for next year. Addresses, phone number, language and email are updated",
+            "testCaseDescription": "ADD Transaction - Existing account, brand new Enrollment span created for next year. Addresses, phone number, language and email are updated",
             "exceptionExpected": false,
             "httpStatusCode": "200",
             "accountProcessingRequest": {
@@ -7642,7 +7629,8 @@
                         "totalResponsibleAmount": 150.00,
                         "aptcAmount": 0.00,
                         "otherPayAmount": 0.00,
-                        "csrAmount": 10.00
+                        "csrAmount": 10.00,
+                        "sequence": 1
                       }
                     ],
                     "stateTypeCode": "FL",
@@ -7993,7 +7981,8 @@
                       "totalPremiumAmount": 150.00,
                       "totalResponsibleAmount": 100.00,
                       "aptcAmount": 50.00,
-                      "changed": true
+                      "changed": true,
+                      "sequence": 1
                     }
                   ],
                   "stateTypeCode": "FL",
@@ -8176,6 +8165,382 @@
                   ],
                   "alternateContacts": null,
                   "memberPremiums": null
+                }
+              ]
+            }
+          }
+        },
+        {
+          "testData": {
+            "testCaseId": "ZEUS-APS-ACCT-Process-13",
+            "testCaseDescription": "CHANGE Transaction - Non Financial Change - Middle Name Updated - PRE AMT TOT Not Present in the transaction - Only Primary Subscriber in the account",
+            "exceptionExpected": false,
+            "httpStatusCode": "200",
+            "accountProcessingRequest": {
+              "accountDto": {
+                "accountSK": "b4725773-488a-40a3-ac44-d5b58c9dca0b",
+                "accountNumber": "52KVD0FOWD8XFFU",
+                "lineOfBusinessTypeCode": "HIX",
+                "enrollmentSpans": [
+                  {
+                    "enrollmentSpanSK": "b04d04c0-355e-4cdc-8181-aef625b52b9c",
+                    "accountSK": "b4725773-488a-40a3-ac44-d5b58c9dca0b",
+                    "enrollmentSpanCode": "FH950NYPOBBJSC1",
+                    "premiumSpans": [
+                      {
+                        "premiumSpanSK": "29e7bf95-1c57-4af9-94cb-24e4385ad55e",
+                        "enrollmentSpanSK": "b04d04c0-355e-4cdc-8181-aef625b52b9c",
+                        "ztcn": "XWN7MM8655GUF3L",
+                        "premiumSpanCode": "YSJWW0K37NH7K1M",
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "f8d5f1c2-2316-4b19-a379-ceeab8ab4dfa",
+                            "memberCode": "L2SI69KMXQKN9CB",
+                            "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                            "exchangeMemberId": "3463456501",
+                            "individualPremiumAmount": 150.00
+                          }
+                        ],
+                        "startDate": "2022-01-01",
+                        "endDate": "2022-12-31",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 150.00,
+                        "totalResponsibleAmount": 150.00,
+                        "aptcAmount": 0.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 10.00
+                      }
+                    ],
+                    "stateTypeCode": "FL",
+                    "marketplaceTypeCode": "FFM",
+                    "businessUnitTypeCode": "MP_FL",
+                    "startDate": "2022-01-01",
+                    "endDate": "2022-12-31",
+                    "exchangeSubscriberId": "34634565",
+                    "effectuationDate": "2021-12-20",
+                    "planId": "09643FL0234735",
+                    "groupPolicyId": "37366365",
+                    "productTypeCode": "HMO",
+                    "coverageTypeCode": "FAM",
+                    "delinqInd": false,
+                    "statusTypeCode": "ENROLLED",
+                    "ztcn": "XWN7MM8655GUF3L"
+                  },
+                  {
+                    "enrollmentSpanSK": "26008203-55e5-4c6e-b0ba-ff4f016fdce3",
+                    "accountSK": "b4725773-488a-40a3-ac44-d5b58c9dca0b",
+                    "enrollmentSpanCode": "0631JDIVWD8MHOP",
+                    "premiumSpans": [
+                      {
+                        "premiumSpanSK": "ccb30ed8-4abc-4041-ae1f-6537e8d06350",
+                        "enrollmentSpanSK": "26008203-55e5-4c6e-b0ba-ff4f016fdce3",
+                        "ztcn": "0UYXB01E58WX9SS",
+                        "premiumSpanCode": "R7OQKDQXTI3LIAE",
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "103fc871-1155-46fc-82bf-a7b246e2c61d",
+                            "memberCode": "L2SI69KMXQKN9CB",
+                            "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                            "exchangeMemberId": "3463456501",
+                            "individualPremiumAmount": 150.00
+                          }
+                        ],
+                        "startDate": "2023-01-01",
+                        "endDate": "2023-12-31",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 150.00,
+                        "totalResponsibleAmount": 150.00,
+                        "aptcAmount": 0.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 10.00
+                      }
+                    ],
+                    "stateTypeCode": "FL",
+                    "marketplaceTypeCode": "FFM",
+                    "businessUnitTypeCode": "MP_FL",
+                    "startDate": "2023-01-01",
+                    "endDate": "2023-12-31",
+                    "exchangeSubscriberId": "34634565",
+                    "effectuationDate": "2021-12-20",
+                    "planId": "09643FL0234736",
+                    "groupPolicyId": "37366366",
+                    "productTypeCode": "HMO",
+                    "coverageTypeCode": "FAM",
+                    "delinqInd": false,
+                    "statusTypeCode": "ENROLLED",
+                    "ztcn": "0UYXB01E58WX9SS"
+                  }
+                ],
+                "members": [
+                  {
+                    "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                    "accountSK": "b4725773-488a-40a3-ac44-d5b58c9dca0b",
+                    "memberCode": "L2SI69KMXQKN9CB",
+                    "firstName": "Mitchell",
+                    "middleName": "Plinger",
+                    "lastName": "Starc",
+                    "relationshipTypeCode": "HOH",
+                    "dateOfBirth": "1989-05-12",
+                    "genderTypeCode": "MALE",
+                    "height": 6.1,
+                    "weight": 190.3,
+                    "memberAddresses": [
+                      {
+                        "memberAddressSK": "6ce5fa28-9563-4977-99f4-cc90faa34413",
+                        "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                        "memberAddressCode": "DBJ2RX468MEROLE",
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "3556 Puller Trail",
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "startDate": "2020-12-10",
+                        "endDate": null
+                      },
+                      {
+                        "memberAddressSK": "f7ec863f-6d8b-436f-82cd-878ea28e4538",
+                        "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                        "memberAddressCode": "6TUKRAN79U77864",
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 62363",
+                        "addressLine2": null,
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "startDate": "2020-12-10",
+                        "endDate": null
+                      }
+                    ],
+                    "memberIdentifiers": [
+                      {
+                        "memberIdentifierSK": "ee245cfc-78b7-454a-82a5-9ab073b2bcba",
+                        "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                        "memberIdentifierCode": "TJOV4DFTTA4T3FD",
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "845-73-8335",
+                        "isActive": true,
+                        "active": true
+                      }
+                    ],
+                    "memberLanguages": [
+                      {
+                        "memberLanguageSK": "4185f07e-2afa-4d5f-b487-9119b2b734d0",
+                        "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                        "memberLanguageCode": "S16NDUDZ02QWRRL",
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "ENG",
+                        "startDate": "2020-12-10",
+                        "endDate": null
+                      },
+                      {
+                        "memberLanguageSK": "c36cf9c8-0888-41dc-8e20-4bb804933c00",
+                        "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                        "memberLanguageCode": "TNCZ0LRF2KISC24",
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "SPA",
+                        "startDate": "2020-12-10",
+                        "endDate": null
+                      }
+                    ],
+                    "memberPhones": [
+                      {
+                        "memberPhoneSK": "406e40ed-ff30-4c50-8595-569865667fd3",
+                        "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                        "memberPhoneCode": "0XCGS5ZUNQAT2UN",
+                        "phoneTypeCode": "CELL",
+                        "phoneNumber": "636-845-2435",
+                        "startDate": "2020-12-10",
+                        "endDate": null
+                      }
+                    ],
+                    "memberEmails": [
+                      {
+                        "memberEmailSK": "a69b5d53-eacf-402a-9a9e-a458857eacb1",
+                        "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                        "memberEmailCode": "0L84BZV73OFBQNU",
+                        "emailTypeCode": "WORK",
+                        "email": "mitchell.starc@wellcare.com",
+                        "isPrimary": false,
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "primary": false
+                      },
+                      {
+                        "memberEmailSK": "4badf77e-b87c-4ce8-8ab8-49cf2795c1c2",
+                        "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                        "memberEmailCode": "6WJ5HGMJN03E7SB",
+                        "emailTypeCode": "PERSONAL",
+                        "email": "mitchell.starc@gmail.com",
+                        "isPrimary": true,
+                        "startDate": "2020-12-10",
+                        "endDate": null,
+                        "primary": true
+                      }
+                    ],
+                    "alternateContacts": null,
+                    "memberPremiums": null
+                  }
+                ],
+                "brokers": null,
+                "sponsors": null,
+                "payers": null
+              },
+              "transactionDto": {
+                "ztcn": "7NUIOAMGD3XR5V9",
+                "zfcn": "MHAF7WF5WAPAN8I",
+                "transactionReceivedDate": "2023-02-07T06:27:25.470Z",
+                "transactionSourceTypeCode": "MARKETPLACE",
+                "transactionDetail": {
+                  "transactionTypeCode": "ADD",
+                  "coverageTypeCode": "FAM",
+                  "planId": "09643FL0234736",
+                  "csrVariant": "03",
+                  "groupPolicyId": "37366366",
+                  "effectiveDate": "2023-01-01"
+                },
+                "transactionAttributes": [
+                  {
+                    "transactionAttributeTypeCode": "RATINGAREA",
+                    "transactionAttributeValue": "R-FL043"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "SRCEXCHID",
+                    "transactionAttributeValue": "FL0"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "REQSBTTMS",
+                    "transactionAttributeValue": "20230207210517"
+                  },
+                  {
+                    "transactionAttributeTypeCode": "APPID",
+                    "transactionAttributeValue": "3340286923-1"
+                  }
+                ],
+                "tradingPartnerDto": {
+                  "tradingPartnerId": "21663",
+                  "lineOfBusinessTypeCode": "HIX",
+                  "businessTypeCode": "MP_FL",
+                  "marketplaceTypeCode": "FFM",
+                  "stateTypeCode": "FL"
+                },
+                "sponsor": {
+                  "sponsorName": "Mitchell Starc",
+                  "sponsorId": "845-73-8335",
+                  "receivedDate": "2023-02-07T06:27:25.484Z"
+                },
+                "broker": {
+                  "brokerName": "Ben Stokes",
+                  "brokerId": "53234534",
+                  "agencyName": "Sapphire Brokers Inc.",
+                  "agencyId": "63363754",
+                  "accountNumber1": "523645-63456",
+                  "receivedDate": "2023-02-07T06:27:25.484Z"
+                },
+                "payer": {
+                  "payerName": "Zeus Health",
+                  "payerId": "5235343",
+                  "receivedDate": "2022-11-07T06:27:25.484Z"
+                },
+                "members": [
+                  {
+                    "transactionMemberCode": "58TUT2PYZGFHVC0",
+                    "transactionTypeCode": "CHANGE",
+                    "effectiveDate": "2023-01-01",
+                    "relationshipTypeCode": "HOH",
+                    "reasonTypeCode": "MBS",
+                    "firstName": "Mitchell",
+                    "middleName": "Zinger",
+                    "lastName": "Starc",
+                    "tobaccoIndicator": "NONE",
+                    "dateOfBirth": "1989-05-12",
+                    "genderTypeCode": "MALE",
+                    "memberRate": 150.00,
+                    "memberPhones": [
+                      {
+                        "phoneTypeCode": "CELL",
+                        "phoneNumber": "636-845-2435",
+                        "receivedDate": "2023-02-07T06:27:25.562Z"
+                      }
+                    ],
+                    "memberAddresses": [
+                      {
+                        "addressTypeCode": "RESIDENCE",
+                        "addressLine1": "3556 Puller Trail",
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "countyCode": "12101",
+                        "receivedDate": "2023-02-07T06:27:25.553Z"
+                      },
+                      {
+                        "addressTypeCode": "MAIL",
+                        "addressLine1": "P.O Box 62363",
+                        "city": "Odessa",
+                        "stateTypeCode": "FL",
+                        "zipCode": "33556",
+                        "countyCode": "12101",
+                        "receivedDate": "2023-02-07T06:27:25.553Z"
+                      }
+                    ],
+                    "identifiers": [
+                      {
+                        "identifierTypeCode": "EXCHSUBID",
+                        "identifierValue": "34634565",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      },
+                      {
+                        "identifierTypeCode": "EXCHMEMID",
+                        "identifierValue": "3463456501",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      },
+                      {
+                        "identifierTypeCode": "SSN",
+                        "identifierValue": "845-73-8335",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      }
+                    ],
+                    "emails": [
+                      {
+                        "email": "mitchell.starc@gmail.com",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      }
+                    ],
+                    "languages": [
+                      {
+                        "languageTypeCode": "WRITING",
+                        "languageCode": "ENG",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      },
+                      {
+                        "languageTypeCode": "SPEAKING",
+                        "languageCode": "SPA",
+                        "receivedDate": "2023-02-07T06:27:25.543Z"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "expectedAccountDto": {
+              "accountSK": "b4725773-488a-40a3-ac44-d5b58c9dca0b",
+              "accountNumber": "52KVD0FOWD8XFFU",
+              "lineOfBusinessTypeCode": "HIX",
+              "members": [
+                {
+                  "memberSK": "83fd82f2-b970-4238-a6c7-a2ccca44ba65",
+                  "accountSK": "b4725773-488a-40a3-ac44-d5b58c9dca0b",
+                  "memberCode": "L2SI69KMXQKN9CB",
+                  "firstName": "Mitchell",
+                  "middleName": "Zinger",
+                  "lastName": "Starc",
+                  "relationshipTypeCode": "HOH",
+                  "dateOfBirth": "1989-05-12",
+                  "genderTypeCode": "MALE",
+                  "height": 6.1,
+                  "weight": 190.3,
+                  "changed": true
                 }
               ]
             }
