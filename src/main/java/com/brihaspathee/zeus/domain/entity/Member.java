@@ -57,8 +57,10 @@ public class Member {
 
     /**
      * The unique code for the member by Transaction manager
+     * There may be members in the account who were not received in the transaction
+     * We need to be able to insert them without requiring a transaction member code
      */
-    @Column(name = "trans_member_code", nullable = false, columnDefinition = "varchar", length = 50)
+    @Column(name = "trans_member_code", nullable = true, columnDefinition = "varchar", length = 50)
     private String transactionMemberCode;
 
     /**

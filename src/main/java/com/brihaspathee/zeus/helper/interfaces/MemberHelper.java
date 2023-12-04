@@ -3,6 +3,7 @@ package com.brihaspathee.zeus.helper.interfaces;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 
@@ -20,7 +21,7 @@ import java.util.List;
 public interface MemberHelper {
 
     /**
-     * Create the member
+     * Create the member who are in the transaction
      * @param members
      * @param account
      */
@@ -40,4 +41,11 @@ public interface MemberHelper {
      * @param account The account entity to which the matched members have to be added
      */
     void matchMember(AccountDto accountDto, TransactionDto transactionDto, Account account);
+
+    /**
+     * Create the member who are not in the transaction, but are present in the account
+     * @param memberDto - Member to be created
+     * @param account - The account for which the member is to be created
+     */
+    Member createMember(MemberDto memberDto, Account account);
 }

@@ -56,4 +56,33 @@ public class MemberPremiumMapperImpl implements MemberPremiumMapper {
     public List<MemberPremiumDto> memberPremiumsToMemberPremiumDtos(List<MemberPremium> memberPremiums) {
         return memberPremiums.stream().map(this::memberPremiumToMemberPremiumDto).collect(Collectors.toList());
     }
+
+    /**
+     * Convert member premium dto to member premium
+     * @param memberPremiumDto
+     * @return
+     */
+    @Override
+    public MemberPremium memberPremiumDtoToMemberPremium(MemberPremiumDto memberPremiumDto) {
+        if (memberPremiumDto == null){
+            return null;
+        }
+        MemberPremium memberPremium = MemberPremium.builder()
+                .acctMemberSK(memberPremiumDto.getMemberSK())
+                .acctMemPremSK(memberPremiumDto.getMemberPremiumSK())
+                .exchangeMemberId(memberPremiumDto.getExchangeMemberId())
+                .individualRateAmount(memberPremiumDto.getIndividualPremiumAmount())
+                .build();
+        return memberPremium;
+    }
+
+    /**
+     * Convert member premium dtos to member premium entities
+     * @param memberPremiumDtos
+     * @return
+     */
+    @Override
+    public List<MemberPremium> memberPremiumDtosToMemberPremiums(List<MemberPremiumDto> memberPremiumDtos) {
+        return memberPremiumDtos.stream().map(this::memberPremiumDtoToMemberPremium).collect(Collectors.toList());
+    }
 }

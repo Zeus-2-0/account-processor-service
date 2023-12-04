@@ -8,6 +8,7 @@ import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
+import com.brihaspathee.zeus.info.ChangeTransactionInfo;
 import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 
 import java.time.LocalDate;
@@ -65,4 +66,18 @@ public interface EnrollmentSpanHelper {
      * @param account
      */
     void updateEnrollmentSpans(AccountDto accountDto, TransactionDto transactionDto, Account account);
+
+    /**
+     * Process the financial change for the enrollment span
+     * @param changeTransactionInfo - Details associated with the change transaction
+     * @param transactionDto - Change transaction data
+     * @param account - The account entity
+     * @param accountDto - The account for which the transaction is received
+     * @param matchedEnrollmentSpanDto - The matched enrollment span
+     */
+    void processFinancialChange(ChangeTransactionInfo changeTransactionInfo,
+                                TransactionDto transactionDto,
+                                Account account,
+                                AccountDto accountDto,
+                                EnrollmentSpanDto matchedEnrollmentSpanDto);
 }

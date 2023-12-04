@@ -18,10 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -95,12 +92,13 @@ public class MemberHelperImpl implements MemberHelper {
         List<Member> savedMembers = new ArrayList<>();
         members.forEach(transactionMemberDto -> {
             Member member = createMember(account, transactionMemberDto, null);
-            memberAddressHelper.createMemberAddress(member, transactionMemberDto);
-            memberEmailHelper.createMemberEmail(member, transactionMemberDto);
-            memberPhoneHelper.createMemberPhone(member, transactionMemberDto);
-            memberLanguageHelper.createMemberLanguage(member, transactionMemberDto);
-            memberIdentifierHelper.createMemberIdentifier(member, transactionMemberDto);
-            alternateContactHelper.createAlternateContact(member, transactionMemberDto);
+            createMemberDemographics(member, transactionMemberDto);
+//            memberAddressHelper.createMemberAddress(member, transactionMemberDto);
+//            memberEmailHelper.createMemberEmail(member, transactionMemberDto);
+//            memberPhoneHelper.createMemberPhone(member, transactionMemberDto);
+//            memberLanguageHelper.createMemberLanguage(member, transactionMemberDto);
+//            memberIdentifierHelper.createMemberIdentifier(member, transactionMemberDto);
+//            alternateContactHelper.createAlternateContact(member, transactionMemberDto);
             savedMembers.add(member);
         });
         return savedMembers;
@@ -115,18 +113,34 @@ public class MemberHelperImpl implements MemberHelper {
     public void setMember(AccountDto accountDto, Account account) {
         if(account.getMembers() != null && account.getMembers().size() > 0){
             List<MemberDto> memberDtos = new ArrayList<>();
-            account.getMembers().stream().forEach(member -> {
-                MemberDto memberDto = memberMapper.memberToMemberDto(member);
-                alternateContactHelper.setAlternateContact(memberDto, member);
-                memberAddressHelper.setMemberAddress(memberDto, member);
-                memberPhoneHelper.setMemberPhone(memberDto, member);
-                memberLanguageHelper.setMemberLanguage(memberDto, member);
-                memberEmailHelper.setMemberEmail(memberDto, member);
-                memberIdentifierHelper.setMemberIdentifier(memberDto,member);
-                memberDtos.add(memberDto);
+            account.getMembers().forEach(member -> {
+                log.info("Member Changed:{}", isMemberChanged(member));
+                if(isMemberChanged(member)){
+                    MemberDto memberDto = memberMapper.memberToMemberDto(member);
+                    alternateContactHelper.setAlternateContact(memberDto, member);
+                    memberAddressHelper.setMemberAddress(memberDto, member);
+                    memberPhoneHelper.setMemberPhone(memberDto, member);
+                    memberLanguageHelper.setMemberLanguage(memberDto, member);
+                    memberEmailHelper.setMemberEmail(memberDto, member);
+                    memberIdentifierHelper.setMemberIdentifier(memberDto,member);
+                    memberDtos.add(memberDto);
+                }
             });
-            accountDto.setMembers(memberDtos.stream().collect(Collectors.toSet()));
+            if(memberDtos.size() > 0){
+                accountDto.setMembers(new HashSet<>(memberDtos));
+            }
+
         }
+    }
+
+    private boolean isMemberChanged(Member member){
+        return (member.getMemberAddresses() != null && !member.getMemberAddresses().isEmpty()) ||
+                (member.getMemberIdentifiers() != null && !member.getMemberIdentifiers().isEmpty()) ||
+                (member.getMemberLanguages() != null && !member.getMemberLanguages().isEmpty()) ||
+                (member.getMemberEmails() != null && !member.getMemberEmails().isEmpty()) ||
+                (member.getMemberPhones() != null && !member.getMemberPhones().isEmpty()) ||
+                (member.getAlternateContacts() != null && !member.getAlternateContacts().isEmpty()) ||
+                member.isChanged();
     }
 
     /**
@@ -156,10 +170,13 @@ public class MemberHelperImpl implements MemberHelper {
             memberEmailHelper.matchMemberEmail(member,primarySubscriber,transactionMemberDto);
             account.setMembers(List.of(member));
         }else{
+            log.info("Member count in account is greater than 1");
             // List to hold all the members from the transaction
             List<Member> members = new ArrayList<>();
             transactionDto.getMembers().forEach(transactionMemberDto -> {
+                log.info("Transaction Member :{}", transactionMemberDto.getTransactionMemberCode());
                 MemberDto memberDto = getMatchedMember(transactionMemberDto, accountDto.getMembers());
+                log.info("Member Dto matched:{}", memberDto);
                 Member member;
                 if(memberDto == null){
                     // Member is not present in MMS - This means it's a new member
@@ -167,6 +184,7 @@ public class MemberHelperImpl implements MemberHelper {
                     member = createMember(account,
                             transactionMemberDto,
                             null);
+                    createMemberDemographics(member, transactionMemberDto);
                 }else{
                     // Member is present in MMS - This means it's not a new member
                     // Create the member in the repository
@@ -185,6 +203,20 @@ public class MemberHelperImpl implements MemberHelper {
             // Add these members to the account
             account.setMembers(members);
         }
+    }
+
+    /**
+     * This method is called to create the member who is not present in the transaction
+     * but is present in the account
+     * @param memberDto - Member to be created
+     * @param account - The account for which the member is to be created
+     * @return
+     */
+    @Override
+    public Member createMember(MemberDto memberDto, Account account) {
+        Member member = memberMapper.memberDtoToMember(memberDto);
+        member.setAccount(account);
+        return memberRepository.save(member);
     }
 
     /**
@@ -262,36 +294,57 @@ public class MemberHelperImpl implements MemberHelper {
      * @return
      */
     private boolean isMemberMatch(TransactionMemberDto transactionMemberDto, MemberDto accountMemberDto){
+        boolean isMatched = false;
         // Get the SSN of the member if present in the transaction
         Optional<TransactionMemberIdentifierDto> optionalMemberTransactionSSN = transactionMemberDto.getIdentifiers()
                 .stream()
                 .filter(
-                        transactionMemberIdentifierDto -> transactionMemberIdentifierDto.getIdentifierValue().equals("SSN"))
+                        transactionMemberIdentifierDto -> transactionMemberIdentifierDto.getIdentifierTypeCode().equals("SSN"))
                 .findFirst();
+        log.info("Account Member Name:{}", accountMemberDto.getFirstName());
+        log.info("Account Member Relationship:{}", accountMemberDto.getRelationshipTypeCode());
+        log.info("Transaction Member Name:{}", transactionMemberDto.getFirstName());
+        log.info("Transaction Member Relationship:{}", transactionMemberDto.getRelationshipTypeCode());
         if(accountMemberDto.getRelationshipTypeCode().equals(transactionMemberDto.getRelationshipTypeCode())){
+            log.info("Relationships are matching:{}", optionalMemberTransactionSSN);
+            log.info("Transaction member identifiers:{}", transactionMemberDto.getIdentifiers());
             // Get the SSN of the member if present in the account
             if(optionalMemberTransactionSSN.isPresent()){
                 String transactionSSN = optionalMemberTransactionSSN.get().getIdentifierValue();
+                log.info("Transaction Member SSN:{}", transactionSSN);
+                log.info("Account Member Identifiers:{}", accountMemberDto.getMemberIdentifiers());
                 Optional<MemberIdentifierDto> optionalMemberAccountSSN = accountMemberDto.getMemberIdentifiers()
                         .stream()
                         .filter(
-                                memberIdentifierDto -> memberIdentifierDto.getIdentifierValue().equals("SSN")
+                                memberIdentifierDto -> memberIdentifierDto.getIdentifierTypeCode().equals("SSN")
                         ).findFirst();
                 if(optionalMemberAccountSSN.isPresent()){
                     String accountSSN = optionalMemberAccountSSN.get().getIdentifierValue();
+                    log.info("Account Member SSN:{}", accountSSN);
                     // SSN is present in both the transaction and the account
                     // if they match indicate that the member is a match
-                    return accountSSN.equals(transactionSSN);
+                    isMatched = accountSSN.equals(transactionSSN);
                 }
             }
-            // If the SSN does not match, match by first name, last name and date of birth
-            // If they all match, indicate that the member is match
-            return transactionMemberDto.getFirstName().equals(accountMemberDto.getFirstName()) &&
-                    transactionMemberDto.getLastName().equals(accountMemberDto.getLastName()) &&
-                    transactionMemberDto.getDateOfBirth().isEqual(accountMemberDto.getDateOfBirth());
+            if(isMatched){
+                return isMatched;
+            }else{
+                // If the SSN does not match, match by first name, last name and date of birth
+                // If they all match, indicate that the member is match
+                log.info("First Name Match:{}", transactionMemberDto.getFirstName().equals(accountMemberDto.getFirstName()));
+                log.info("Last Name Match:{}", transactionMemberDto.getLastName().equals(accountMemberDto.getLastName()));
+                log.info("DOB Match:{}", transactionMemberDto.getDateOfBirth().isEqual(accountMemberDto.getDateOfBirth()));
+                log.info("Name and DOB match:{}", transactionMemberDto.getFirstName().equals(accountMemberDto.getFirstName()) &&
+                        transactionMemberDto.getLastName().equals(accountMemberDto.getLastName()) &&
+                        transactionMemberDto.getDateOfBirth().isEqual(accountMemberDto.getDateOfBirth()));
+                return transactionMemberDto.getFirstName().equals(accountMemberDto.getFirstName()) &&
+                        transactionMemberDto.getLastName().equals(accountMemberDto.getLastName()) &&
+                        transactionMemberDto.getDateOfBirth().isEqual(accountMemberDto.getDateOfBirth());
+            }
+
 
         }
-        // If the member did not match by relationship type and by either SSN or first, last and DOB then
+        // If the member did not match by relationship type then
         // indicate that the member is not a match
         return false;
     }
@@ -304,6 +357,10 @@ public class MemberHelperImpl implements MemberHelper {
      */
     private boolean doMemberChange(TransactionMemberDto transactionMemberDto, MemberDto accountMemberDto){
         boolean memberUpdated = false;
+        // if the member is not in the account then it is a new member for the account
+        if (accountMemberDto == null){
+            return true;
+        }
         // Check if first name of the member has changed
         if(transactionMemberDto.getFirstName() != null && !transactionMemberDto.getFirstName().equals(accountMemberDto.getFirstName())){
             accountMemberDto.setFirstName(transactionMemberDto.getFirstName());
@@ -336,5 +393,20 @@ public class MemberHelperImpl implements MemberHelper {
         // Check if the weight of the member has changed
 
         return memberUpdated;
+    }
+
+    /**
+     * Common method that is called to create the member demographics like
+     * Address, Phone, Email, Alternate Contacts to be created for a new member.
+     * @param member
+     * @param transactionMemberDto
+     */
+    private void createMemberDemographics(Member member, TransactionMemberDto transactionMemberDto){
+        memberAddressHelper.createMemberAddress(member, transactionMemberDto);
+        memberEmailHelper.createMemberEmail(member, transactionMemberDto);
+        memberPhoneHelper.createMemberPhone(member, transactionMemberDto);
+        memberLanguageHelper.createMemberLanguage(member, transactionMemberDto);
+        memberIdentifierHelper.createMemberIdentifier(member, transactionMemberDto);
+        alternateContactHelper.createAlternateContact(member, transactionMemberDto);
     }
 }

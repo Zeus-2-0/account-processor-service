@@ -1,8 +1,11 @@
 package com.brihaspathee.zeus.helper.interfaces;
 
 import com.brihaspathee.zeus.domain.entity.Member;
+import com.brihaspathee.zeus.dto.account.AlternateContactDto;
 import com.brihaspathee.zeus.dto.account.MemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
+
+import java.util.List;
 
 /**
  * Created in Intellij IDEA
