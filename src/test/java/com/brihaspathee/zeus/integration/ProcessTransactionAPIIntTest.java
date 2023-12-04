@@ -7,6 +7,7 @@ import com.brihaspathee.zeus.test.TestClass;
 import com.brihaspathee.zeus.test.validator.AccountValidation;
 import com.brihaspathee.zeus.web.model.TestAccountProcessingRequest;
 import com.brihaspathee.zeus.web.response.ZeusApiResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -98,9 +99,9 @@ public class ProcessTransactionAPIIntTest {
      * This method tests the processing of the transaction
      * @param repetitionInfo the repetition identifies the test iteration
      */
-    @RepeatedTest(12)
+    @RepeatedTest(36)
     @Order(1)
-    void testProcessTransaction(RepetitionInfo repetitionInfo){
+    void testProcessTransaction(RepetitionInfo repetitionInfo) throws JsonProcessingException {
         log.info("Current Repetition:{}", repetitionInfo.getCurrentRepetition());
 
         // Retrieve the accounting processing request for the repetition

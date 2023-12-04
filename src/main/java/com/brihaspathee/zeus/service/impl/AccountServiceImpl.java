@@ -87,6 +87,11 @@ public class AccountServiceImpl implements AccountService {
     private final AddTransactionHelper addTransactionHelper;
 
     /**
+     * Change Transaction helper instance to process CHANGE transactions
+     */
+    private final ChangeTransactionHelper changeTransactionHelper;
+
+    /**
      * The utility class for account processor service
      */
     private final AccountProcessorUtil accountProcessorUtil;
@@ -165,7 +170,15 @@ public class AccountServiceImpl implements AccountService {
                 .lineOfBusinessTypeCode(transactionDto.getTradingPartnerDto().getLineOfBusinessTypeCode())
                 .build();
         account = accountRepository.save(account);
-        account = addTransactionHelper.updateAccount(accountDto, account, transactionDto, transaction);
+        // TODO
+        // Check for the transaction type of the transaction and invoke the appropriate helper class
+        String transactionTypeCode = transactionDto.getTransactionDetail().getTransactionTypeCode();
+        if (transactionTypeCode.equals("ADD")){
+            account = addTransactionHelper.updateAccount(accountDto, account, transactionDto, transaction);
+        } else if (transactionTypeCode.equals("CHANGE")){
+            account = changeTransactionHelper.updateAccount(accountDto, account, transactionDto, transaction);
+        }
+
         return createAccountDto(account, transactionDto.getZtcn());
     }
 

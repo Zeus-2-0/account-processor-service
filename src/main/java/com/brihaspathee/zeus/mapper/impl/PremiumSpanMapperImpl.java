@@ -36,7 +36,7 @@ public class PremiumSpanMapperImpl implements PremiumSpanMapper {
             return null;
         }
         PremiumSpanDto premiumSpanDto = PremiumSpanDto.builder()
-                .premiumSpanSK(premiumSpan.getPremiumSpanSK())
+                .premiumSpanSK(premiumSpan.getAcctPremiumSpanSK())
                 .premiumSpanCode(premiumSpan.getPremiumSpanCode())
                 .ztcn(premiumSpan.getZtcn())
                 .startDate(premiumSpan.getStartDate())
@@ -63,6 +63,7 @@ public class PremiumSpanMapperImpl implements PremiumSpanMapper {
         }
         PremiumSpan premiumSpan = PremiumSpan.builder()
                 .premiumSpanCode(premiumSpanDto.getPremiumSpanCode())
+                .acctPremiumSpanSK(premiumSpanDto.getPremiumSpanSK())
                 .ztcn(premiumSpanDto.getZtcn())
                 .startDate(premiumSpanDto.getStartDate())
                 .endDate(premiumSpanDto.getEndDate())

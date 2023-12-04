@@ -3,9 +3,11 @@ package com.brihaspathee.zeus.helper.interfaces;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
 import com.brihaspathee.zeus.domain.entity.PremiumSpan;
+import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.info.ChangeTransactionInfo;
 
 import java.util.List;
 
@@ -46,4 +48,20 @@ public interface PremiumSpanHelper {
      * @return return the saved premium spans
      */
     List<PremiumSpan> saveUpdatedPremiumSpans(List<PremiumSpanDto> premiumSpanDtos, EnrollmentSpan enrollmentSpan);
+
+    /**
+     * Process a financial change for a transaction
+     * @param changeTransactionInfo - Contains details about the change transaction
+     * @param transactionDto - Change transaction as received
+     * @param accountDto - the account for which the transaction was reeived
+     * @param account - the account entity
+     * @param enrollmentSpan - enrollmentSpan entity that is created
+     * @param matchedEnrollmentSpanDto - The enrollment span that was matched for the change transaction
+     */
+    void processFinancialChange(ChangeTransactionInfo changeTransactionInfo,
+                                TransactionDto transactionDto,
+                                Account account,
+                                AccountDto accountDto,
+                                EnrollmentSpan enrollmentSpan,
+                                EnrollmentSpanDto matchedEnrollmentSpanDto);
 }

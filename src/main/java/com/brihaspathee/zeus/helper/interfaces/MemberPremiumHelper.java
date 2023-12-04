@@ -1,7 +1,10 @@
 package com.brihaspathee.zeus.helper.interfaces;
 
+import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.entity.PremiumSpan;
+import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.account.MemberPremiumDto;
 import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 
@@ -19,7 +22,7 @@ import java.util.List;
 public interface MemberPremiumHelper {
 
     /**
-     * Create member premiums
+     * Create member premiums - this is called for ADD transaction
      * @param transactionMemberDtos
      * @param premiumSpan
      * @param members
@@ -36,4 +39,18 @@ public interface MemberPremiumHelper {
      * @param premiumSpan
      */
     void setMemberPremiums(PremiumSpanDto premiumSpanDto, PremiumSpan premiumSpan);
+
+    /**
+     * Create member premiums for change transaction
+     * @param matchedPremiumSpanDto
+     * @param account
+     * @param accountDto
+     * @param transactionMemberDtos
+     * @param premiumSpan
+     */
+    void createMemberPremiums(PremiumSpanDto matchedPremiumSpanDto,
+                                     Account account,
+                                     AccountDto accountDto,
+                                     List<TransactionMemberDto> transactionMemberDtos,
+                                     PremiumSpan premiumSpan);
 }

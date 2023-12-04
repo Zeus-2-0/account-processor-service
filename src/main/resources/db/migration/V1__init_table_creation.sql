@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `accountprocessordb`.`member` (
     `member_sk` VARCHAR(36) NOT NULL COMMENT 'Primary key of the table',
     `account_sk` VARCHAR(36) NOT NULL COMMENT 'The foreign key connects the member with the account',
     `acct_member_sk` VARCHAR(36) NULL COMMENT 'The key that is assigned to the member in MMS. This will be NULL if the member is not present in the MMS',
-    `trans_member_code` VARCHAR(50) NOT NULL COMMENT 'The unique code for the member by Transaction manager',
+    `trans_member_code` VARCHAR(50) NULL COMMENT 'The unique code for the member by Transaction manager',
     `member_code` VARCHAR(50) NOT NULL,
     `relationship_type_code` VARCHAR(50) NOT NULL,
     `first_name` VARCHAR(100) NOT NULL,

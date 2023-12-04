@@ -84,6 +84,7 @@ public class EnrollmentSpanMapperImpl implements EnrollmentSpanMapper {
         }
         EnrollmentSpan enrollmentSpan = EnrollmentSpan.builder()
                 .enrollmentSpanCode(enrollmentSpanDto.getEnrollmentSpanCode())
+                .acctEnrollmentSpanSK(enrollmentSpanDto.getEnrollmentSpanSK())
                 .ztcn(enrollmentSpanDto.getZtcn())
                 .stateTypeCode(enrollmentSpanDto.getStateTypeCode())
                 .marketplaceTypeCode(enrollmentSpanDto.getMarketplaceTypeCode())

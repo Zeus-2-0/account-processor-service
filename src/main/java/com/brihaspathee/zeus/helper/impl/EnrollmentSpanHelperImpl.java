@@ -14,6 +14,7 @@ import com.brihaspathee.zeus.dto.transaction.TransactionMemberIdentifierDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionRateDto;
 import com.brihaspathee.zeus.helper.interfaces.EnrollmentSpanHelper;
 import com.brihaspathee.zeus.helper.interfaces.PremiumSpanHelper;
+import com.brihaspathee.zeus.info.ChangeTransactionInfo;
 import com.brihaspathee.zeus.mapper.interfaces.EnrollmentSpanMapper;
 import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
@@ -371,6 +372,29 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
             log.info("Saved Enrollment span ztcn after:{}", enrollmentSpan.getZtcn());
         });
         account.setEnrollmentSpan(updatedEnrollmentSpans);
+    }
+
+    /**
+     * Process the financial change for the enrollment span
+     * @param changeTransactionInfo - Details associated with the change transaction
+     * @param transactionDto - Change transaction data
+     * @param account - The account entity
+     * @param accountDto - the account for which the transaction was received
+     * @param matchedEnrollmentSpanDto - The matched enrollment span
+     */
+    @Override
+    public void processFinancialChange(ChangeTransactionInfo changeTransactionInfo,
+                                       TransactionDto transactionDto,
+                                       Account account,
+                                       AccountDto accountDto,
+                                       EnrollmentSpanDto matchedEnrollmentSpanDto) {
+        EnrollmentSpan enrollmentSpan = enrollmentSpanMapper.enrollmentSpanDtoToEnrollmentSpan(matchedEnrollmentSpanDto);
+        enrollmentSpan.setAccount(account);
+        enrollmentSpan.setChanged(false);
+        enrollmentSpan = enrollmentSpanRepository.save(enrollmentSpan);
+        account.setEnrollmentSpan(List.of(enrollmentSpan));
+        premiumSpanHelper.processFinancialChange(changeTransactionInfo, transactionDto,
+                account, accountDto, enrollmentSpan, matchedEnrollmentSpanDto);
     }
 
     /**

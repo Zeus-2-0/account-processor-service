@@ -30,4 +30,18 @@ public interface MemberPremiumMapper {
      */
     List<MemberPremiumDto> memberPremiumsToMemberPremiumDtos(List<MemberPremium> memberPremiums);
 
+    /**
+     * Convert member premium dto to member premium
+     * @param memberPremiumDto
+     * @return
+     */
+    MemberPremium memberPremiumDtoToMemberPremium(MemberPremiumDto memberPremiumDto);
+
+    /**
+     * Convert member premium dtos to member premium entities
+     * @param memberPremiumDtos
+     * @return
+     */
+    List<MemberPremium> memberPremiumDtosToMemberPremiums(List<MemberPremiumDto> memberPremiumDtos);
+
 }
