@@ -8,6 +8,7 @@ import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionRateDto;
 import com.brihaspathee.zeus.helper.interfaces.ChangeTransactionHelper;
 import com.brihaspathee.zeus.helper.interfaces.EnrollmentSpanHelper;
@@ -52,14 +53,11 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
      * @param accountDto account information that was retrieved from MMS
      * @param account Account that needs to be updated
      * @param transactionDto the dto object that was received for processing the account
-     * @param transaction the entity object that was persisted in APS
-     * @return the account dto object that was updated
      */
     @Override
-    public Account updateAccount(AccountDto accountDto,
+    public void updateAccount(AccountDto accountDto,
                                  Account account,
-                                 TransactionDto transactionDto,
-                                 Transaction transaction) throws JsonProcessingException {
+                                 TransactionDto transactionDto) throws JsonProcessingException {
         // Identify if there are any member level changes (Demographic, Addresses, Communication etc.) to the account
         memberHelper.matchMember(accountDto, transactionDto, account);
         // Identify if the change transaction is a financial or non-financial change
@@ -80,7 +78,6 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
                     matchedEnrollmentSpan);
 
         }
-        return account;
     }
 
 
@@ -133,7 +130,7 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
             // if any of them are different then set the financial change flag as true
             List<PremiumSpanUpdateInfo> premiumSpanUpdateInfos = new ArrayList<>();
             sortedPremiumTotals.forEach(preAmtTotRate -> updatePremiumSpanUpdateInfo(premiumSpanUpdateInfos, preAmtTotRate,
-                    transactionDto.getTransactionRates(),
+                    transactionDto,
                     matchedEnrollmentSpan));
             log.info("Premium Span Update Infos in Change Transaction Helper:{}", premiumSpanUpdateInfos);
             boolean isPremiumSpanUpdatedRequired = premiumSpanUpdateInfos.stream()
@@ -157,8 +154,10 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
 
             PremiumSpanDto matchedPremiumSpan = retrieveMatchingPremiumSpan(matchedEnrollmentSpan, changeEffectiveDate);
             premiumSpanUpdateInfo.setMatchedPremiumSpanSK(matchedPremiumSpan.getPremiumSpanSK());
-            // Set premium spans update required to true if there is a CSR Variant change
-            changeTransactionInfo.setPremiumSpanUpdateRequired(!csrVariant.equals(matchedPremiumSpan.getCsrVariant()));
+            // Set premium spans update required to true if there is a CSR Variant change or if a dep is added/canceled/termed
+            changeTransactionInfo.setPremiumSpanUpdateRequired(
+                    (!csrVariant.equals(matchedPremiumSpan.getCsrVariant()) ||
+                    isDepAddedOrCanceled(transactionDto)));
             // If CSR Variant is not changed then check if the amounts have changed
             if(!changeTransactionInfo.isPremiumSpanUpdateRequired()){
                 // Set premium spans update required to true if there is are any amounts changed
@@ -280,14 +279,15 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
      * @param premiumSpanUpdateInfos - List of premium span update info object that will be populated
      * @param preAmtTotRateDto - The premium amt tot rate that will have the start date, end date and
      *                         csr variant that needs to be used for the respective premium span
-     * @param transactionRates - the list of transaction rates received in the transaction
+     * @param transactionDto - The transaction dto
      * @param matchedEnrollmentSpan - the matched enrollment span
      */
     private void updatePremiumSpanUpdateInfo(List<PremiumSpanUpdateInfo> premiumSpanUpdateInfos,
                                       TransactionRateDto preAmtTotRateDto,
-                                      List<TransactionRateDto> transactionRates,
+                                      TransactionDto transactionDto,
                                       EnrollmentSpanDto matchedEnrollmentSpan){
-        log.info("Premium Span Updated Info - Update Premium Span Method:{}", premiumSpanUpdateInfos);
+//        log.info("Premium Span Updated Info - Update Premium Span Method:{}", premiumSpanUpdateInfos);
+        List<TransactionRateDto> transactionRates = transactionDto.getTransactionRates();
         PremiumSpanUpdateInfo premiumSpanUpdateInfo = PremiumSpanUpdateInfo.builder()
                 .build();
         LocalDate effectiveDate = preAmtTotRateDto.getRateStartDate();
@@ -308,7 +308,7 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
                 .anyMatch(premSpanUpdInfo ->
                         premSpanUpdInfo.getMatchedPremiumSpanSK()
                                 .equals(matchedPremiumSpan.getPremiumSpanSK()));
-        log.info("Matched Premium Span Exist:{}", matchedPremiumSpanExist);
+//        log.info("Matched Premium Span Exist:{}", matchedPremiumSpanExist);
         premiumSpanUpdateInfo.setMatchedPremiumSpanSK(matchedPremiumSpan.getPremiumSpanSK());
         if(!effectiveDate.equals(matchedPremiumSpan.getStartDate())){
             // Dates are not equal, so the matching premium span has to be canceled and a new one should be created
@@ -322,9 +322,10 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
             boolean isAmountUpdated = isAmountUpdated(transactionRateDtos, matchedPremiumSpan);
             // Check if the CSR Variant is updated
             boolean isCSRVariantUpdated = !csrVariant.equals(matchedPremiumSpan.getCsrVariant());
+            boolean isDepAddedOrCanceledOrTermed = isDepAddedOrCanceled(transactionDto, effectiveDate, rateEndDate);
             // Check if the end date is different
             boolean isEndDateDifferent = !rateEndDate.isEqual(matchedPremiumSpan.getEndDate());
-            if (isAmountUpdated || isCSRVariantUpdated){
+            if (isAmountUpdated || isCSRVariantUpdated || isDepAddedOrCanceledOrTermed){
                 // If either the amounts or the CSR Variant is updated
                 // The matching premium span has to be canceled and new one should be created
                 premiumSpanUpdateInfo.setUpdateRequired(1);
@@ -410,6 +411,47 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
         }else {
             premiumSpanUpdateInfo.setOtherPayAmt(
                     premiumSpanUpdateInfo.getOtherPayAmt().add(otherPayAmount));
+        }
+    }
+
+    /**
+     * Check if a dependent is being added or canceled
+     * @param transactionDto
+     * @return
+     */
+    private boolean isDepAddedOrCanceled(TransactionDto transactionDto){
+        return transactionDto.getMembers().stream().anyMatch(transactionMemberDto ->
+                transactionMemberDto.getTransactionTypeCode().equals("CANCEL") ||
+                transactionMemberDto.getTransactionTypeCode().equals("TERM") ||
+                transactionMemberDto.getTransactionTypeCode().equals("ADD"));
+    }
+
+    private boolean isDepAddedOrCanceled(TransactionDto transactionDto, LocalDate startDate, LocalDate endDate){
+        boolean isMemberAddedCanceledOrTermed = transactionDto.getMembers().stream().anyMatch(transactionMemberDto ->
+                transactionMemberDto.getTransactionTypeCode().equals("CANCEL") ||
+                        transactionMemberDto.getTransactionTypeCode().equals("TERM") ||
+                        transactionMemberDto.getTransactionTypeCode().equals("ADD"));
+        if(!isMemberAddedCanceledOrTermed){
+            return false;
+        }else{
+            List<TransactionMemberDto> memberDtos = transactionDto.getMembers().stream().filter(transactionMemberDto ->
+                    transactionMemberDto.getTransactionTypeCode().equals("CANCEL") ||
+                            transactionMemberDto.getTransactionTypeCode().equals("TERM") ||
+                            transactionMemberDto.getTransactionTypeCode().equals("ADD")).toList();
+            // retrieve all members who are being added or termed or canceled
+            return memberDtos.stream().anyMatch(transactionMemberDto -> {
+               String transactionTypeCode = transactionMemberDto.getTransactionTypeCode();
+                LocalDate effectiveDate = transactionMemberDto.getEffectiveDate();
+               if(transactionTypeCode.equals("ADD")){
+                   return effectiveDate.isBefore(startDate) ||
+                           effectiveDate.isEqual(startDate) ||
+                           effectiveDate.isEqual(endDate) ||
+                           (effectiveDate.isAfter(startDate) && effectiveDate.isBefore(endDate));
+               }else{
+                   return effectiveDate.isBefore(startDate) ||
+                           effectiveDate.isEqual(startDate);
+               }
+            });
         }
     }
 }

@@ -114,7 +114,7 @@ public class MemberHelperImpl implements MemberHelper {
         if(account.getMembers() != null && account.getMembers().size() > 0){
             List<MemberDto> memberDtos = new ArrayList<>();
             account.getMembers().forEach(member -> {
-                log.info("Member Changed:{}", isMemberChanged(member));
+//                log.info("Member Changed:{}", isMemberChanged(member));
                 if(isMemberChanged(member)){
                     MemberDto memberDto = memberMapper.memberToMemberDto(member);
                     alternateContactHelper.setAlternateContact(memberDto, member);
@@ -160,6 +160,8 @@ public class MemberHelperImpl implements MemberHelper {
         if(accountDto.getMembers().size() == 1 && transactionDto.getMembers().size() == 1){
             MemberDto primarySubscriber = accountDto.getMembers().stream().findFirst().orElseThrow();
             TransactionMemberDto transactionMemberDto = transactionDto.getMembers().get(0);
+            // Set the member code from MMS in the transaction member DTO
+            transactionMemberDto.setMmsMemberCode(primarySubscriber.getMemberCode());
             Member member = createMember(account,
                     transactionMemberDto,
                     primarySubscriber);
@@ -170,13 +172,13 @@ public class MemberHelperImpl implements MemberHelper {
             memberEmailHelper.matchMemberEmail(member,primarySubscriber,transactionMemberDto);
             account.setMembers(List.of(member));
         }else{
-            log.info("Member count in account is greater than 1");
+//            log.info("Member count in account is greater than 1");
             // List to hold all the members from the transaction
             List<Member> members = new ArrayList<>();
             transactionDto.getMembers().forEach(transactionMemberDto -> {
-                log.info("Transaction Member :{}", transactionMemberDto.getTransactionMemberCode());
+//                log.info("Transaction Member :{}", transactionMemberDto.getTransactionMemberCode());
                 MemberDto memberDto = getMatchedMember(transactionMemberDto, accountDto.getMembers());
-                log.info("Member Dto matched:{}", memberDto);
+//                log.info("Member Dto matched:{}", memberDto);
                 Member member;
                 if(memberDto == null){
                     // Member is not present in MMS - This means it's a new member
@@ -187,6 +189,9 @@ public class MemberHelperImpl implements MemberHelper {
                     createMemberDemographics(member, transactionMemberDto);
                 }else{
                     // Member is present in MMS - This means it's not a new member
+                    // Set the MMS member code in the transaction member dto
+                    // so that we can infer the member to which the member in the transaction was matched
+                    transactionMemberDto.setMmsMemberCode(memberDto.getMemberCode());
                     // Create the member in the repository
                     member = createMember(account,
                             transactionMemberDto,
@@ -244,7 +249,7 @@ public class MemberHelperImpl implements MemberHelper {
     private Member createMember(Account account,
                                 TransactionMemberDto transactionMemberDto,
                                 MemberDto memberDto) {
-        log.info("member detail:{}", transactionMemberDto);
+//        log.info("member detail:{}", transactionMemberDto);
         Member member = Member.builder()
                 .account(account)
                 // The member code assigned for the member in the transaction manager service
@@ -301,18 +306,18 @@ public class MemberHelperImpl implements MemberHelper {
                 .filter(
                         transactionMemberIdentifierDto -> transactionMemberIdentifierDto.getIdentifierTypeCode().equals("SSN"))
                 .findFirst();
-        log.info("Account Member Name:{}", accountMemberDto.getFirstName());
-        log.info("Account Member Relationship:{}", accountMemberDto.getRelationshipTypeCode());
-        log.info("Transaction Member Name:{}", transactionMemberDto.getFirstName());
-        log.info("Transaction Member Relationship:{}", transactionMemberDto.getRelationshipTypeCode());
+//        log.info("Account Member Name:{}", accountMemberDto.getFirstName());
+//        log.info("Account Member Relationship:{}", accountMemberDto.getRelationshipTypeCode());
+//        log.info("Transaction Member Name:{}", transactionMemberDto.getFirstName());
+//        log.info("Transaction Member Relationship:{}", transactionMemberDto.getRelationshipTypeCode());
         if(accountMemberDto.getRelationshipTypeCode().equals(transactionMemberDto.getRelationshipTypeCode())){
-            log.info("Relationships are matching:{}", optionalMemberTransactionSSN);
-            log.info("Transaction member identifiers:{}", transactionMemberDto.getIdentifiers());
+//            log.info("Relationships are matching:{}", optionalMemberTransactionSSN);
+//            log.info("Transaction member identifiers:{}", transactionMemberDto.getIdentifiers());
             // Get the SSN of the member if present in the account
             if(optionalMemberTransactionSSN.isPresent()){
                 String transactionSSN = optionalMemberTransactionSSN.get().getIdentifierValue();
-                log.info("Transaction Member SSN:{}", transactionSSN);
-                log.info("Account Member Identifiers:{}", accountMemberDto.getMemberIdentifiers());
+//                log.info("Transaction Member SSN:{}", transactionSSN);
+//                log.info("Account Member Identifiers:{}", accountMemberDto.getMemberIdentifiers());
                 Optional<MemberIdentifierDto> optionalMemberAccountSSN = accountMemberDto.getMemberIdentifiers()
                         .stream()
                         .filter(
@@ -320,7 +325,7 @@ public class MemberHelperImpl implements MemberHelper {
                         ).findFirst();
                 if(optionalMemberAccountSSN.isPresent()){
                     String accountSSN = optionalMemberAccountSSN.get().getIdentifierValue();
-                    log.info("Account Member SSN:{}", accountSSN);
+//                    log.info("Account Member SSN:{}", accountSSN);
                     // SSN is present in both the transaction and the account
                     // if they match indicate that the member is a match
                     isMatched = accountSSN.equals(transactionSSN);
@@ -331,12 +336,6 @@ public class MemberHelperImpl implements MemberHelper {
             }else{
                 // If the SSN does not match, match by first name, last name and date of birth
                 // If they all match, indicate that the member is match
-                log.info("First Name Match:{}", transactionMemberDto.getFirstName().equals(accountMemberDto.getFirstName()));
-                log.info("Last Name Match:{}", transactionMemberDto.getLastName().equals(accountMemberDto.getLastName()));
-                log.info("DOB Match:{}", transactionMemberDto.getDateOfBirth().isEqual(accountMemberDto.getDateOfBirth()));
-                log.info("Name and DOB match:{}", transactionMemberDto.getFirstName().equals(accountMemberDto.getFirstName()) &&
-                        transactionMemberDto.getLastName().equals(accountMemberDto.getLastName()) &&
-                        transactionMemberDto.getDateOfBirth().isEqual(accountMemberDto.getDateOfBirth()));
                 return transactionMemberDto.getFirstName().equals(accountMemberDto.getFirstName()) &&
                         transactionMemberDto.getLastName().equals(accountMemberDto.getLastName()) &&
                         transactionMemberDto.getDateOfBirth().isEqual(accountMemberDto.getDateOfBirth());

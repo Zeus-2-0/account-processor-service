@@ -92,6 +92,21 @@ public class AccountServiceImpl implements AccountService {
     private final ChangeTransactionHelper changeTransactionHelper;
 
     /**
+     * Cancel Transaction helper instance to process CANCEL transactions
+     */
+    private final CancelTransactionHelper cancelTransactionHelper;
+
+    /**
+     * Term Transaction helper instance to process TERM transactions
+     */
+    private final TermTransactionHelper termTransactionHelper;
+
+    /**
+     * Reinstatement Transaction helper instance to process REINSTATEMENT transactions
+     */
+    private final ReinstatementTransactionHelper reinstatementTransactionHelper;
+
+    /**
      * The utility class for account processor service
      */
     private final AccountProcessorUtil accountProcessorUtil;
@@ -170,13 +185,18 @@ public class AccountServiceImpl implements AccountService {
                 .lineOfBusinessTypeCode(transactionDto.getTradingPartnerDto().getLineOfBusinessTypeCode())
                 .build();
         account = accountRepository.save(account);
-        // TODO
         // Check for the transaction type of the transaction and invoke the appropriate helper class
         String transactionTypeCode = transactionDto.getTransactionDetail().getTransactionTypeCode();
         if (transactionTypeCode.equals("ADD")){
-            account = addTransactionHelper.updateAccount(accountDto, account, transactionDto, transaction);
+            addTransactionHelper.updateAccount(accountDto, account, transactionDto);
         } else if (transactionTypeCode.equals("CHANGE")){
-            account = changeTransactionHelper.updateAccount(accountDto, account, transactionDto, transaction);
+            changeTransactionHelper.updateAccount(accountDto, account, transactionDto);
+        } else if (transactionTypeCode.equals("CANCEL")){
+            cancelTransactionHelper.updateAccount(accountDto, account, transactionDto);
+        }else if (transactionTypeCode.equals("TERM")){
+            termTransactionHelper.updateAccount(accountDto, account, transactionDto);
+        }else if (transactionTypeCode.equals("REINSTATEMENT")){
+            reinstatementTransactionHelper.updateAccount(accountDto, account, transactionDto);
         }
 
         return createAccountDto(account, transactionDto.getZtcn());

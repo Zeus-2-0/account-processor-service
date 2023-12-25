@@ -59,18 +59,14 @@ public class AddTransactionHelperImpl implements AddTransactionHelper {
      * @param accountDto Account information retrieved from MMS
      * @param account Account that needs to be updated
      * @param transactionDto the dto object that was received for processing the account
-     * @param transaction the entity object that was persisted in APS
-     * @return the account object that was updated
      */
     @Override
-    public Account updateAccount(AccountDto accountDto,
+    public void updateAccount(AccountDto accountDto,
                                     Account account,
-                                    TransactionDto transactionDto,
-                                    Transaction transaction) throws JsonProcessingException {
+                                    TransactionDto transactionDto) throws JsonProcessingException {
         // Match the members in the transaction and create them in the APS repository
         memberHelper.matchMember(accountDto,transactionDto, account);
         enrollmentSpanHelper.updateEnrollmentSpans(accountDto, transactionDto, account);
-        return account;
     }
 
 

@@ -128,7 +128,7 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
      */
     @Override
     public void matchMemberLanguage(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
-        log.info("Inside member match language");
+//        log.info("Inside member match language");
         // Check if the transaction has any languages for the member
         // If there are no languages in the transaction then return
         if(transactionMemberDto.getLanguages() == null ||

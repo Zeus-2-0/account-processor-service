@@ -64,6 +64,8 @@ CREATE TABLE IF NOT EXISTS `accountprocessordb`.`enrollment_span` (
     `paid_through_date` DATE NULL,
     `claim_paid_through_date` DATE NULL COMMENT 'The claim paid through date associated with the enrollment span',
     `status_type_code` VARCHAR(50) NOT NULL COMMENT 'The status of the enrollment span',
+    `effective_reason` VARCHAR(150) NULL COMMENT 'The effective reason of the enrollment span',
+    `term_reason` VARCHAR(150) NULL COMMENT 'The term reason of the enrollment span',
     `changed` BOOLEAN NOT NULL COMMENT 'Indicates if entity was updated by the transaction',
     `created_date` DATETIME NULL COMMENT 'The date when the record is created',
     `updated_date` DATETIME NULL COMMENT 'The date when the record is updated',

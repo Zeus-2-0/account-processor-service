@@ -101,7 +101,7 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
      */
     @Override
     public void matchMemberAddress(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
-        log.info("Inside member match address");
+//        log.info("Inside member match address");
         // Check if the transaction has any addresses for the member
         // If there are no addresses in the transaction then return
         if (transactionMemberDto.getMemberAddresses() == null ||

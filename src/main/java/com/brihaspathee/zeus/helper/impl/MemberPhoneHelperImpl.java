@@ -129,7 +129,7 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
      */
     @Override
     public void matchMemberPhone(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
-        log.info("Inside member match phone");
+//        log.info("Inside member match phone");
         // check if the transaction has any languages for the member
         // if there are no languages in the transaction then return
         if (transactionMemberDto.getMemberPhones() == null ||

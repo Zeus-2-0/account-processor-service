@@ -55,6 +55,8 @@ public class EnrollmentSpanMapperImpl implements EnrollmentSpanMapper {
                 .paidThroughDate(enrollmentSpan.getPaidThroughDate())
                 .claimPaidThroughDate(enrollmentSpan.getClaimPaidThroughDate())
                 .statusTypeCode(enrollmentSpan.getStatusTypeCode())
+                .effectiveReason(enrollmentSpan.getEffectiveReason())
+                .termReason(enrollmentSpan.getTermReason())
                 .changed(new AtomicBoolean(enrollmentSpan.isChanged()))
                 .createdDate(enrollmentSpan.getCreatedDate())
                 .updatedDate(enrollmentSpan.getUpdatedDate())
@@ -102,13 +104,15 @@ public class EnrollmentSpanMapperImpl implements EnrollmentSpanMapper {
                 .paidThroughDate(enrollmentSpanDto.getPaidThroughDate())
                 .claimPaidThroughDate(enrollmentSpanDto.getClaimPaidThroughDate())
                 .statusTypeCode(enrollmentSpanDto.getStatusTypeCode())
+                .effectiveReason(enrollmentSpanDto.getEffectiveReason())
+                .termReason(enrollmentSpanDto.getTermReason())
                 .createdDate(enrollmentSpanDto.getCreatedDate())
                 .updatedDate(enrollmentSpanDto.getUpdatedDate())
                 .build();
         if(enrollmentSpanDto.getChanged() != null){
-            enrollmentSpanDto.setChanged(enrollmentSpanDto.getChanged());
+            enrollmentSpan.setChanged(enrollmentSpanDto.getChanged().get());
         } else {
-            enrollmentSpanDto.setChanged(new AtomicBoolean(false));
+            enrollmentSpan.setChanged(false);
         }
         return enrollmentSpan;
     }

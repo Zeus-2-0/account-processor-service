@@ -80,4 +80,28 @@ public interface EnrollmentSpanHelper {
                                 Account account,
                                 AccountDto accountDto,
                                 EnrollmentSpanDto matchedEnrollmentSpanDto);
+
+    /**
+     * Cancel the enrollment span that is received in the transaction
+     * @param accountDto
+     * @param transactionDto
+     * @param account
+     */
+    void cancelEnrollmentSpan(AccountDto accountDto, TransactionDto transactionDto, Account account);
+
+    /**
+     * Term the enrollment span that is received in the transaction
+     * @param accountDto
+     * @param transactionDto
+     * @param account
+     */
+    void termEnrollmentSpan(AccountDto accountDto, TransactionDto transactionDto, Account account);
+
+    /**
+     * Reinstate the enrollment span that is received in the transaction
+     * @param accountDto
+     * @param transactionDto
+     * @param account
+     */
+    void reinstateEnrollmentSpan(AccountDto accountDto, TransactionDto transactionDto, Account account);
 }

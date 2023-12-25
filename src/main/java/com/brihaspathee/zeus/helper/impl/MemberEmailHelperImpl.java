@@ -131,7 +131,7 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
      */
     @Override
     public void matchMemberEmail(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
-        log.info("Inside member match email");
+//        log.info("Inside member match email");
         // Check if the transaction has any emails for the member
         // If there is no email in the transaction then return
         if(transactionMemberDto.getEmails() == null ||
