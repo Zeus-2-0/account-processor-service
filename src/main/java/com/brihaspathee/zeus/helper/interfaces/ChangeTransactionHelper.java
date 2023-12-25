@@ -22,11 +22,8 @@ public interface ChangeTransactionHelper {
      * @param accountDto account information that was retrieved from MMS
      * @param account Account that needs to be updated
      * @param transactionDto the dto object that was received for processing the account
-     * @param transaction the entity object that was persisted in APS
-     * @return the account dto object that was updated
      */
-    Account updateAccount(AccountDto accountDto,
+    void updateAccount(AccountDto accountDto,
                           Account account,
-                          TransactionDto transactionDto,
-                          Transaction transaction) throws JsonProcessingException;
+                          TransactionDto transactionDto) throws JsonProcessingException;
 }

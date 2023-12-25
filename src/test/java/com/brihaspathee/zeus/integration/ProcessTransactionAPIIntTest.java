@@ -1,6 +1,7 @@
 package com.brihaspathee.zeus.integration;
 
 import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
+import com.brihaspathee.zeus.constants.ZeusServiceNames;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.test.BuildTestData;
 import com.brihaspathee.zeus.test.TestClass;
@@ -91,6 +92,8 @@ public class ProcessTransactionAPIIntTest {
         // Read the file information and convert to test class object
         accountProcessingRequestTestClass = objectMapper.readValue(resourceFile.getFile(), new TypeReference<TestClass<TestAccountProcessingRequest>>() {});
 
+        accountValidation.setTestServiceName(ZeusServiceNames.ACCOUNT_PROCESSOR_SERVICE);
+
         // Build the test data for the test method that is to be executed
         this.requests = buildTestData.buildData(testInfo.getTestMethod().get().getName(),this.accountProcessingRequestTestClass);
     }
@@ -99,17 +102,17 @@ public class ProcessTransactionAPIIntTest {
      * This method tests the processing of the transaction
      * @param repetitionInfo the repetition identifies the test iteration
      */
-    @RepeatedTest(36)
+    @RepeatedTest(75)
     @Order(1)
-    void testProcessTransaction(RepetitionInfo repetitionInfo) throws JsonProcessingException {
+      void testProcessTransaction(RepetitionInfo repetitionInfo) throws JsonProcessingException {
         log.info("Current Repetition:{}", repetitionInfo.getCurrentRepetition());
 
         // Retrieve the accounting processing request for the repetition
         TestAccountProcessingRequest testAccountProcessingRequest = requests.get(repetitionInfo.getCurrentRepetition() - 1);
-        log.info("Test accounting processing request:{}", testAccountProcessingRequest);
+//        log.info("Test accounting processing request:{}", testAccountProcessingRequest);
         AccountDto expectedAccountDto = testAccountProcessingRequest.getExpectedAccountDto();
         AccountProcessingRequest accountProcessingRequest = testAccountProcessingRequest.getAccountProcessingRequest();
-        log.info("Entity Codes:{}", accountProcessingRequest.getTransactionDto().getEntityCodes());
+//        log.info("Entity Codes:{}", accountProcessingRequest.getTransactionDto().getEntityCodes());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<AccountProcessingRequest> httpEntity = new HttpEntity<>(accountProcessingRequest, headers);
@@ -121,7 +124,7 @@ public class ProcessTransactionAPIIntTest {
         // Get the account dto object
         AccountDto actualAccountDto =
                 objectMapper.convertValue(apiResponse.getResponse(), AccountDto.class);
-        log.info("Account Dto:{}", actualAccountDto);
+//        log.info("Account Dto:{}", actualAccountDto);
         accountValidation.assertAccount(expectedAccountDto, actualAccountDto);
     }
 }

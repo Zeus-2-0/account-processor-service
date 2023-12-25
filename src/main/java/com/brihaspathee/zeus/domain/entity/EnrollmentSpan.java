@@ -139,6 +139,18 @@ public class EnrollmentSpan {
     private String statusTypeCode;
 
     /**
+     * The effective reason that is associated with the enrollment span
+     */
+    @Column(name = "effective_reason", length = 150, columnDefinition = "varchar", nullable = true)
+    private String effectiveReason;
+
+    /**
+     * The term reason that is associated with the enrollment span
+     */
+    @Column(name = "term_reason", length = 150, columnDefinition = "varchar", nullable = true)
+    private String termReason;
+
+    /**
      * Identifies if the enrollment span is delinquent or not
      */
     @Column(name="delinq_ind")

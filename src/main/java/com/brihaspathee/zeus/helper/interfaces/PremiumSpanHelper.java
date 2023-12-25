@@ -64,4 +64,25 @@ public interface PremiumSpanHelper {
                                 AccountDto accountDto,
                                 EnrollmentSpan enrollmentSpan,
                                 EnrollmentSpanDto matchedEnrollmentSpanDto);
+
+    /**
+     * Cancel the premium spans associated with the enrollment span
+     * @param enrollmentSpanDto
+     * @param enrollmentSpan
+     */
+    void cancelPremiumSpans(EnrollmentSpanDto enrollmentSpanDto, EnrollmentSpan enrollmentSpan);
+
+    /**
+     * Term the premium spans associated with the enrollment span
+     * @param enrollmentSpanDto
+     * @param enrollmentSpan
+     */
+    void termPremiumSpans(EnrollmentSpanDto enrollmentSpanDto, EnrollmentSpan enrollmentSpan);
+
+    /**
+     * Reinstate the premium spans associated with the enrollment span
+     * @param enrollmentSpanDto
+     * @param enrollmentSpan
+     */
+    void reinstatePremiumSpans(EnrollmentSpanDto enrollmentSpanDto, EnrollmentSpan enrollmentSpan);
 }
