@@ -36,8 +36,8 @@ public class AccountProcessorUtil {
      */
     public String generateUniqueCode(Map<String, List<String>> entityCodes, String key){
         // Use the code from the test data if the profile is "test"
-        if(Arrays.asList(environment.getActiveProfiles()).contains("test")){
-//            log.info("Test Environment - entity codes:{}", entityCodes);
+        if(Arrays.asList(environment.getActiveProfiles()).contains("test") || Arrays.asList(environment.getActiveProfiles()).contains("int-test")){
+            log.info("Test Environment - entity codes:{}", entityCodes);
             if(entityCodes.get(key) != null && entityCodes.get(key).get(0)!=null){
                 String code = entityCodes.get(key).get(0);
                 entityCodes.get(key).remove(code);
