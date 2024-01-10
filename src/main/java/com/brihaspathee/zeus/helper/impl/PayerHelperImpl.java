@@ -65,6 +65,8 @@ public class PayerHelperImpl implements PayerHelper {
                     .payerCode(payerCode)
                     .payerName(transactionDto.getPayer().getPayerName())
                     .payerId(transactionDto.getPayer().getPayerId())
+                    .ztcn(transactionDto.getZtcn())
+                    .source(transactionDto.getSource())
                     .startDate(transactionDto.getBroker().getReceivedDate().toLocalDate())
                     .endDate(null)
                     .changed(true)

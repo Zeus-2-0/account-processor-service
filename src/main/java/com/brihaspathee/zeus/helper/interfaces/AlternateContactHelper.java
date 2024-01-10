@@ -22,8 +22,13 @@ public interface AlternateContactHelper {
      * Create alternate contact
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    void createAlternateContact(Member member, TransactionMemberDto transactionMemberDto);
+    void createAlternateContact(Member member,
+                                TransactionMemberDto transactionMemberDto,
+                                String ztcn,
+                                String source);
 
     /**
      * Set the alternate contact dto to  send to MMS

@@ -39,6 +39,7 @@ public class PremiumSpanMapperImpl implements PremiumSpanMapper {
                 .premiumSpanSK(premiumSpan.getAcctPremiumSpanSK())
                 .premiumSpanCode(premiumSpan.getPremiumSpanCode())
                 .ztcn(premiumSpan.getZtcn())
+                .source(premiumSpan.getSource())
                 .startDate(premiumSpan.getStartDate())
                 .endDate(premiumSpan.getEndDate())
                 .statusTypeCode(premiumSpan.getStatusTypeCode())

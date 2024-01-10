@@ -146,6 +146,18 @@ public class AlternateContact {
     private String zipCode;
 
     /**
+     * The zeus transaction control number of the transaction that created the alternate contact
+     */
+    @Column(name = "ztcn", length = 50, columnDefinition = "varchar", nullable = true)
+    private String ztcn;
+
+    /**
+     * The source of the data
+     */
+    @Column(name = "source", length = 50, columnDefinition = "varchar", nullable = false)
+    private String source;
+
+    /**
      * Start date of the alternate contact
      */
     @Column(name = "start_date", columnDefinition = "datetime", nullable = false)

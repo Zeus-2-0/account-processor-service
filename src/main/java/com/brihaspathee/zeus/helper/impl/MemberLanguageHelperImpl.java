@@ -54,9 +54,14 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
      * Create the member language
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
     @Override
-    public void createMemberLanguage(Member member, TransactionMemberDto transactionMemberDto) {
+    public void createMemberLanguage(Member member,
+                                     TransactionMemberDto transactionMemberDto,
+                                     String ztcn,
+                                     String source) {
         if(transactionMemberDto.getLanguages() != null && transactionMemberDto.getLanguages().size() > 0){
             List<MemberLanguage> languages = new ArrayList<>();
             transactionMemberDto.getLanguages().forEach(languageDto -> {
@@ -68,6 +73,8 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
                         .memberLanguageCode(memberLanguageCode)
                         .languageTypeCode(languageDto.getLanguageTypeCode())
                         .languageCode(languageDto.getLanguageCode())
+                        .ztcn(ztcn)
+                        .source(source)
                         .startDate(languageDto.getReceivedDate().toLocalDate())
                         .endDate(null)
                         .changed(true)
@@ -83,17 +90,23 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
      * Create the member language in the repository
      * @param member
      * @param transactionMemberLanguageDto
+     * @param ztcn
+     * @param source
      * @return
      */
     private MemberLanguage createMemberLanguage(Member member,
                                                 TransactionMemberLanguageDto transactionMemberLanguageDto,
-                                                String memberLanguageCode){
+                                                String memberLanguageCode,
+                                                String ztcn,
+                                                String source){
         MemberLanguage memberLanguage = MemberLanguage.builder()
                 .member(member)
                 .memberAcctLangSK(null)
                 .memberLanguageCode(memberLanguageCode)
                 .languageTypeCode(transactionMemberLanguageDto.getLanguageTypeCode())
                 .languageCode(transactionMemberLanguageDto.getLanguageCode())
+                .ztcn(ztcn)
+                .source(source)
                 .startDate(transactionMemberLanguageDto.getReceivedDate().toLocalDate())
                 .endDate(null)
                 .changed(true)
@@ -125,9 +138,15 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
     @Override
-    public void matchMemberLanguage(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
+    public void matchMemberLanguage(Member member,
+                                    MemberDto memberDto,
+                                    TransactionMemberDto transactionMemberDto,
+                                    String ztcn,
+                                    String source) {
 //        log.info("Inside member match language");
         // Check if the transaction has any languages for the member
         // If there are no languages in the transaction then return
@@ -136,10 +155,10 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
             return;
         }
         // There are four types of languages possible "SPEAKING" and "WRITTEN"
-        matchMemberLanguage("SPEAKING", member, memberDto, transactionMemberDto);
-        matchMemberLanguage("WRITING", member, memberDto, transactionMemberDto);
-        matchMemberLanguage("READING", member, memberDto, transactionMemberDto);
-        matchMemberLanguage("NATIVE", member, memberDto, transactionMemberDto);
+        matchMemberLanguage("SPEAKING", member, memberDto, transactionMemberDto, ztcn, source);
+        matchMemberLanguage("WRITING", member, memberDto, transactionMemberDto, ztcn, source);
+        matchMemberLanguage("READING", member, memberDto, transactionMemberDto, ztcn, source);
+        matchMemberLanguage("NATIVE", member, memberDto, transactionMemberDto, ztcn, source);
     }
 
     /**
@@ -148,8 +167,12 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    private void matchMemberLanguage(String languageTypeCode, Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto){
+    private void matchMemberLanguage(String languageTypeCode, Member member, MemberDto memberDto,
+                                     TransactionMemberDto transactionMemberDto, String ztcn,
+                                     String source){
         List<MemberLanguage> languages = new ArrayList<>();
         // Check if the transactions has the passed in language type for the member
         Optional<TransactionMemberLanguageDto> optionalTransactionLanguageDto = transactionMemberDto.getLanguages()
@@ -178,7 +201,7 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
                     "memberLanguageCode");
             MemberLanguage memberLanguage = createMemberLanguage(member,
                     transactionLanguageDto,
-                    memberLanguageCode);
+                    memberLanguageCode, ztcn, source);
             languages.add(memberLanguage);
             return;
         }
@@ -193,7 +216,7 @@ public class MemberLanguageHelperImpl implements MemberLanguageHelper {
                     "memberLanguageCode");
             MemberLanguage memberLanguage = createMemberLanguage(member,
                     transactionLanguageDto,
-                    memberLanguageCode);
+                    memberLanguageCode, ztcn, source);
             languages.add(memberLanguage);
             // set the end date of the language in the account to one day prior to the
             // transaction received date

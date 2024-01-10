@@ -71,6 +71,18 @@ public class Account {
     private String lineOfBusinessTypeCode;
 
     /**
+     * The zeus transaction control number of the transaction that created the account
+     */
+    @Column(name = "ztcn", length = 50, columnDefinition = "varchar", nullable = true)
+    private String ztcn;
+
+    /**
+     * The source of the data
+     */
+    @Column(name = "source", length = 50, columnDefinition = "varchar", nullable = false)
+    private String source;
+
+    /**
      * The enrollment spans that are associated with the account
      */
     @OneToMany(mappedBy = "account")

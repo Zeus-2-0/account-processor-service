@@ -37,6 +37,8 @@ public class AccountMapperImpl implements AccountMapper {
                 .accountSK(account.getMatchAccountSK())
                 .accountNumber(account.getAccountNumber())
                 .lineOfBusinessTypeCode(account.getLineOfBusinessTypeCode())
+                .ztcn(account.getZtcn())
+                .source(account.getSource())
                 .createdDate(account.getCreatedDate())
                 .updatedDate(account.getUpdatedDate())
                 .build();

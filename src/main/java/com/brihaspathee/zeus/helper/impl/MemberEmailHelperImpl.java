@@ -54,9 +54,14 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
      * Create the member email
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
     @Override
-    public void createMemberEmail(Member member, TransactionMemberDto transactionMemberDto) {
+    public void createMemberEmail(Member member,
+                                  TransactionMemberDto transactionMemberDto,
+                                  String ztcn,
+                                  String source) {
         if(transactionMemberDto.getEmails() != null && transactionMemberDto.getEmails().size() > 0){
             List<MemberEmail> emails = new ArrayList<>();
             transactionMemberDto.getEmails().forEach(emailDto -> {
@@ -69,6 +74,8 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
                         .emailTypeCode("PERSONAL")
                         .email(emailDto.getEmail())
                         .isPrimary(true)
+                        .ztcn(ztcn)
+                        .source(source)
                         .startDate(emailDto.getReceivedDate().toLocalDate())
                         .endDate(null)
                         .changed(true)
@@ -85,11 +92,14 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
      * @param member
      * @param transactionMemberEmailDto
      * @param memberEmailCode
+     * @param ztcn
+     * @param source
      * @return
      */
     private MemberEmail createMemberEmail(Member member,
                                           TransactionMemberEmailDto transactionMemberEmailDto,
-                                          String memberEmailCode){
+                                          String memberEmailCode, String ztcn,
+                                          String source){
         MemberEmail memberEmail = MemberEmail.builder()
                 .member(member)
                 .memberAcctEmailSK(null)
@@ -97,6 +107,8 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
                 .email(transactionMemberEmailDto.getEmail())
                 .emailTypeCode("PERSONAL")
                 .isPrimary(true)
+                .ztcn(ztcn)
+                .source(source)
                 .startDate(transactionMemberEmailDto.getReceivedDate().toLocalDate())
                 .endDate(null)
                 .changed(true)
@@ -128,9 +140,15 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
     @Override
-    public void matchMemberEmail(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
+    public void matchMemberEmail(Member member,
+                                 MemberDto memberDto,
+                                 TransactionMemberDto transactionMemberDto,
+                                 String ztcn,
+                                 String source) {
 //        log.info("Inside member match email");
         // Check if the transaction has any emails for the member
         // If there is no email in the transaction then return
@@ -139,7 +157,7 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
             return;
         }
         // Compare the below email types
-        matchMemberEmail("PERSONAL", member, memberDto, transactionMemberDto);
+        matchMemberEmail("PERSONAL", member, memberDto, transactionMemberDto, ztcn, source);
     }
 
     /**
@@ -148,8 +166,15 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    private void matchMemberEmail(String emailTypeCode, Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto){
+    private void matchMemberEmail(String emailTypeCode,
+                                  Member member,
+                                  MemberDto memberDto,
+                                  TransactionMemberDto transactionMemberDto,
+                                  String ztcn,
+                                  String source){
         List<MemberEmail> emails = new ArrayList<>();
         // if there are no emails then return
         if(transactionMemberDto.getEmails() == null ||
@@ -175,7 +200,7 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
                     "memberEmailCode");
             MemberEmail memberEmail = createMemberEmail(member,
                     transactionEmailDto,
-                    memberEmailCode);
+                    memberEmailCode, ztcn, source);
             emails.add(memberEmail);
             return;
         }
@@ -189,7 +214,7 @@ public class MemberEmailHelperImpl implements MemberEmailHelper {
                     "memberEmailCode");
             MemberEmail memberEmail = createMemberEmail(member,
                     transactionEmailDto,
-                    memberEmailCode);
+                    memberEmailCode, ztcn, source);
             emails.add(memberEmail);
             // set the end date of the email in the account to one day prior to the
             // transaction received date

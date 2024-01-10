@@ -70,6 +70,8 @@ public class BrokerHelperImpl implements BrokerHelper {
                     .agencyId(transactionDto.getBroker().getAgencyId())
                     .accountNumber1(transactionDto.getBroker().getAccountNumber1())
                     .accountNumber2(transactionDto.getBroker().getAccountNumber2())
+                    .ztcn(transactionDto.getZtcn())
+                    .source(transactionDto.getSource())
                     .startDate(transactionDto.getBroker().getReceivedDate().toLocalDate())
                     .endDate(null)
                     .changed(true)

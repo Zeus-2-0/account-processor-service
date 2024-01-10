@@ -91,8 +91,14 @@ public class MemberHelperImpl implements MemberHelper {
                                       Account account) {
         List<Member> savedMembers = new ArrayList<>();
         members.forEach(transactionMemberDto -> {
-            Member member = createMember(account, transactionMemberDto, null);
-            createMemberDemographics(member, transactionMemberDto);
+            Member member = createMember(account,
+                    transactionMemberDto,
+                    null,
+                    account.getZtcn(),
+                    account.getSource());
+            createMemberDemographics(member, transactionMemberDto,
+                    account.getZtcn(),
+                    account.getSource());
 //            memberAddressHelper.createMemberAddress(member, transactionMemberDto);
 //            memberEmailHelper.createMemberEmail(member, transactionMemberDto);
 //            memberPhoneHelper.createMemberPhone(member, transactionMemberDto);
@@ -164,12 +170,14 @@ public class MemberHelperImpl implements MemberHelper {
             transactionMemberDto.setMmsMemberCode(primarySubscriber.getMemberCode());
             Member member = createMember(account,
                     transactionMemberDto,
-                    primarySubscriber);
-            memberAddressHelper.matchMemberAddress(member, primarySubscriber, transactionMemberDto);
-            memberIdentifierHelper.matchMemberIdentifier(member, primarySubscriber, transactionMemberDto);
-            memberPhoneHelper.matchMemberPhone(member,primarySubscriber,transactionMemberDto);
-            memberLanguageHelper.matchMemberLanguage(member,primarySubscriber,transactionMemberDto);
-            memberEmailHelper.matchMemberEmail(member,primarySubscriber,transactionMemberDto);
+                    primarySubscriber,
+                    transactionDto.getZtcn(),
+                    transactionDto.getSource());
+            memberAddressHelper.matchMemberAddress(member, primarySubscriber, transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
+            memberIdentifierHelper.matchMemberIdentifier(member, primarySubscriber, transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
+            memberPhoneHelper.matchMemberPhone(member,primarySubscriber,transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
+            memberLanguageHelper.matchMemberLanguage(member,primarySubscriber,transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
+            memberEmailHelper.matchMemberEmail(member,primarySubscriber,transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
             account.setMembers(List.of(member));
         }else{
 //            log.info("Member count in account is greater than 1");
@@ -185,8 +193,10 @@ public class MemberHelperImpl implements MemberHelper {
                     // Create the member in the repository
                     member = createMember(account,
                             transactionMemberDto,
-                            null);
-                    createMemberDemographics(member, transactionMemberDto);
+                            null,
+                            transactionDto.getZtcn(),
+                            transactionDto.getSource());
+                    createMemberDemographics(member, transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
                 }else{
                     // Member is present in MMS - This means it's not a new member
                     // Set the MMS member code in the transaction member dto
@@ -195,12 +205,14 @@ public class MemberHelperImpl implements MemberHelper {
                     // Create the member in the repository
                     member = createMember(account,
                             transactionMemberDto,
-                            memberDto);
-                    memberAddressHelper.matchMemberAddress(member, memberDto, transactionMemberDto);
-                    memberIdentifierHelper.matchMemberIdentifier(member, memberDto, transactionMemberDto);
-                    memberPhoneHelper.matchMemberPhone(member,memberDto,transactionMemberDto);
-                    memberLanguageHelper.matchMemberLanguage(member,memberDto,transactionMemberDto);
-                    memberEmailHelper.matchMemberEmail(member,memberDto,transactionMemberDto);
+                            memberDto,
+                            transactionDto.getZtcn(),
+                            transactionDto.getSource());
+                    memberAddressHelper.matchMemberAddress(member, memberDto, transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
+                    memberIdentifierHelper.matchMemberIdentifier(member, memberDto, transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
+                    memberPhoneHelper.matchMemberPhone(member,memberDto,transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
+                    memberLanguageHelper.matchMemberLanguage(member,memberDto,transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
+                    memberEmailHelper.matchMemberEmail(member,memberDto,transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
                 }
                 // Add the member to the list
                 members.add(member);
@@ -244,11 +256,14 @@ public class MemberHelperImpl implements MemberHelper {
      * @param account account to which the member needs to be added
      * @param transactionMemberDto details of the member present in the transaction
      * @param memberDto member dto if the member was matched in MMS
+     * @param ztcn the transaction control number that creates the member
      * @return returns the created member
      */
     private Member createMember(Account account,
                                 TransactionMemberDto transactionMemberDto,
-                                MemberDto memberDto) {
+                                MemberDto memberDto,
+                                String ztcn,
+                                String source) {
 //        log.info("member detail:{}", transactionMemberDto);
         Member member = Member.builder()
                 .account(account)
@@ -256,6 +271,8 @@ public class MemberHelperImpl implements MemberHelper {
                 .transactionMemberCode(transactionMemberDto.getTransactionMemberCode())
                 // If the member is present in the account their relationship should be the same
                 .relationShipTypeCode(transactionMemberDto.getRelationshipTypeCode())
+                .ztcn(ztcn)
+                .source(source)
                 .changed(true)
                 .build();
         // the member was matched in MMS then set the member SK and member code from MMS
@@ -399,13 +416,19 @@ public class MemberHelperImpl implements MemberHelper {
      * Address, Phone, Email, Alternate Contacts to be created for a new member.
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
+     *
      */
-    private void createMemberDemographics(Member member, TransactionMemberDto transactionMemberDto){
-        memberAddressHelper.createMemberAddress(member, transactionMemberDto);
-        memberEmailHelper.createMemberEmail(member, transactionMemberDto);
-        memberPhoneHelper.createMemberPhone(member, transactionMemberDto);
-        memberLanguageHelper.createMemberLanguage(member, transactionMemberDto);
-        memberIdentifierHelper.createMemberIdentifier(member, transactionMemberDto);
-        alternateContactHelper.createAlternateContact(member, transactionMemberDto);
+    private void createMemberDemographics(Member member,
+                                          TransactionMemberDto transactionMemberDto,
+                                          String ztcn,
+                                          String source){
+        memberAddressHelper.createMemberAddress(member, transactionMemberDto, ztcn, source);
+        memberEmailHelper.createMemberEmail(member, transactionMemberDto, ztcn, source);
+        memberPhoneHelper.createMemberPhone(member, transactionMemberDto, ztcn, source);
+        memberLanguageHelper.createMemberLanguage(member, transactionMemberDto, ztcn, source);
+        memberIdentifierHelper.createMemberIdentifier(member, transactionMemberDto, ztcn, source);
+        alternateContactHelper.createAlternateContact(member, transactionMemberDto, ztcn, source);
     }
 }

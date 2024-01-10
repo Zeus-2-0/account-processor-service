@@ -54,9 +54,14 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
      * Create member phone
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
     @Override
-    public void createMemberPhone(Member member, TransactionMemberDto transactionMemberDto) {
+    public void createMemberPhone(Member member,
+                                  TransactionMemberDto transactionMemberDto,
+                                  String ztcn,
+                                  String source) {
         if(transactionMemberDto.getMemberPhones() != null && transactionMemberDto.getMemberPhones().size() > 0){
             List<MemberPhone> phones = new ArrayList<>();
             transactionMemberDto.getMemberPhones().forEach(phoneDto -> {
@@ -68,6 +73,8 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
                         .memberPhoneCode(memberPhoneCode)
                         .phoneTypeCode(phoneDto.getPhoneTypeCode())
                         .phoneNumber(phoneDto.getPhoneNumber())
+                        .ztcn(ztcn)
+                        .source(source)
                         .startDate(phoneDto.getReceivedDate().toLocalDate())
                         .endDate(null)
                         .changed(true)
@@ -84,17 +91,22 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
      * @param member
      * @param transactionMemberPhoneDto
      * @param memberPhoneCode
+     * @param ztcn
+     * @param source
      * @return
      */
     private MemberPhone createMemberPhone(Member member,
                                           TransactionMemberPhoneDto transactionMemberPhoneDto,
-                                          String memberPhoneCode){
+                                          String memberPhoneCode, String ztcn,
+                                          String source){
         MemberPhone memberPhone = MemberPhone.builder()
                 .member(member)
                 .memberAcctPhoneSK(null)
                 .memberPhoneCode(memberPhoneCode)
                 .phoneTypeCode(transactionMemberPhoneDto.getPhoneTypeCode())
                 .phoneNumber(transactionMemberPhoneDto.getPhoneNumber())
+                .ztcn(ztcn)
+                .source(source)
                 .startDate(transactionMemberPhoneDto.getReceivedDate().toLocalDate())
                 .endDate(null)
                 .changed(true)
@@ -126,9 +138,15 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
     @Override
-    public void matchMemberPhone(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
+    public void matchMemberPhone(Member member,
+                                 MemberDto memberDto,
+                                 TransactionMemberDto transactionMemberDto,
+                                 String ztcn,
+                                 String source) {
 //        log.info("Inside member match phone");
         // check if the transaction has any languages for the member
         // if there are no languages in the transaction then return
@@ -137,13 +155,13 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
             return;
         }
         // check for each phone types possible
-        matchMemberPhone("ALT", member, memberDto, transactionMemberDto);
-        matchMemberPhone("BEEPER", member, memberDto, transactionMemberDto);
-        matchMemberPhone("CELL", member, memberDto, transactionMemberDto);
-        matchMemberPhone("EXT", member, memberDto, transactionMemberDto);
-        matchMemberPhone("FAX", member, memberDto, transactionMemberDto);
-        matchMemberPhone("HOME", member, memberDto, transactionMemberDto);
-        matchMemberPhone("WORK", member, memberDto, transactionMemberDto);
+        matchMemberPhone("ALT", member, memberDto, transactionMemberDto, ztcn, source);
+        matchMemberPhone("BEEPER", member, memberDto, transactionMemberDto, ztcn, source);
+        matchMemberPhone("CELL", member, memberDto, transactionMemberDto, ztcn, source);
+        matchMemberPhone("EXT", member, memberDto, transactionMemberDto, ztcn, source);
+        matchMemberPhone("FAX", member, memberDto, transactionMemberDto, ztcn, source);
+        matchMemberPhone("HOME", member, memberDto, transactionMemberDto, ztcn, source);
+        matchMemberPhone("WORK", member, memberDto, transactionMemberDto, ztcn, source);
 
     }
 
@@ -153,11 +171,15 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
     private void matchMemberPhone(String phoneTypeCode,
                                   Member member,
                                   MemberDto memberDto,
-                                  TransactionMemberDto transactionMemberDto){
+                                  TransactionMemberDto transactionMemberDto,
+                                  String ztcn,
+                                  String source){
         List<MemberPhone> phones = new ArrayList<>();
         // Check if the transactions has the passed in phone type for the member
         Optional<TransactionMemberPhoneDto> optionalTransactionPhoneDto = transactionMemberDto.getMemberPhones()
@@ -188,7 +210,7 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
                     "memberPhoneCode");
             MemberPhone memberPhone = createMemberPhone(member,
                     transactionPhoneDto,
-                    memberPhoneCode);
+                    memberPhoneCode, ztcn, source);
             phones.add(memberPhone);
             return;
         }
@@ -203,7 +225,7 @@ public class MemberPhoneHelperImpl implements MemberPhoneHelper {
                     "memberPhoneCode");
             MemberPhone memberPhone = createMemberPhone(member,
                     transactionPhoneDto,
-                    memberPhoneCode);
+                    memberPhoneCode, ztcn, source);
             phones.add(memberPhone);
             // set the end date of the phone number in the account to one day prior to the
             // transaction received date

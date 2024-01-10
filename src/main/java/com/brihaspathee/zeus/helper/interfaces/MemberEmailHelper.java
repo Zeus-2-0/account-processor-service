@@ -19,8 +19,13 @@ public interface MemberEmailHelper {
      * Create the member email
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    void createMemberEmail(Member member, TransactionMemberDto transactionMemberDto);
+    void createMemberEmail(Member member,
+                           TransactionMemberDto transactionMemberDto,
+                           String ztcn,
+                           String source);
 
     /**
      * Set the member email dto to  send to MMS
@@ -34,6 +39,12 @@ public interface MemberEmailHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    void matchMemberEmail(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto);
+    void matchMemberEmail(Member member,
+                          MemberDto memberDto,
+                          TransactionMemberDto transactionMemberDto,
+                          String ztcn,
+                          String source);
 }

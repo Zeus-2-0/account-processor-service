@@ -65,6 +65,8 @@ public class SponsorHelperImpl implements SponsorHelper {
                     .sponsorCode(sponsorCode)
                     .sponsorName(transactionDto.getSponsor().getSponsorName())
                     .sponsorId(transactionDto.getSponsor().getSponsorId())
+                    .ztcn(transactionDto.getZtcn())
+                    .source(transactionDto.getSource())
                     .startDate(transactionDto.getBroker().getReceivedDate().toLocalDate())
                     .endDate(null)
                     .changed(true)

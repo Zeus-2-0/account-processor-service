@@ -51,16 +51,17 @@ public class Transaction {
     private String zfcn;
 
     /**
+     * The source of the transaction data
+     */
+    @Column(name = "source", length = 50, columnDefinition = "varchar", nullable = false)
+    private String source;
+
+    /**
      * The date the transaction was received
      */
     @Column(name ="transaction_received_date")
     private LocalDateTime transactionReceivedDate;
 
-    /**
-     * The source of the transaction
-     */
-    @Column(name = "transaction_source_type_code", length = 50, columnDefinition = "varchar", nullable = false)
-    private String transactionSourceTypeCode;
 
     /**
      * The account that was created or matched for the transaction

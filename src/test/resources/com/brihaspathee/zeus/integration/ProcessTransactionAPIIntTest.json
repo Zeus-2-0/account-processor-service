@@ -16,7 +16,7 @@
                 "ztcn": "HW0VQ1NBEUJAID9",
                 "zfcn": "VRK245K5ZI7NWPF",
                 "transactionReceivedDate": "2020-01-11T06:27:25.470Z",
-                "transactionSourceTypeCode": "MARKETPLACE",
+                "source": "MARKETPLACE",
                 "entityCodes": {
                   "accountNumber": ["VA43YZG0M56LFWP"],
                   "enrollmentSpanCode": ["SCU3ZBJOPDI6DTG"],
@@ -233,6 +233,8 @@
             "expectedAccountDto": {
               "accountNumber": "VA43YZG0M56LFWP",
               "lineOfBusinessTypeCode": "HIX",
+              "ztcn": "HW0VQ1NBEUJAID9",
+              "source": "MARKETPLACE",
               "enrollmentSpans": [
                 {
                   "enrollmentSpanCode": "SCU3ZBJOPDI6DTG",
@@ -251,11 +253,13 @@
                   "effectuationDate": "2020-01-11",
                   "effectiveReason": "MBS",
                   "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "changed": true,
                   "premiumSpans": [
                     {
                       "premiumSpanCode": "L8B3V4CGCOJFRXW",
                       "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "memberPremiumSpans": [
                         {
                           "memberCode": "QENYOLD4SRWCCWI",
@@ -294,6 +298,8 @@
                   "genderTypeCode": "MALE",
                   "height": 0.0,
                   "weight": 0.0,
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "memberAttributes": null,
                   "changed": true,
                   "memberAddresses": [
@@ -305,6 +311,8 @@
                       "city": "Homestead",
                       "stateTypeCode": "FL",
                       "zipCode": "33032",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
                       "endDate": null,
                       "changed": true
@@ -316,6 +324,8 @@
                       "identifierTypeCode": "SSN",
                       "identifierValue": "166492101",
                       "isActive": true,
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "changed": true
                     }
                   ],
@@ -326,12 +336,16 @@
                       "languageCode": "spa",
                       "startDate": "2022-11-07",
                       "endDate": null,
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "changed": true
                     },
                     {
                       "memberLanguageCode": "ACCOHPUVUAYI0X8",
                       "languageTypeCode": "SPEAKING",
                       "languageCode": "spa",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
                       "endDate": null,
                       "changed": true
@@ -342,6 +356,8 @@
                       "memberPhoneCode": "GDR0W1Z2XDAZZMJ",
                       "phoneTypeCode": "HOME",
                       "phoneNumber": "7864223101",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
                       "endDate": null,
                       "changed": true
@@ -353,6 +369,8 @@
                       "emailTypeCode": "PERSONAL",
                       "email": "ppeterpiperbogus@bogus.com",
                       "isPrimary": true,
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
                       "endDate": null,
                       "changed": true
@@ -370,6 +388,8 @@
                   "genderTypeCode": "FEMALE",
                   "height": 0.0,
                   "weight": 0.0,
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "changed": true,
                   "memberAttributes": null,
                   "memberAddresses": [
@@ -381,6 +401,8 @@
                       "city": "Homestead",
                       "stateTypeCode": "FL",
                       "zipCode": "33032",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
                       "endDate": null,
                       "changed": true
@@ -391,6 +413,8 @@
                       "memberIdentifierCode": "ABXLBVMQ3JSAP8G",
                       "identifierTypeCode": "SSN",
                       "identifierValue": "422850102",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "isActive": true,
                       "changed": true
                     }
@@ -402,12 +426,9 @@
                   "brokerCode": "UISGYIWR2PAHGWX",
                   "brokerName": "Horacio  Sequeira",
                   "brokerId": "17845067",
-                  "agencyName": null,
-                  "agencyId": null,
-                  "accountNumber1": null,
-                  "accountNumber2": null,
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "startDate": "2022-11-07",
-                  "endDate": null,
                   "changed": true
                 }
               ],
@@ -416,6 +437,8 @@
                   "sponsorCode": "K4CQPB5BU3MTAVQ",
                   "sponsorId": "166492101",
                   "sponsorName": "Peter A Peterson",
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "startDate": "2022-11-07",
                   "endDate": null,
                   "changed": true
@@ -426,14 +449,13 @@
                   "payerCode": "48C1UFLL51333CK",
                   "payerName": "Ambetter from Sunshine Health",
                   "payerId": "060641618",
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "startDate": "2022-11-07",
                   "endDate": null,
                   "changed": true
                 }
-              ],
-              "accountAttributes": null,
-              "createdDate": "2023-03-21 13:37:40",
-              "updatedDate": "2023-03-21 13:37:40"
+              ]
             }
           }
         },
@@ -447,9 +469,9 @@
               "accountNumber": null,
               "transactionDto": {
                 "ztcn": "HW0VQ1NBEUJAID9",
+                "source": "MARKETPLACE",
                 "zfcn": "VRK245K5ZI7NWPF",
                 "transactionReceivedDate": "2020-01-11T06:27:25.470Z",
-                "transactionSourceTypeCode": "MARKETPLACE",
                 "entityCodes": {
                   "accountNumber": ["UV4HFFUE8J5KY6C"],
                   "enrollmentSpanCode": ["KU4MCMNK5XZEX3X"],
@@ -714,6 +736,8 @@
             "expectedAccountDto": {
               "accountNumber": "UV4HFFUE8J5KY6C",
               "lineOfBusinessTypeCode": "HIX",
+              "ztcn": "HW0VQ1NBEUJAID9",
+              "source": "MARKETPLACE",
               "enrollmentSpans": [
                 {
                   "enrollmentSpanCode": "KU4MCMNK5XZEX3X",
@@ -732,11 +756,13 @@
                   "effectuationDate": "2020-01-11",
                   "effectiveReason": "MBS",
                   "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "changed": true,
                   "premiumSpans": [
                     {
                       "premiumSpanCode": "8MIZK6SEHXUJ8UV",
                       "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "memberPremiumSpans": [
                         {
                           "memberCode": "SX7ITLA0N4YMIW2",
@@ -764,6 +790,7 @@
                     {
                       "premiumSpanCode": "AMDRY2TTLOLU15M",
                       "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "memberPremiumSpans": [
                         {
                           "memberCode": "SX7ITLA0N4YMIW2",
@@ -791,6 +818,7 @@
                     {
                       "premiumSpanCode": "YZBG38HD8Z8G2VX",
                       "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "memberPremiumSpans": [
                         {
                           "memberCode": "Y2PYDI8D9OT7V5A",
@@ -829,6 +857,8 @@
                   "genderTypeCode": "MALE",
                   "height": 0.0,
                   "weight": 0.0,
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "changed": true,
                   "memberAttributes": null,
                   "memberAddresses": [
@@ -840,6 +870,8 @@
                       "city": "Homestead",
                       "stateTypeCode": "FL",
                       "zipCode": "33032",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
                       "endDate": null,
                       "changed": true
@@ -851,8 +883,8 @@
                       "identifierTypeCode": "SSN",
                       "identifierValue": "166492101",
                       "isActive": true,
-                      "createdDate": "2023-03-22 06:34:18",
-                      "updatedDate": "2023-03-22 06:34:18",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "active": true,
                       "changed": true
                     }
@@ -862,6 +894,8 @@
                       "memberLanguageCode": "X35LPDII0ZDVKHQ",
                       "languageTypeCode": "WRITING",
                       "languageCode": "spa",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
                       "endDate": null,
                       "changed": true
@@ -870,6 +904,8 @@
                       "memberLanguageCode": "6Z40RALJECGM06X",
                       "languageTypeCode": "SPEAKING",
                       "languageCode": "spa",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
                       "endDate": null,
                       "changed": true
@@ -880,6 +916,8 @@
                       "memberPhoneCode": "LKTQZHAMUPKNW81",
                       "phoneTypeCode": "HOME",
                       "phoneNumber": "7864223101",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
                       "endDate": null,
                       "changed": true
@@ -891,10 +929,9 @@
                       "emailTypeCode": "PERSONAL",
                       "email": "ppeterpiperbogus@bogus.com",
                       "isPrimary": true,
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
-                      "endDate": null,
-                      "createdDate": "2023-03-22 06:34:18",
-                      "updatedDate": "2023-03-22 06:34:18",
                       "primary": true,
                       "changed": true
                     }
@@ -910,6 +947,8 @@
                   "genderTypeCode": "FEMALE",
                   "height": 0.0,
                   "weight": 0.0,
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "changed": true,
                   "memberAttributes": null,
                   "memberAddresses": [
@@ -921,6 +960,8 @@
                       "city": "Homestead",
                       "stateTypeCode": "FL",
                       "zipCode": "33032",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "startDate": "2022-11-07",
                       "endDate": null,
                       "changed": true
@@ -931,6 +972,8 @@
                       "memberIdentifierCode": "5F4LPSXNVSS2R2E",
                       "identifierTypeCode": "SSN",
                       "identifierValue": "422850102",
+                      "ztcn": "HW0VQ1NBEUJAID9",
+                      "source": "MARKETPLACE",
                       "isActive": true,
                       "changed": true
                     }
@@ -942,10 +985,8 @@
                   "brokerCode": "CW5I1J303KPQPI7",
                   "brokerName": "Horacio  Sequeira",
                   "brokerId": "17845067",
-                  "agencyName": null,
-                  "agencyId": null,
-                  "accountNumber1": null,
-                  "accountNumber2": null,
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "startDate": "2022-11-07",
                   "endDate": null,
                   "changed": true
@@ -956,6 +997,8 @@
                   "sponsorCode": "EKK626BDF4MMX1M",
                   "sponsorId": "166492101",
                   "sponsorName": "Peter A Peterson",
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "startDate": "2022-11-07",
                   "endDate": null,
                   "changed": true
@@ -966,14 +1009,13 @@
                   "payerCode": "7UDQWT0X3GAF387",
                   "payerName": "Ambetter from Sunshine Health",
                   "payerId": "060641618",
+                  "ztcn": "HW0VQ1NBEUJAID9",
+                  "source": "MARKETPLACE",
                   "startDate": "2022-11-07",
                   "endDate": null,
                   "changed": true
                 }
-              ],
-              "accountAttributes": null,
-              "createdDate": "2023-03-22 06:34:18",
-              "updatedDate": "2023-03-22 06:34:18"
+              ]
             }
           }
         },
@@ -988,73 +1030,12 @@
                 "accountSK": "e29f6d8d-51c8-4259-b789-1aac0e5fcfe7",
                 "accountNumber": "5LOQKYBP1NQX17E",
                 "lineOfBusinessTypeCode": "HIX",
+                "ztcn": "MC6L56Z5GRGHEK2",
+                "source": "MARKETPLACE",
                 "enrollmentSpans": [
                   {
                     "enrollmentSpanSK": "1f4684b7-834d-41ad-a150-658da294c54c",
-                    "accountSK": "e29f6d8d-51c8-4259-b789-1aac0e5fcfe7",
                     "enrollmentSpanCode": "I5LXC5ELIEO0G2O",
-                    "premiumSpans": [
-                      {
-                        "premiumSpanSK": "12573e17-7244-4e49-a152-38d59b03e2f6",
-                        "enrollmentSpanSK": "1f4684b7-834d-41ad-a150-658da294c54c",
-                        "ztcn": "MC6L56Z5GRGHEK2",
-                        "premiumSpanCode": "CNH182BAIO3321D",
-                        "memberPremiumSpans": [
-                          {
-                            "memberPremiumSK": "6dfe06fb-05e8-4f2e-88c0-7441bd0b5e43",
-                            "memberCode": "G8RKJY77IYPBYXU",
-                            "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
-                            "exchangeMemberId": "24524734501",
-                            "individualPremiumAmount": 150.00,
-                            "createdDate": "2023-06-03 01:51:17",
-                            "updatedDate": "2023-06-03 01:51:17"
-                          }
-                        ],
-                        "startDate": "2022-01-01",
-                        "endDate": "2022-06-30",
-                        "statusTypeCode": "ACTIVE",
-                        "csrVariant": "03",
-                        "totalPremiumAmount": 150.00,
-                        "totalResponsibleAmount": 150.00,
-                        "aptcAmount": 0.00,
-                        "otherPayAmount": 0.00,
-                        "csrAmount": 10.00,
-                        "sequence": 1,
-                        "changed": null,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17"
-                      },
-                      {
-                        "premiumSpanSK": "96aedae2-95b1-4181-bd2b-cfc26179e044",
-                        "enrollmentSpanSK": "1f4684b7-834d-41ad-a150-658da294c54c",
-                        "ztcn": "55UCZGSHBH98VKM",
-                        "premiumSpanCode": "GT5PSZ6FBWEOH69",
-                        "memberPremiumSpans": [
-                          {
-                            "memberPremiumSK": "d421d90b-74a9-4df9-add9-a1f84ef9908f",
-                            "memberCode": "G8RKJY77IYPBYXU",
-                            "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
-                            "exchangeMemberId": "24524734501",
-                            "individualPremiumAmount": 150.00,
-                            "createdDate": "2023-06-03 01:51:17",
-                            "updatedDate": "2023-06-03 01:51:17"
-                          }
-                        ],
-                        "startDate": "2022-07-01",
-                        "endDate": "2022-12-31",
-                        "statusTypeCode": "ACTIVE",
-                        "csrVariant": "03",
-                        "totalPremiumAmount": 150.00,
-                        "totalResponsibleAmount": 150.00,
-                        "aptcAmount": 0.00,
-                        "otherPayAmount": 0.00,
-                        "csrAmount": 20.00,
-                        "sequence": 2,
-                        "changed": null,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17"
-                      }
-                    ],
                     "stateTypeCode": "FL",
                     "marketplaceTypeCode": "FFM",
                     "businessUnitTypeCode": "MP_FL",
@@ -1072,9 +1053,64 @@
                     "statusTypeCode": "ENROLLED",
                     "effectiveReason": "MBS",
                     "ztcn": "MC6L56Z5GRGHEK2",
-                    "changed": null,
-                    "createdDate": "2023-06-03 01:51:17",
-                    "updatedDate": "2023-06-03 01:51:17"
+                    "source": "MARKETPLACE",
+                    "premiumSpans": [
+                      {
+                        "premiumSpanSK": "12573e17-7244-4e49-a152-38d59b03e2f6",
+                        "ztcn": "MC6L56Z5GRGHEK2",
+                        "source": "MARKETPLACE",
+                        "premiumSpanCode": "CNH182BAIO3321D",
+                        "startDate": "2022-01-01",
+                        "endDate": "2022-06-30",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 150.00,
+                        "totalResponsibleAmount": 150.00,
+                        "aptcAmount": 0.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 10.00,
+                        "sequence": 1,
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "6dfe06fb-05e8-4f2e-88c0-7441bd0b5e43",
+                            "memberCode": "G8RKJY77IYPBYXU",
+                            "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
+                            "exchangeMemberId": "24524734501",
+                            "individualPremiumAmount": 150.00,
+                            "createdDate": "2023-06-03 01:51:17",
+                            "updatedDate": "2023-06-03 01:51:17"
+                          }
+                        ]
+                      },
+                      {
+                        "premiumSpanSK": "96aedae2-95b1-4181-bd2b-cfc26179e044",
+                        "enrollmentSpanSK": "1f4684b7-834d-41ad-a150-658da294c54c",
+                        "ztcn": "55UCZGSHBH98VKM",
+                        "source": "MARKETPLACE",
+                        "premiumSpanCode": "GT5PSZ6FBWEOH69",
+                        "startDate": "2022-07-01",
+                        "endDate": "2022-12-31",
+                        "statusTypeCode": "ACTIVE",
+                        "csrVariant": "03",
+                        "totalPremiumAmount": 150.00,
+                        "totalResponsibleAmount": 150.00,
+                        "aptcAmount": 0.00,
+                        "otherPayAmount": 0.00,
+                        "csrAmount": 20.00,
+                        "sequence": 2,
+                        "memberPremiumSpans": [
+                          {
+                            "memberPremiumSK": "d421d90b-74a9-4df9-add9-a1f84ef9908f",
+                            "memberCode": "G8RKJY77IYPBYXU",
+                            "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
+                            "exchangeMemberId": "24524734501",
+                            "individualPremiumAmount": 150.00,
+                            "createdDate": "2023-06-03 01:51:17",
+                            "updatedDate": "2023-06-03 01:51:17"
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ],
                 "members": [
@@ -1090,12 +1126,11 @@
                     "genderTypeCode": "MALE",
                     "height": 5.8,
                     "weight": 155.6,
-                    "changed": null,
-                    "memberAttributes": null,
+                    "ztcn": "MC6L56Z5GRGHEK2",
+                    "source": "MARKETPLACE",
                     "memberAddresses": [
                       {
                         "memberAddressSK": "a0e9af18-f109-4a9c-bba3-e7824cf99616",
-                        "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
                         "memberAddressCode": "L89ZMCJ50PM36TW",
                         "addressTypeCode": "MAIL",
                         "addressLine1": "P.O Box 23646",
@@ -1104,13 +1139,11 @@
                         "stateTypeCode": "FL",
                         "zipCode": "33556",
                         "startDate": "2021-12-15",
-                        "endDate": null,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17"
+                        "ztcn": "MC6L56Z5GRGHEK2",
+                        "source": "MARKETPLACE"
                       },
                       {
                         "memberAddressSK": "4c5c3b7c-0950-49e8-b483-72fca0f428f2",
-                        "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
                         "memberAddressCode": "HP86QL1UWE0UAKZ",
                         "addressTypeCode": "RESIDENCE",
                         "addressLine1": "13377 Batten Lane",
@@ -1119,86 +1152,73 @@
                         "stateTypeCode": "FL",
                         "zipCode": "33556",
                         "startDate": "2021-12-15",
-                        "endDate": null,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17"
+                        "ztcn": "MC6L56Z5GRGHEK2",
+                        "source": "MARKETPLACE"
                       }
                     ],
                     "memberIdentifiers": [
                       {
                         "memberIdentifierSK": "b0d97992-bc5b-4d53-8e68-68176914b8bb",
-                        "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
                         "memberIdentifierCode": "Y2BF30P04IH1IOR",
                         "identifierTypeCode": "SSN",
                         "identifierValue": "023-53-5234",
+                        "ztcn": "MC6L56Z5GRGHEK2",
+                        "source": "MARKETPLACE",
                         "isActive": true,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17",
                         "active": true
                       }
                     ],
                     "memberLanguages": [
                       {
                         "memberLanguageSK": "266b2753-220f-45d8-928c-a4e8fb2e42eb",
-                        "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
                         "memberLanguageCode": "CZ8TRC5GYH6UGTH",
                         "languageTypeCode": "SPEAKING",
                         "languageCode": "ENG",
                         "startDate": "2021-12-15",
-                        "endDate": null,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17"
+                        "ztcn": "MC6L56Z5GRGHEK2",
+                        "source": "MARKETPLACE"
                       },
                       {
                         "memberLanguageSK": "56c65d79-6556-42d5-89fa-3eeef4a993fa",
-                        "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
                         "memberLanguageCode": "224QAUBU304JVPK",
                         "languageTypeCode": "WRITING",
                         "languageCode": "SPA",
                         "startDate": "2021-12-15",
-                        "endDate": null,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17"
+                        "ztcn": "MC6L56Z5GRGHEK2",
+                        "source": "MARKETPLACE"
                       }
                     ],
                     "memberPhones": [
                       {
                         "memberPhoneSK": "24629daf-e0c7-4dd9-9f8b-64360a50793b",
-                        "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
                         "memberPhoneCode": "KI0QVIJKYERYY9G",
                         "phoneTypeCode": "CELL",
                         "phoneNumber": "813-357-9150",
                         "startDate": "2021-12-15",
-                        "endDate": null,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17"
+                        "ztcn": "MC6L56Z5GRGHEK2",
+                        "source": "MARKETPLACE"
                       }
                     ],
                     "memberEmails": [
                       {
                         "memberEmailSK": "a018f0ce-f269-4353-ac97-0c88df8477df",
-                        "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
                         "memberEmailCode": "50QGOOCJ3K2IMZC",
                         "emailTypeCode": "PERSONAL",
                         "email": "vbalaji215@gmail.com",
+                        "ztcn": "MC6L56Z5GRGHEK2",
+                        "source": "MARKETPLACE",
                         "isPrimary": true,
                         "startDate": "2021-12-15",
-                        "endDate": null,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17",
                         "primary": true
                       },
                       {
                         "memberEmailSK": "f60459a2-dc26-44ec-88d2-027c541cda7c",
-                        "memberSK": "1817da35-c65d-469d-a7ce-d6eb1569ffe9",
                         "memberEmailCode": "TBVHIU74HUHFMZP",
                         "emailTypeCode": "WORK",
                         "email": "balaji.varadharajan@wellcare.com",
+                        "source": "ZEUS-UI",
                         "isPrimary": false,
                         "startDate": "2021-12-15",
-                        "endDate": null,
-                        "createdDate": "2023-06-03 01:51:17",
-                        "updatedDate": "2023-06-03 01:51:17",
                         "primary": false
                       }
                     ]
@@ -1207,55 +1227,45 @@
                 "brokers": [
                   {
                     "brokerSK": "803b938c-b4ee-4d98-be3c-0e36ddd845b1",
-                    "accountSK": null,
                     "brokerCode": "K8Y3XMEKND1X8L2",
                     "brokerName": "Ben Stokes",
                     "brokerId": "53234534",
                     "agencyName": "Sapphire Brokers Inc.",
                     "agencyId": "63363754",
                     "accountNumber1": "523645-63456",
-                    "accountNumber2": null,
-                    "startDate": "2022-01-01",
-                    "endDate": null,
-                    "createdDate": "2023-06-03 01:51:17",
-                    "updatedDate": "2023-06-03 01:51:17"
+                    "ztcn": "MC6L56Z5GRGHEK2",
+                    "source": "MARKETPLACE",
+                    "startDate": "2022-01-01"
                   }
                 ],
                 "sponsors": [
                   {
                     "sponsorSK": "66aff58a-a9f0-43ce-8f03-2699f4f5bb30",
                     "sponsorCode": "1MFGMD2ATZLCX9N",
-                    "accountSK": null,
                     "sponsorId": "023-53-5234",
                     "sponsorName": "Balaji Varadharajan",
-                    "startDate": "2022-01-01",
-                    "endDate": null,
-                    "createdDate": "2023-06-03 01:51:17",
-                    "updatedDate": "2023-06-03 01:51:17"
+                    "ztcn": "MC6L56Z5GRGHEK2",
+                    "source": "MARKETPLACE",
+                    "startDate": "2022-01-01"
                   }
                 ],
                 "payers": [
                   {
                     "payerSK": "97fc21a9-a202-4e5d-9dd0-625c7f3f3cf0",
-                    "accountSK": null,
                     "payerCode": "8G0R6X17WMER37G",
                     "payerName": "Zeus Health",
                     "payerId": "5235343",
-                    "startDate": "2022-01-01",
-                    "endDate": null,
-                    "createdDate": "2023-06-03 01:51:17",
-                    "updatedDate": "2023-06-03 01:51:17"
+                    "ztcn": "MC6L56Z5GRGHEK2",
+                    "source": "MARKETPLACE",
+                    "startDate": "2022-01-01"
                   }
-                ],
-                "accountAttributes": null,
-                "createdDate": "2023-06-03 01:51:17",
-                "updatedDate": "2023-06-03 01:51:17"
+                ]
               },
               "transactionDto": {
                 "ztcn": "631GPKM3TJZ3FU7",
                 "zfcn": "KIJRFQX1PKVQYGU",
                 "transactionReceivedDate": "2022-12-07T06:27:25.470Z",
-                "transactionSourceTypeCode": "MARKETPLACE",
+                "source": "MARKETPLACE",
                 "entityCodes": {
                   "enrollmentSpanCode": ["TM39ARWMKXX1T10"],
                   "premiumSpanCode": ["ZV7H1SMOMGLBXG7"]
@@ -1416,31 +1426,11 @@
               "accountSK": "e29f6d8d-51c8-4259-b789-1aac0e5fcfe7",
               "accountNumber": "5LOQKYBP1NQX17E",
               "lineOfBusinessTypeCode": "HIX",
+              "ztcn": "MC6L56Z5GRGHEK2",
+              "source": "MARKETPLACE",
               "enrollmentSpans": [
                 {
                   "enrollmentSpanCode": "TM39ARWMKXX1T10",
-                  "premiumSpans": [
-                    {
-                      "ztcn": "631GPKM3TJZ3FU7",
-                      "premiumSpanCode": "ZV7H1SMOMGLBXG7",
-                      "memberPremiumSpans": [
-                        {
-                          "memberCode": "G8RKJY77IYPBYXU",
-                          "exchangeMemberId": "24524734501",
-                          "individualPremiumAmount": 150.00
-                        }
-                      ],
-                      "startDate": "2023-01-01",
-                      "endDate": "2023-12-31",
-                      "statusTypeCode": "ACTIVE",
-                      "csrVariant": "03",
-                      "totalPremiumAmount": 150.00,
-                      "totalResponsibleAmount": 150.00,
-                      "aptcAmount": 0.00,
-                      "sequence": 1,
-                      "changed": true
-                    }
-                  ],
                   "stateTypeCode": "FL",
                   "marketplaceTypeCode": "FFM",
                   "businessUnitTypeCode": "MP_FL",
@@ -1456,7 +1446,31 @@
                   "effectuationDate": "2022-12-07",
                   "effectiveReason": "MBS",
                   "ztcn": "631GPKM3TJZ3FU7",
-                  "changed": true
+                  "source": "MARKETPLACE",
+                  "changed": true,
+                  "premiumSpans": [
+                    {
+                      "premiumSpanCode": "ZV7H1SMOMGLBXG7",
+                      "ztcn": "631GPKM3TJZ3FU7",
+                      "source": "MARKETPLACE",
+                      "startDate": "2023-01-01",
+                      "endDate": "2023-12-31",
+                      "statusTypeCode": "ACTIVE",
+                      "csrVariant": "03",
+                      "totalPremiumAmount": 150.00,
+                      "totalResponsibleAmount": 150.00,
+                      "aptcAmount": 0.00,
+                      "sequence": 1,
+                      "changed": true,
+                      "memberPremiumSpans": [
+                        {
+                          "memberCode": "G8RKJY77IYPBYXU",
+                          "exchangeMemberId": "24524734501",
+                          "individualPremiumAmount": 150.00
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             }
