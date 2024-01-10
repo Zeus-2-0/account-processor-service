@@ -51,9 +51,14 @@ public class AlternateContactHelperImpl implements AlternateContactHelper {
      * Create alternate contact
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
     @Override
-    public void createAlternateContact(Member member, TransactionMemberDto transactionMemberDto) {
+    public void createAlternateContact(Member member,
+                                       TransactionMemberDto transactionMemberDto,
+                                       String ztcn,
+                                       String source) {
 
         List<AlternateContact> alternateContacts = new ArrayList<>();
         if(transactionMemberDto.getAlternateContacts() != null &&
@@ -79,6 +84,8 @@ public class AlternateContactHelperImpl implements AlternateContactHelper {
                         .city(alternateContactDto.getCity())
                         .stateTypeCode(alternateContactDto.getStateTypeCode())
                         .zipCode(alternateContactDto.getZipCode())
+                        .ztcn(ztcn)
+                        .source(source)
                         .startDate(alternateContactDto.getReceivedDate().toLocalDate())
                         .endDate(null)
                         .changed(true)

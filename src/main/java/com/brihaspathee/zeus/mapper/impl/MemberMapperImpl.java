@@ -46,6 +46,8 @@ public class MemberMapperImpl implements MemberMapper {
                 .genderTypeCode(member.getGenderTypeCode())
                 .height(member.getHeight())
                 .weight(member.getWeight())
+                .ztcn(member.getZtcn())
+                .source(member.getSource())
                 .changed(new AtomicBoolean(member.isChanged()))
                 .createdDate(member.getCreatedDate())
                 .updatedDate(member.getUpdatedDate())
@@ -74,6 +76,8 @@ public class MemberMapperImpl implements MemberMapper {
                 .genderTypeCode(memberDto.getGenderTypeCode())
                 .height(memberDto.getHeight())
                 .weight(memberDto.getWeight())
+                .ztcn(memberDto.getZtcn())
+                .source(memberDto.getSource())
                 .createdDate(memberDto.getCreatedDate())
                 .updatedDate(memberDto.getUpdatedDate())
                 .build();

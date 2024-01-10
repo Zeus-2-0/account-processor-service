@@ -91,6 +91,7 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                 .enrollmentSpanCode(enrollmentSpanCode)
                 .account(account)
                 .ztcn(transactionDto.getZtcn())
+                .source(transactionDto.getSource())
                 .stateTypeCode(transactionDto.getTradingPartnerDto().getStateTypeCode())
                 .marketplaceTypeCode(transactionDto.getTradingPartnerDto().getMarketplaceTypeCode())
                 .businessUnitTypeCode(transactionDto.getTradingPartnerDto().getBusinessTypeCode())

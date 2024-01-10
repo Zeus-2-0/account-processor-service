@@ -19,8 +19,13 @@ public interface MemberIdentifierHelper {
      * Create member identifier
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    void createMemberIdentifier(Member member, TransactionMemberDto transactionMemberDto);
+    void createMemberIdentifier(Member member,
+                                TransactionMemberDto transactionMemberDto,
+                                String ztcn,
+                                String source);
 
     /**
      * Set the member identifier dto to  send to MMS
@@ -35,6 +40,12 @@ public interface MemberIdentifierHelper {
      * @param member - The member entity
      * @param memberDto - The member dto
      * @param transactionMemberDto - The member's transaction information
+     * @param ztcn
+     * @param source
      */
-    void matchMemberIdentifier(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto);
+    void matchMemberIdentifier(Member member,
+                               MemberDto memberDto,
+                               TransactionMemberDto transactionMemberDto,
+                               String ztcn,
+                               String source);
 }

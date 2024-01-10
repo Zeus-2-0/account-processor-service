@@ -124,6 +124,18 @@ public class Member {
     private double weight;
 
     /**
+     * The zeus transaction control number of the transaction that created the member
+     */
+    @Column(name = "ztcn", length = 20, columnDefinition = "varchar", nullable = true)
+    private String ztcn;
+
+    /**
+     * The source of the data
+     */
+    @Column(name = "source", length = 50, columnDefinition = "varchar", nullable = false)
+    private String source;
+
+    /**
      * List of member address associated with the member
      */
     @OneToMany(mappedBy = "member")

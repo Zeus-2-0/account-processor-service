@@ -19,8 +19,13 @@ public interface MemberLanguageHelper {
      * Create member language
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    void createMemberLanguage(Member member, TransactionMemberDto transactionMemberDto);
+    void createMemberLanguage(Member member,
+                              TransactionMemberDto transactionMemberDto,
+                              String ztcn,
+                              String source);
 
     /**
      * Set the member language dto to  send to MMS
@@ -34,6 +39,12 @@ public interface MemberLanguageHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    void matchMemberLanguage(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto);
+    void matchMemberLanguage(Member member,
+                             MemberDto memberDto,
+                             TransactionMemberDto transactionMemberDto,
+                             String ztcn,
+                             String source);
 }

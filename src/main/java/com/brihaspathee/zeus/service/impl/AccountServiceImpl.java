@@ -128,6 +128,8 @@ public class AccountServiceImpl implements AccountService {
                 .matchFound(false)
                 .accountNumber(accountNumber)
                 .lineOfBusinessTypeCode(transactionDto.getTradingPartnerDto().getLineOfBusinessTypeCode())
+                .ztcn(transactionDto.getZtcn())
+                .source(transactionDto.getSource())
                 .build();
         account = accountRepository.save(account);
         // Create the members. Members are created first before creating the enrollment spans so that the created
@@ -182,6 +184,8 @@ public class AccountServiceImpl implements AccountService {
                 .matchFound(true)
                 .matchAccountSK(accountDto.getAccountSK())
                 .accountNumber(accountDto.getAccountNumber())
+                .ztcn(accountDto.getZtcn())
+                .source(accountDto.getSource())
                 .lineOfBusinessTypeCode(transactionDto.getTradingPartnerDto().getLineOfBusinessTypeCode())
                 .build();
         account = accountRepository.save(account);

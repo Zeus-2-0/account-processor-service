@@ -19,8 +19,13 @@ public interface MemberPhoneHelper {
      * Create member phone
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    void createMemberPhone(Member member, TransactionMemberDto transactionMemberDto);
+    void createMemberPhone(Member member,
+                           TransactionMemberDto transactionMemberDto,
+                           String ztcn,
+                           String source);
 
     /**
      * Set the member phone dto to  send to MMS
@@ -34,6 +39,12 @@ public interface MemberPhoneHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    void matchMemberPhone(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto);
+    void matchMemberPhone(Member member,
+                          MemberDto memberDto,
+                          TransactionMemberDto transactionMemberDto,
+                          String ztcn,
+                          String source);
 }

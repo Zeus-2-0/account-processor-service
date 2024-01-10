@@ -57,8 +57,14 @@ public class PremiumSpan {
     /**
      * The zeus transaction control number of the transaction that created the premium span
      */
-    @Column(name = "ztcn", length = 20, columnDefinition = "varchar", nullable = false)
+    @Column(name = "ztcn", length = 20, columnDefinition = "varchar", nullable = true)
     private String ztcn;
+
+    /**
+     * The source of the data
+     */
+    @Column(name = "source", length = 50, columnDefinition = "varchar", nullable = false)
+    private String source;
 
     /**
      * Unique span code that is assigned to the premium span

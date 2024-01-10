@@ -58,9 +58,14 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
      * Create a member address
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
     @Override
-    public void createMemberAddress(Member member, TransactionMemberDto transactionMemberDto) {
+    public void createMemberAddress(Member member,
+                                    TransactionMemberDto transactionMemberDto,
+                                    String ztcn,
+                                    String source) {
         if(transactionMemberDto.getMemberAddresses() != null && transactionMemberDto.getMemberAddresses().size() > 0){
             List<MemberAddress> addresses = new ArrayList<>();
             transactionMemberDto.getMemberAddresses().forEach(addressDto -> {
@@ -68,7 +73,7 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
                 // Since this will be a new address create a new member code
                 String memberAddressCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
                         "memberAddressCode");
-                MemberAddress memberAddress = createMemberAddress(member, addressDto, memberAddressCode);
+                MemberAddress memberAddress = createMemberAddress(member, addressDto, memberAddressCode, ztcn, source);
                 addresses.add(memberAddress);
             });
             member.setMemberAddresses(addresses);
@@ -98,9 +103,15 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
     @Override
-    public void matchMemberAddress(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
+    public void matchMemberAddress(Member member,
+                                   MemberDto memberDto,
+                                   TransactionMemberDto transactionMemberDto,
+                                   String ztcn,
+                                   String source) {
 //        log.info("Inside member match address");
         // Check if the transaction has any addresses for the member
         // If there are no addresses in the transaction then return
@@ -109,8 +120,8 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
             return;
         }
         // There are only two types of addresses possible "RESIDENCE" and "MAIL"
-        matchAddress("RESIDENCE", member, memberDto, transactionMemberDto);
-        matchAddress("MAIL", member, memberDto, transactionMemberDto);
+        matchAddress("RESIDENCE", member, memberDto, transactionMemberDto, ztcn, source);
+        matchAddress("MAIL", member, memberDto, transactionMemberDto, ztcn, source);
     }
 
     /**
@@ -119,8 +130,15 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    private void matchAddress(String addressTypeCode, Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
+    private void matchAddress(String addressTypeCode,
+                              Member member,
+                              MemberDto memberDto,
+                              TransactionMemberDto transactionMemberDto,
+                              String ztcn,
+                              String source) {
         List<MemberAddress> addresses = new ArrayList<>();
 
         // Check if the transaction has the passed in address type for the member
@@ -145,7 +163,11 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
                     // if the address in the transaction is different from the address in the account then create the new address
                     String memberAddressCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
                             "memberAddressCode");
-                    MemberAddress memberAddress = createMemberAddress(member, optionalTransactionMemberResAddressDto.get(), memberAddressCode);
+                    MemberAddress memberAddress = createMemberAddress(member,
+                            optionalTransactionMemberResAddressDto.get(),
+                            memberAddressCode,
+                            ztcn,
+                            source);
                     addresses.add(memberAddress);
                     // Update the address in the account to term one day prior to the transaction received date
                     // Get the current residential address in the account
@@ -167,7 +189,11 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
                 // Since this will be a new address create a new address code
                 String memberAddressCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
                         "memberAddressCode");
-                MemberAddress memberAddress = createMemberAddress(member, optionalTransactionMemberResAddressDto.get(), memberAddressCode);
+                MemberAddress memberAddress = createMemberAddress(member,
+                        optionalTransactionMemberResAddressDto.get(),
+                        memberAddressCode,
+                        ztcn,
+                        source);
                 addresses.add(memberAddress);
             }
         }
@@ -184,9 +210,15 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
      * @param member
      * @param transactionMemberAddressDto
      * @param memberAddressCode
+     * @param ztcn
+     * @param source
      * @return
      */
-    private MemberAddress createMemberAddress(Member member, TransactionMemberAddressDto transactionMemberAddressDto, String memberAddressCode){
+    private MemberAddress createMemberAddress(Member member,
+                                              TransactionMemberAddressDto transactionMemberAddressDto,
+                                              String memberAddressCode,
+                                              String ztcn,
+                                              String source){
         MemberAddress memberAddress = MemberAddress.builder()
                 .member(member)
                 .memberAcctAddressSK(null)
@@ -198,6 +230,8 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
                 .stateTypeCode(transactionMemberAddressDto.getStateTypeCode())
                 .zipCode(transactionMemberAddressDto.getZipCode())
                 .countyCode(transactionMemberAddressDto.getCountyCode())
+                .ztcn(ztcn)
+                .source(source)
                 .startDate(transactionMemberAddressDto.getReceivedDate().toLocalDate())
                 .endDate(null)
                 .changed(true)

@@ -34,8 +34,8 @@ public class TransactionMapperImpl implements TransactionMapper {
         Transaction transaction = Transaction.builder()
                 .ztcn(transactionDto.getZtcn())
                 .zfcn(transactionDto.getZfcn())
+                .source(transactionDto.getSource())
                 .transactionReceivedDate(transactionDto.getTransactionReceivedDate())
-                .transactionSourceTypeCode(transactionDto.getTransactionSourceTypeCode())
                 .build();
         return transaction;
     }

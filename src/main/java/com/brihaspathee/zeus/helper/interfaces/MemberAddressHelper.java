@@ -23,8 +23,13 @@ public interface MemberAddressHelper {
      * Create member address
      * @param member
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    void createMemberAddress(Member member, TransactionMemberDto transactionMemberDto);
+    void createMemberAddress(Member member,
+                             TransactionMemberDto transactionMemberDto,
+                             String ztcn,
+                             String source);
 
     /**
      * Set the member address dto to  send to MMS
@@ -38,6 +43,12 @@ public interface MemberAddressHelper {
      * @param member
      * @param memberDto
      * @param transactionMemberDto
+     * @param ztcn
+     * @param source
      */
-    void matchMemberAddress(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto);
+    void matchMemberAddress(Member member,
+                            MemberDto memberDto,
+                            TransactionMemberDto transactionMemberDto,
+                            String ztcn,
+                            String source);
 }

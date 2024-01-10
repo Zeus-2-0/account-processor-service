@@ -50,8 +50,18 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
      */
     private final AccountProcessorUtil accountProcessorUtil;
 
+    /**
+     * Create member identifier
+     * @param member
+     * @param transactionMemberDto
+     * @param ztcn
+     * @param source
+     */
     @Override
-    public void createMemberIdentifier(Member member, TransactionMemberDto transactionMemberDto) {
+    public void createMemberIdentifier(Member member,
+                                       TransactionMemberDto transactionMemberDto,
+                                       String ztcn,
+                                       String source) {
 //        log.info("Inside create member identifier");
         if(transactionMemberDto.getIdentifiers() != null && transactionMemberDto.getIdentifiers().size() > 0){
             List<MemberIdentifier> identifiers = new ArrayList<>();
@@ -73,6 +83,8 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
                         .memberIdentifierCode(memberIdentifierCode)
                         .identifierTypeCode(memberIdentifierDto.getIdentifierTypeCode())
                         .identifierValue(memberIdentifierDto.getIdentifierValue())
+                        .ztcn(ztcn)
+                        .source(source)
                         .active(true)
                         .changed(true)
                         .build();
@@ -108,9 +120,15 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
      * @param member - The member entity
      * @param memberDto - The member dto
      * @param transactionMemberDto - The member's transaction information
+     * @param ztcn
+     * @param source
      */
     @Override
-    public void matchMemberIdentifier(Member member, MemberDto memberDto, TransactionMemberDto transactionMemberDto) {
+    public void matchMemberIdentifier(Member member,
+                                      MemberDto memberDto,
+                                      TransactionMemberDto transactionMemberDto,
+                                      String ztcn,
+                                      String source) {
 //        log.info("Inside member match identifier");
         // Check if the transaction has any addresses for the member
         // If there are no addresses in the transaction then return
@@ -143,7 +161,7 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
         if(optionalAccountSSN.isEmpty()){
             // This means that there is no active SSN in the account for the member
             // Hence create the SSN that was received in the transaction
-            createMemberIdentifier(member, transactionMemberDto);
+            createMemberIdentifier(member, transactionMemberDto, ztcn, source);
             return;
         }
         // if the control reaches here, means that there is a SSN for the member in the transaction
@@ -155,7 +173,7 @@ public class MemberIdentifierHelperImpl implements MemberIdentifierHelper {
         if(!memberAccountSSN.equals(memberTransactionSSN)){
             // If the SSNs are different then we needed to deactivate the previous SSN and activate the current SSN
             // Hence create the SSN that was received in the transaction
-            createMemberIdentifier(member, transactionMemberDto);
+            createMemberIdentifier(member, transactionMemberDto, ztcn, source);
             MemberIdentifierDto memberIdentifierDto = optionalAccountSSN.get();
             MemberIdentifier memberIdentifier = identifierMapper.identifierDtoToIdentifier(memberIdentifierDto);
             memberIdentifier.setMemberAcctIdentifierSK(memberIdentifierDto.getMemberIdentifierSK());

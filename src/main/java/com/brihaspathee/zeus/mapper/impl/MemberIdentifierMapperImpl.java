@@ -41,6 +41,8 @@ public class MemberIdentifierMapperImpl implements MemberIdentifierMapper {
                 .identifierTypeCode(identifier.getIdentifierTypeCode())
                 .identifierValue(identifier.getIdentifierValue())
                 .isActive(identifier.isActive())
+                .ztcn(identifier.getZtcn())
+                .source(identifier.getSource())
                 .changed(new AtomicBoolean(identifier.isChanged()))
                 .createdDate(identifier.getCreatedDate())
                 .updatedDate(identifier.getUpdatedDate())
@@ -63,6 +65,8 @@ public class MemberIdentifierMapperImpl implements MemberIdentifierMapper {
                 .identifierTypeCode(memberIdentifierDto.getIdentifierTypeCode())
                 .identifierValue(memberIdentifierDto.getIdentifierValue())
                 .active(memberIdentifierDto.isActive())
+                .ztcn(memberIdentifierDto.getZtcn())
+                .source(memberIdentifierDto.getSource())
                 .createdDate(memberIdentifierDto.getCreatedDate())
                 .updatedDate(memberIdentifierDto.getUpdatedDate())
                 .build();
