@@ -1,27 +1,16 @@
 package com.brihaspathee.zeus.helper.impl;
 
 import com.brihaspathee.zeus.domain.entity.Account;
-import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
-import com.brihaspathee.zeus.domain.entity.Transaction;
 import com.brihaspathee.zeus.dto.account.AccountDto;
-import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
-import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.AddTransactionHelper;
 import com.brihaspathee.zeus.helper.interfaces.EnrollmentSpanHelper;
 import com.brihaspathee.zeus.helper.interfaces.MemberHelper;
-import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 /**
  * Created in Intellij IDEA

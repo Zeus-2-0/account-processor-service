@@ -5,7 +5,7 @@ import com.brihaspathee.zeus.constants.ZeusServiceNames;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.test.BuildTestData;
 import com.brihaspathee.zeus.test.TestClass;
-import com.brihaspathee.zeus.test.validator.AccountValidation;
+import com.brihaspathee.zeus.test.validator.AccountValidator;
 import com.brihaspathee.zeus.web.model.TestAccountProcessingRequest;
 import com.brihaspathee.zeus.web.response.ZeusApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -73,7 +73,7 @@ public class ProcessTransactionAPIIntTest {
     /**
      * The account validation instance to validate the details of the account
      */
-    private AccountValidation accountValidation = new AccountValidation();
+    private final AccountValidator accountValidator = new AccountValidator();
 
 
     /**
@@ -92,7 +92,7 @@ public class ProcessTransactionAPIIntTest {
         // Read the file information and convert to test class object
         accountProcessingRequestTestClass = objectMapper.readValue(resourceFile.getFile(), new TypeReference<TestClass<TestAccountProcessingRequest>>() {});
 
-        accountValidation.setTestServiceName(ZeusServiceNames.ACCOUNT_PROCESSOR_SERVICE);
+        accountValidator.setTestServiceName(ZeusServiceNames.ACCOUNT_PROCESSOR_SERVICE);
 
         // Build the test data for the test method that is to be executed
         this.requests = buildTestData.buildData(testInfo.getTestMethod().get().getName(),this.accountProcessingRequestTestClass);
@@ -125,6 +125,6 @@ public class ProcessTransactionAPIIntTest {
         AccountDto actualAccountDto =
                 objectMapper.convertValue(apiResponse.getResponse(), AccountDto.class);
 //        log.info("Account Dto:{}", actualAccountDto);
-        accountValidation.assertAccount(expectedAccountDto, actualAccountDto);
+        accountValidator.assertAccount(expectedAccountDto, actualAccountDto);
     }
 }

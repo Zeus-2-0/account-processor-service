@@ -1,10 +1,11 @@
 package com.brihaspathee.zeus.domain.entity;
 
-import jakarta.persistence.Table;
-import lombok.*;
-import org.hibernate.annotations.*;
-
 import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Types;
 import java.time.LocalDateTime;
@@ -13,8 +14,8 @@ import java.util.UUID;
 /**
  * Created in Intellij IDEA
  * User: Balaji Varadharajan
- * Date: 20, November 2022
- * Time: 5:30 PM
+ * Date: 14, January 2024
+ * Time: 8:34 PM
  * Project: Zeus
  * Package Name: com.brihaspathee.zeus.domain.entity
  * To change this template use File | Settings | File and Code Template
@@ -25,8 +26,8 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TRANSACTION")
-public class Transaction {
+@Table(name = "PROCESS_REQUEST")
+public class ProcessingRequest {
 
     /**
      * Primary key of the table
@@ -35,38 +36,37 @@ public class Transaction {
     @GeneratedValue(generator = "UUID")
     @JdbcTypeCode(Types.LONGVARCHAR)
     @GenericGenerator(name="UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "transaction_sk", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
-    private UUID transactionSK;
+    @Column(name = "process_request_sk", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
+    private UUID processRequestSK;
 
     /**
-     * Unique assigned to the transaction by the transaction origination service
+     * Identifies the request control number type code
+     * E.g. Transaction
      */
-    @Column(name = "ztcn", length = 50, columnDefinition = "varchar", nullable = false)
-    private String ztcn;
+    private String zrcnTypeCode;
 
     /**
-     * The file control number of the file that the transaction was received
+     * The request control number
+     * E.g. ztcn
      */
-    @Column(name = "zfcn", length = 50, columnDefinition = "varchar", nullable = false)
-    private String zfcn;
+    private String zrcn;
 
     /**
-     * The source of the transaction data
+     * The source of the request
      */
     @Column(name = "source", length = 50, columnDefinition = "varchar", nullable = false)
     private String source;
 
     /**
-     * The date the transaction was received
+     * The date when the request was received
      */
-    @Column(name ="transaction_received_date")
-    private LocalDateTime transactionReceivedDate;
-
+    @Column(name ="request_received_date")
+    private LocalDateTime requestReceivedDate;
 
     /**
      * The account that was created or matched for the transaction
      */
-    @OneToOne(mappedBy = "transaction")
+    @OneToOne(mappedBy = "processRequest")
     private Account account;
 
     /**
@@ -82,6 +82,4 @@ public class Transaction {
     @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
-
-
 }

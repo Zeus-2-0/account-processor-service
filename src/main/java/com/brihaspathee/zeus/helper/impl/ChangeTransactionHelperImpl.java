@@ -2,8 +2,6 @@ package com.brihaspathee.zeus.helper.impl;
 
 import com.brihaspathee.zeus.constants.PremiumSpanStatus;
 import com.brihaspathee.zeus.domain.entity.Account;
-import com.brihaspathee.zeus.domain.entity.PremiumSpan;
-import com.brihaspathee.zeus.domain.entity.Transaction;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.account.PremiumSpanDto;

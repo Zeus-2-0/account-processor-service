@@ -1,7 +1,6 @@
 package com.brihaspathee.zeus.helper.impl;
 
 import com.brihaspathee.zeus.domain.entity.Account;
-import com.brihaspathee.zeus.domain.entity.Transaction;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.EnrollmentSpanHelper;

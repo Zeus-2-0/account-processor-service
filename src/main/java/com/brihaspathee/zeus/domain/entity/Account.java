@@ -39,12 +39,13 @@ public class Account {
     @Column(name = "account_sk", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID accountSK;
 
+
     /**
-     * The transaction that is being processed for the account
+     * The processing request that is being processed for the account
      */
     @OneToOne
-    @JoinColumn(name = "transaction_sk")
-    private Transaction transaction;
+    @JoinColumn(name = "process_request_sk")
+    private ProcessingRequest processRequest;
 
     /**
      * Identifies if an account match was found in the MMS for the transaction

@@ -1,9 +1,6 @@
 package com.brihaspathee.zeus.service.impl;
 
-import com.brihaspathee.zeus.domain.entity.Account;
-import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
-import com.brihaspathee.zeus.domain.entity.Member;
-import com.brihaspathee.zeus.domain.entity.Transaction;
+import com.brihaspathee.zeus.domain.entity.*;
 import com.brihaspathee.zeus.domain.repository.AccountRepository;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
@@ -114,17 +111,18 @@ public class AccountServiceImpl implements AccountService {
     /**
      * This method should be invoked if a new account should be created
      * @param transactionDto The transaction dto from which the account has to be created
-     * @param transaction the transaction entity to which the created account has to be associated
+     * @param processingRequest the transaction entity to which the created account has to be associated
      * @return the created account
      * @throws JsonProcessingException the json processing exception
      */
     @Override
-    public AccountDto createAccount(TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
+    public AccountDto createAccount(TransactionDto transactionDto, ProcessingRequest processingRequest) throws JsonProcessingException {
         String accountNumber = accountProcessorUtil.generateUniqueCode(transactionDto.getEntityCodes(),
                 "accountNumber");
         // Create the account
         Account account = Account.builder()
-                .transaction(transaction)
+//                .transaction(transaction)
+                .processRequest(processingRequest)
                 .matchFound(false)
                 .accountNumber(accountNumber)
                 .lineOfBusinessTypeCode(transactionDto.getTradingPartnerDto().getLineOfBusinessTypeCode())
@@ -147,7 +145,7 @@ public class AccountServiceImpl implements AccountService {
         brokerHelper.createBroker(transactionDto, account);
         // Create the payers from the transaction
         payerHelper.createPayer(transactionDto, account);
-        AccountDto accountDto = createAccountDto(account, transaction.getZtcn());
+        AccountDto accountDto = createAccountDto(account, processingRequest.getZrcn());
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
         log.info("Account to be set to MMS:{}", objectMapper.writeValueAsString(accountDto));
@@ -158,14 +156,14 @@ public class AccountServiceImpl implements AccountService {
      * This method should be invoked if an account should be updated
      * @param accountNumber Account number of the account that needs to be updated
      * @param transactionDto the dto object that was received for processing the account
-     * @param transaction the entity object that was persisted in APS
+     * @param processingRequest the entity object that was persisted in APS
      * @return the account dto object that was updated
      * @throws JsonProcessingException json processing exception
      */
     @Override
-    public AccountDto updateAccount(String accountNumber, TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
+    public AccountDto updateAccount(String accountNumber, TransactionDto transactionDto, ProcessingRequest processingRequest) throws JsonProcessingException {
         AccountDto accountDto = memberManagementService.getAccountByAccountNumber(accountNumber);
-        return updateAccount(accountDto, transactionDto, transaction);
+        return updateAccount(accountDto, transactionDto, processingRequest);
     }
 
     /**
@@ -173,14 +171,15 @@ public class AccountServiceImpl implements AccountService {
      * Use this method if the calling method only has the account number of the account that needs to be updated
      * @param accountDto Account number of the account that needs to be updated
      * @param transactionDto the dto object that was received for processing the account
-     * @param transaction the entity object that was persisted in APS
+     * @param processingRequest the entity object that was persisted in APS
      * @return the account dto object that was updated
      * @throws JsonProcessingException json processing exception
      */
     @Override
-    public AccountDto updateAccount(AccountDto accountDto, TransactionDto transactionDto, Transaction transaction) throws JsonProcessingException {
+    public AccountDto updateAccount(AccountDto accountDto, TransactionDto transactionDto, ProcessingRequest processingRequest) throws JsonProcessingException {
         Account account = Account.builder()
-                .transaction(transaction)
+//                .transaction(transaction)
+                .processRequest(processingRequest)
                 .matchFound(true)
                 .matchAccountSK(accountDto.getAccountSK())
                 .accountNumber(accountDto.getAccountNumber())
