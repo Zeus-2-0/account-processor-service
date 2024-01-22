@@ -4,12 +4,11 @@ import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
 import com.brihaspathee.zeus.broker.message.AccountUpdateRequest;
 import com.brihaspathee.zeus.broker.producer.AccountUpdateProducer;
 import com.brihaspathee.zeus.domain.entity.PayloadTracker;
-import com.brihaspathee.zeus.domain.entity.Transaction;
-import com.brihaspathee.zeus.domain.repository.TransactionRepository;
+import com.brihaspathee.zeus.domain.entity.ProcessingRequest;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
-import com.brihaspathee.zeus.mapper.interfaces.TransactionMapper;
 import com.brihaspathee.zeus.service.interfaces.AccountService;
+import com.brihaspathee.zeus.service.interfaces.RequestService;
 import com.brihaspathee.zeus.service.interfaces.TransactionProcessor;
 import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
@@ -43,14 +42,9 @@ public class TransactionProcessorImpl implements TransactionProcessor {
     private final AccountService accountService;
 
     /**
-     * The transaction repository instance to perform the CRUD operations
+     * Instance of the request service to save the request
      */
-    private final TransactionRepository transactionRepository;
-
-    /**
-     * The transaction mapper instance for mapping the transaction
-     */
-    private final TransactionMapper transactionMapper;
+    private final RequestService requestService;
 
     /**
      * Producer instance to send Account information to MMS
@@ -107,15 +101,15 @@ public class TransactionProcessorImpl implements TransactionProcessor {
     private AccountDto processTransactionByAccountNumber(TransactionDto transactionDto,
                                           String accountNumber,
                                           boolean sendToMMS) throws JsonProcessingException {
-        Transaction transaction = transactionMapper.transactionDtoToTransaction(transactionDto);
-        transaction = transactionRepository.save(transaction);
+        ProcessingRequest processingRequest =
+                requestService.saveRequest(transactionDto);
         AccountDto accountDto = null;
         if(accountNumber == null){
             // If the account number is null, a new account has to be created in MMS
-            accountDto =  accountService.createAccount(transactionDto, transaction);
+            accountDto =  accountService.createAccount(transactionDto, processingRequest);
         }else{
             // If the account number is not null then update the account
-            accountDto = accountService.updateAccount(accountNumber, transactionDto, transaction);
+            accountDto = accountService.updateAccount(accountNumber, transactionDto, processingRequest);
         }
         AccountUpdateRequest accountUpdateRequest = AccountUpdateRequest.builder()
                 .accountDto(accountDto)
@@ -137,8 +131,9 @@ public class TransactionProcessorImpl implements TransactionProcessor {
     private AccountDto processTransactionByAccountDto(TransactionDto transactionDto,
                                           AccountDto accountDto,
                                           boolean sendToMMS) throws JsonProcessingException {
-        Transaction transaction = transactionMapper.transactionDtoToTransaction(transactionDto);
-        transaction = transactionRepository.save(transaction);
-        return accountService.updateAccount(accountDto, transactionDto, transaction);
+        ProcessingRequest processingRequest =
+                requestService.saveRequest(transactionDto);
+        return accountService.updateAccount(accountDto, transactionDto, processingRequest);
     }
+
 }

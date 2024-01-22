@@ -171,8 +171,8 @@ public class MemberHelperImpl implements MemberHelper {
             Member member = createMember(account,
                     transactionMemberDto,
                     primarySubscriber,
-                    transactionDto.getZtcn(),
-                    transactionDto.getSource());
+                    primarySubscriber.getZtcn(),
+                    primarySubscriber.getSource());
             memberAddressHelper.matchMemberAddress(member, primarySubscriber, transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
             memberIdentifierHelper.matchMemberIdentifier(member, primarySubscriber, transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
             memberPhoneHelper.matchMemberPhone(member,primarySubscriber,transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
@@ -206,8 +206,8 @@ public class MemberHelperImpl implements MemberHelper {
                     member = createMember(account,
                             transactionMemberDto,
                             memberDto,
-                            transactionDto.getZtcn(),
-                            transactionDto.getSource());
+                            memberDto.getZtcn(),
+                            memberDto.getSource());
                     memberAddressHelper.matchMemberAddress(member, memberDto, transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
                     memberIdentifierHelper.matchMemberIdentifier(member, memberDto, transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
                     memberPhoneHelper.matchMemberPhone(member,memberDto,transactionMemberDto, transactionDto.getZtcn(), transactionDto.getSource());
@@ -264,7 +264,7 @@ public class MemberHelperImpl implements MemberHelper {
                                 MemberDto memberDto,
                                 String ztcn,
                                 String source) {
-//        log.info("member detail:{}", transactionMemberDto);
+        log.info("Source:{}", source);
         Member member = Member.builder()
                 .account(account)
                 // The member code assigned for the member in the transaction manager service

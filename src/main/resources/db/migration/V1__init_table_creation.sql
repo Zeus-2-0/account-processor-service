@@ -12,22 +12,22 @@ DROP TABLE IF EXISTS `accountprocessordb`.`premium_span`;
 DROP TABLE IF EXISTS `accountprocessordb`.`enrollment_span`;
 DROP TABLE IF EXISTS `accountprocessordb`.`member`;
 DROP TABLE IF EXISTS `accountprocessordb`.`account`;
-DROP TABLE IF EXISTS `accountprocessordb`.`transaction`;
+DROP TABLE IF EXISTS `accountprocessordb`.`acct_process_request`;
 DROP TABLE IF EXISTS `accountprocessordb`.`payload_tracker_detail`;
 DROP TABLE IF EXISTS `accountprocessordb`.`payload_tracker`;
-CREATE TABLE IF NOT EXISTS `accountprocessordb`.`transaction` (
-    `transaction_sk` VARCHAR(36) NOT NULL COMMENT 'The primary key of the table',
-    `ztcn` VARCHAR(50) NOT NULL COMMENT 'The zeus transaction control number',
-    `zfcn` VARCHAR(50) NULL COMMENT 'The zeus file control number',
+CREATE TABLE IF NOT EXISTS `accountprocessordb`.`process_request` (
+    `process_request_sk` VARCHAR(36) NOT NULL COMMENT 'The primary key of the table',
+    `zrcn_type_code` VARCHAR(50) NOT NULL COMMENT 'Identifies the request control number type code',
+    `zrcn` VARCHAR(50) NULL COMMENT 'The request control number',
     `source` VARCHAR(50) NOT NULL COMMENT 'The source of the transaction',
-    `transaction_received_date` DATETIME NOT NULL COMMENT 'The date when the transaction was received',
+    `request_received_date` DATETIME NOT NULL COMMENT 'The date when the request was received',
     `created_date` DATETIME NULL COMMENT 'The date when the record was created',
     `updated_date` DATETIME NULL COMMENT 'The date when the record was updated',
-    PRIMARY KEY (`transaction_sk`, `ztcn`))
+    PRIMARY KEY (`process_request_sk`))
     ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `accountprocessordb`.`account` (
     `account_sk` VARCHAR(36) NOT NULL COMMENT 'Primary key of the table',
-    `transaction_sk` VARCHAR(36) NOT NULL COMMENT 'The transaction for which the match was found',
+    `process_request_sk` VARCHAR(36) NOT NULL COMMENT 'The request for which the account is being processed',
     `match_found` BOOLEAN NOT NULL COMMENT 'Indicates if a match was found or not for the transaction',
     `match_account_sk` VARCHAR(36) NULL COMMENT 'The account sk of the matched account, this will be NULL if no match was found',
     `account_number` VARCHAR(50) NOT NULL COMMENT 'The account number for the account that was matched or a new account number for the account to be created',
@@ -37,10 +37,10 @@ CREATE TABLE IF NOT EXISTS `accountprocessordb`.`account` (
     `created_date` DATETIME NULL,
     `updated_date` DATETIME NULL,
     PRIMARY KEY (`account_sk`),
-    INDEX `acct_trans_fk_idx` (`transaction_sk` ASC) VISIBLE,
-    CONSTRAINT `acct_trans_fk`
-    FOREIGN KEY (`transaction_sk`)
-    REFERENCES `accountprocessordb`.`transaction` (`transaction_sk`)
+    INDEX `acct_process_fk_idx` (`process_request_sk` ASC) VISIBLE,
+    CONSTRAINT `acct_process_fk`
+    FOREIGN KEY (`process_request_sk`)
+    REFERENCES `accountprocessordb`.`process_request` (`process_request_sk`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
     ENGINE = InnoDB
