@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.*;
 
 import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
 
 import java.sql.Types;
 import java.time.LocalDate;
@@ -44,6 +45,7 @@ public class Payer {
      * The key of the payer in MMS
      */
     @Column(name = "acct_payer_sk", length = 36, columnDefinition = "varchar", updatable = true, nullable = true)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID acctPayerSK;
 
     /**

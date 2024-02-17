@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.*;
 
 import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
+
 import java.math.BigDecimal;
 import java.sql.Types;
 import java.time.LocalDateTime;
@@ -43,6 +45,7 @@ public class MemberPremium {
      * The key of the member premium record in MMS
      */
     @Column(name = "acct_mem_prem_sk", length = 36, columnDefinition = "varchar", updatable = true, nullable = true)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID acctMemPremSK;
 
     /**

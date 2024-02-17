@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.*;
 
 import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
 
 import java.sql.Types;
 import java.time.LocalDate;
@@ -46,6 +47,7 @@ public class Member {
      * The key that is assigned to the member in MMS
      */
     @Column(name = "acct_member_sk", length = 36, columnDefinition = "varchar", updatable = true, nullable = true)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID acctMemberSK;
 
     /**

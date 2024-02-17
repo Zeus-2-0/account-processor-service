@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.*;
 
 import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
+
 import java.math.BigDecimal;
 import java.sql.Types;
 import java.time.LocalDate;
@@ -45,6 +47,7 @@ public class PremiumSpan {
      * The key of this premium span in MMS
      */
     @Column(name = "acct_premium_span_sk", length = 36, columnDefinition = "varchar", updatable = true, nullable = true)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID acctPremiumSpanSK;
 
     /**
