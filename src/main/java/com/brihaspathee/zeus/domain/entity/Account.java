@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.*;
 
 import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
 
 import java.sql.Types;
 import java.time.LocalDateTime;
@@ -57,6 +58,7 @@ public class Account {
      * The key of the account in MMS if a match was found
      */
     @Column(name = "match_account_sk", length = 36, columnDefinition = "varchar", updatable = true, nullable = true)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID matchAccountSK;
 
     /**

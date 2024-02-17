@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.*;
 
 import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
 
 import java.sql.Types;
 import java.time.LocalDate;
@@ -45,6 +46,7 @@ public class EnrollmentSpan {
      * The key of the enrollment span that is present in the account
      */
     @Column(name = "acct_enrollment_span_sk", length = 36, columnDefinition = "varchar", updatable = true, nullable = true)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID acctEnrollmentSpanSK;
 
     /**

@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.*;
 
 import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
 
 import java.sql.Types;
 import java.time.LocalDate;
@@ -44,6 +45,7 @@ public class MemberLanguage {
      * The key assigned to the language record in MMS
      */
     @Column(name = "member_acct_lang_sk", length = 36, columnDefinition = "varchar", nullable = true, updatable = true)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID memberAcctLangSK;
 
     /**

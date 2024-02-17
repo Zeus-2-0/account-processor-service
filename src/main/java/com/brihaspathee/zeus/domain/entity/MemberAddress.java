@@ -7,6 +7,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
 
 import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
 
 import java.sql.Types;
 import java.time.LocalDate;
@@ -46,6 +47,7 @@ public class MemberAddress {
      * The key assigned to the address record in MMS
      */
     @Column(name = "member_acct_address_sk", length = 36, columnDefinition = "varchar", nullable = true, updatable = true)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID memberAcctAddressSK;
 
     /**

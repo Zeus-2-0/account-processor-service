@@ -162,6 +162,7 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public AccountDto updateAccount(String accountNumber, TransactionDto transactionDto, ProcessingRequest processingRequest) throws JsonProcessingException {
+        log.info("Calling MMS to get account for account number:{}", accountNumber);
         AccountDto accountDto = memberManagementService.getAccountByAccountNumber(accountNumber);
         return updateAccount(accountDto, transactionDto, processingRequest);
     }
@@ -187,6 +188,7 @@ public class AccountServiceImpl implements AccountService {
                 .source(accountDto.getSource())
                 .lineOfBusinessTypeCode(transactionDto.getTradingPartnerDto().getLineOfBusinessTypeCode())
                 .build();
+        log.info("Account match sk before before insert:{}", account.getMatchAccountSK());
         account = accountRepository.save(account);
         // Check for the transaction type of the transaction and invoke the appropriate helper class
         String transactionTypeCode = transactionDto.getTransactionDetail().getTransactionTypeCode();
