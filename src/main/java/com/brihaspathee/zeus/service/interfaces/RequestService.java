@@ -14,5 +14,20 @@ import com.brihaspathee.zeus.dto.transaction.TransactionDto;
  */
 public interface RequestService {
 
+    /**
+     * Save the request
+     * @param transactionDto
+     * @return
+     */
     ProcessingRequest saveRequest(TransactionDto transactionDto);
+
+    /**
+     * Delete data by ZRCN
+     */
+    void deleteByZrcn(String zrcn);
+
+    /**
+     * Clean up the entire database
+     */
+    void deleteAll();
 }

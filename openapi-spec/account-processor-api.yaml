@@ -50,24 +50,24 @@ paths:
               $ref: '#/components/schemas/AccountProcessingRequest'
         required: true
       responses:
-        "409":
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiExceptionList'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiExceptionList'
         "201":
           description: Transaction successfully processed for the account
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountProcessingResponse'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiExceptionList'
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiExceptionList'
   /api/v1/zeus/account-processor/welcome:
     get:
       tags:
@@ -81,6 +81,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WelcomeDto'
+  /api/v1/zeus/account-processor/delete:
+    delete:
+      tags:
+      - account
+      description: Delete all data
+      operationId: Delete all data
+      responses:
+        "204":
+          description: Data deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZeusApiResponse'
+  /api/v1/zeus/account-processor/delete/{zrcn}:
+    delete:
+      tags:
+      - account
+      description: Delete the data by ZRCN
+      operationId: Delete the data by ZRCN
+      parameters:
+      - name: zrcn
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Data deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZeusApiResponse'
 components:
   schemas:
     EnrollmentSpanDto:
@@ -93,8 +125,10 @@ components:
       - marketplaceTypeCode
       - planId
       - productTypeCode
+      - source
       - startDate
       - stateTypeCode
+      - statusTypeCode
       type: object
       properties:
         enrollmentSpanSK:
@@ -113,11 +147,6 @@ components:
           description: Enrollment Span Code - Unique id that is assigned to the enrollment
             span in MMS
           example: DFEV323455DE5S3
-        premiumSpans:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PremiumSpanDto'
         stateTypeCode:
           type: string
           description: State associated with the enrollment span
@@ -178,11 +207,23 @@ components:
           type: string
           description: Status of the enrollment span
           example: ENROLLED
+        effectiveReason:
+          type: string
+          description: Effective Reason of the enrollment span
+          example: MBS
+        termReason:
+          type: string
+          description: Term Reason of the enrollment span
+          example: VW
         ztcn:
           type: string
           description: The zeus transaction control number of the transaction that
             created the enrollment span
           example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         changed:
           type: object
           properties:
@@ -205,6 +246,11 @@ components:
           type: string
           description: The date when the enrollment span was updated
           format: date-time
+        premiumSpans:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PremiumSpanDto'
     EnrollmentSpanStatusDto:
       type: object
       properties:
@@ -259,6 +305,8 @@ components:
       - endDate
       - memberPremiumSpans
       - premiumSpanCode
+      - sequence
+      - source
       - startDate
       - statusTypeCode
       - totalPremiumAmount
@@ -278,21 +326,25 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        ztcn:
-          type: string
-          description: The zeus transaction control number of the transaction that
-            created the premium span
-          example: SDFG43456DFG23G
+        sequence:
+          type: integer
+          description: The sequence in which the premium span is created
+          format: int32
+          example: 1
         premiumSpanCode:
           type: string
           description: Premium Span Code - Unique id that is assigned to the premium
             span in MMS
           example: DFEV323455DE5S3
-        memberPremiumSpans:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/MemberPremiumDto'
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the premium span
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         startDate:
           type: string
           description: The start date of the premium span
@@ -351,6 +403,11 @@ components:
           type: string
           description: The date when the premium span was updated
           format: date-time
+        memberPremiumSpans:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberPremiumDto'
     ZeusApiResponseString:
       type: object
       properties:
@@ -366,6 +423,7 @@ components:
           - 100 CONTINUE
           - 101 SWITCHING_PROTOCOLS
           - 102 PROCESSING
+          - 103 EARLY_HINTS
           - 103 CHECKPOINT
           - 200 OK
           - 201 CREATED
@@ -443,6 +501,7 @@ components:
       required:
       - attributeSK
       - attributeValue
+      - source
       type: object
       properties:
         accountAttributeSK:
@@ -465,6 +524,10 @@ components:
           type: string
           description: The value of the attribute
           example: FFM-FL
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         createdDate:
           type: string
           description: The date when the account attribute was created
@@ -481,6 +544,7 @@ components:
       - lineOfBusinessTypeCode
       - members
       - payers
+      - source
       - sponsors
       type: object
       properties:
@@ -497,6 +561,15 @@ components:
           type: string
           description: Line of business of the account
           example: HIX
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the account
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         enrollmentSpans:
           uniqueItems: true
           type: array
@@ -551,6 +624,7 @@ components:
       - alternateContactTypeCode
       - changed
       - lastName
+      - source
       - startDate
       - stateTypeCode
       type: object
@@ -626,6 +700,15 @@ components:
           type: string
           description: The zipcode of the address
           example: "33556"
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the alternate contact
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         startDate:
           type: string
           description: The start date of the alternate contact
@@ -663,6 +746,7 @@ components:
       - brokerId
       - brokerName
       - changed
+      - source
       - startDate
       type: object
       properties:
@@ -704,6 +788,15 @@ components:
           type: string
           description: The account number 2 of the broker
           example: "23452345562"
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the broker
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         startDate:
           type: string
           description: Start date of the broker
@@ -742,6 +835,7 @@ components:
       - changed
       - city
       - memberAddressCode
+      - source
       - startDate
       - stateTypeCode
       - zipCode
@@ -786,6 +880,15 @@ components:
           type: string
           description: The zipcode of the address
           example: "33556"
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the address
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         startDate:
           type: string
           description: The start date of the address
@@ -822,6 +925,7 @@ components:
       - attributeSK
       - attributeValue
       - changed
+      - source
       type: object
       properties:
         memberAttributeSK:
@@ -844,6 +948,10 @@ components:
           type: string
           description: The value of the attribute
           example: FFM-FL
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         changed:
           type: object
           properties:
@@ -876,6 +984,7 @@ components:
       - lastName
       - memberCode
       - relationshipTypeCode
+      - source
       type: object
       properties:
         memberSK:
@@ -927,6 +1036,15 @@ components:
           description: The weight of the member in pounds
           format: double
           example: 65.6
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the member
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         changed:
           type: object
           properties:
@@ -1005,6 +1123,7 @@ components:
       - isPrimary
       - memberEmailCode
       - primary
+      - source
       - startDate
       type: object
       properties:
@@ -1032,10 +1151,19 @@ components:
           type: string
           description: The email of the member
           example: vbalaji215@gmail.com
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         isPrimary:
           type: boolean
           description: Identifies if the email is the primary email
           example: true
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the email
+          example: SDFG43456DFG23G
         startDate:
           type: string
           description: The start date of the email
@@ -1077,6 +1205,7 @@ components:
       - identifierValue
       - isActive
       - memberIdentifierCode
+      - source
       type: object
       properties:
         memberIdentifierSK:
@@ -1107,6 +1236,15 @@ components:
           type: boolean
           description: Identifies if the identifier is active
           example: true
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the identifier
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         changed:
           type: object
           properties:
@@ -1139,6 +1277,7 @@ components:
       - languageCode
       - languageTypeCode
       - memberLanguageCode
+      - source
       - startDate
       type: object
       properties:
@@ -1166,6 +1305,15 @@ components:
           type: string
           description: The language of the member
           example: ENG
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the language
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         startDate:
           type: string
           description: The start date of the language
@@ -1203,6 +1351,7 @@ components:
       - memberPhoneCode
       - phoneNumber
       - phoneTypeCode
+      - source
       - startDate
       type: object
       properties:
@@ -1230,6 +1379,15 @@ components:
           type: string
           description: The phone number of the member
           example: 813-357-9150
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the phone number
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         startDate:
           type: string
           description: The start date of the phone
@@ -1267,6 +1425,7 @@ components:
       - payerCode
       - payerId
       - payerName
+      - source
       - startDate
       type: object
       properties:
@@ -1292,6 +1451,15 @@ components:
           type: string
           description: The id of the payer
           example: 923-53-6234
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the payer
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         startDate:
           type: string
           description: Start date of the payer
@@ -1325,6 +1493,7 @@ components:
     SponsorDto:
       required:
       - changed
+      - source
       - sponsorCode
       - sponsorId
       - sponsorName
@@ -1354,6 +1523,15 @@ components:
           type: string
           description: The name of the sponsor
           example: John Doe
+        ztcn:
+          type: string
+          description: The zeus transaction control number of the transaction that
+            created the account
+          example: SDFG43456DFG23G
+        source:
+          type: string
+          description: The source of the data
+          example: MARKETPLACE
         startDate:
           type: string
           description: Start date of the sponsor
@@ -1390,7 +1568,6 @@ components:
       - firstName
       - identifierTypeCode
       - lastName
-      - member
       - zipCode
       type: object
       properties:
@@ -1400,8 +1577,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        member:
-          $ref: '#/components/schemas/TransactionMemberDto'
+        memberSK:
+          type: string
+          format: uuid
         alternateContactTypeCode:
           type: string
           description: The type code of the alternate contact
@@ -1477,7 +1655,6 @@ components:
       required:
       - transactionAttributeTypeCode
       - transactionAttributeValue
-      - transactionDto
       type: object
       properties:
         transactionAttributeSK:
@@ -1486,8 +1663,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        transactionDto:
-          $ref: '#/components/schemas/TransactionDto'
+        transactionSK:
+          type: string
+          format: uuid
         transactionAttributeTypeCode:
           type: string
           description: The transaction attribute type code
@@ -1508,7 +1686,6 @@ components:
       required:
       - brokerId
       - brokerName
-      - transactionDto
       type: object
       properties:
         transactionBrokerSK:
@@ -1517,8 +1694,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        transactionDto:
-          $ref: '#/components/schemas/TransactionDto'
+        transactionSK:
+          type: string
+          format: uuid
         brokerName:
           type: string
           description: The name of the broker
@@ -1563,7 +1741,6 @@ components:
       - effectiveDate
       - groupPolicyId
       - planId
-      - transaction
       - transactionTypeCode
       type: object
       properties:
@@ -1573,8 +1750,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        transaction:
-          $ref: '#/components/schemas/TransactionDto'
+        transactionSK:
+          type: string
+          format: uuid
         transactionTypeCode:
           type: string
           description: The type of transaction
@@ -1595,6 +1773,10 @@ components:
           type: string
           description: The group policy id received in the transaction
           example: "72352456"
+        maintenanceReasonCode:
+          type: string
+          description: The maintenance reason code received in the transaction
+          example: MBS
         effectiveDate:
           type: string
           description: The effective date received in the transaction
@@ -1619,10 +1801,10 @@ components:
       required:
       - members
       - payer
+      - source
       - sponsor
       - tradingPartnerDto
       - transactionDetail
-      - transactionSourceTypeCode
       - ztcn
       type: object
       properties:
@@ -1642,16 +1824,15 @@ components:
           description: The zeus file control number
           readOnly: true
           example: DFEV323455DE5S3
+        source:
+          type: string
+          description: The source of the transaction
+          example: MARKETPLACE
         transactionReceivedDate:
           type: string
           description: The date when the transaction was received
           format: date-time
           readOnly: true
-        transactionSourceTypeCode:
-          type: string
-          description: The source of the transaction
-          readOnly: true
-          example: MARKETPLACE
         transactionDetail:
           $ref: '#/components/schemas/TransactionDetailDto'
         transactionStatus:
@@ -1676,6 +1857,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TransactionMemberDto'
+        transactionRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionRuleDto'
         createdDate:
           type: string
           description: The date when the transaction was created
@@ -1701,7 +1886,6 @@ components:
       - addressLine1
       - addressTypeCode
       - city
-      - member
       - stateTypeCode
       - zipCode
       type: object
@@ -1712,8 +1896,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        member:
-          $ref: '#/components/schemas/TransactionMemberDto'
+        memberSK:
+          type: string
+          format: uuid
         addressTypeCode:
           type: string
           description: The type of address that was received for the member
@@ -1763,7 +1948,6 @@ components:
       - reasonTypeCode
       - relationshipTypeCode
       - tobaccoIndicator
-      - transaction
       - transactionMemberCode
       - transactionTypeCode
       type: object
@@ -1774,12 +1958,18 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        transaction:
-          $ref: '#/components/schemas/TransactionDto'
+        transactionSK:
+          type: string
+          format: uuid
         transactionMemberCode:
           type: string
           description: Unique member code assigned for the member during transaction
             processing
+          readOnly: true
+          example: DR323FS55WGS53D
+        mmsMemberCode:
+          type: string
+          description: Member code assigned to the member in MMS
           readOnly: true
           example: DR323FS55WGS53D
         transactionTypeCode:
@@ -1893,7 +2083,6 @@ components:
     TransactionMemberEmailDto:
       required:
       - email
-      - member
       type: object
       properties:
         memberEmailSK:
@@ -1902,8 +2091,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        member:
-          $ref: '#/components/schemas/TransactionMemberDto'
+        memberSK:
+          type: string
+          format: uuid
         email:
           type: string
           description: The email that was received for the member
@@ -1925,7 +2115,6 @@ components:
       required:
       - identifierTypeCode
       - identifierValue
-      - member
       type: object
       properties:
         memberIdentifierSK:
@@ -1934,8 +2123,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        member:
-          $ref: '#/components/schemas/TransactionMemberDto'
+        memberSK:
+          type: string
+          format: uuid
         identifierTypeCode:
           type: string
           description: The type of identifier that was received for the member
@@ -1961,7 +2151,6 @@ components:
       required:
       - languageCode
       - languageTypeCode
-      - member
       type: object
       properties:
         memberLanguageSK:
@@ -1970,8 +2159,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        member:
-          $ref: '#/components/schemas/TransactionMemberDto'
+        memberSK:
+          type: string
+          format: uuid
         languageTypeCode:
           type: string
           description: The type of language that was received for the member
@@ -1995,7 +2185,6 @@ components:
           format: date-time
     TransactionMemberPhoneDto:
       required:
-      - member
       - phoneNumber
       - phoneTypeCode
       type: object
@@ -2006,8 +2195,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        member:
-          $ref: '#/components/schemas/TransactionMemberDto'
+        memberSK:
+          type: string
+          format: uuid
         phoneTypeCode:
           type: string
           description: The type of phone that was received for the member
@@ -2033,7 +2223,6 @@ components:
       required:
       - payerId
       - payerName
-      - transaction
       type: object
       properties:
         payerSK:
@@ -2042,8 +2231,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        transaction:
-          $ref: '#/components/schemas/TransactionDto'
+        transactionSK:
+          type: string
+          format: uuid
         payerName:
           type: string
           description: The payer name received in the transaction
@@ -2070,7 +2260,6 @@ components:
       - csrVariant
       - rateStartDate
       - rateTypeCode
-      - transaction
       - transactionRate
       type: object
       properties:
@@ -2080,8 +2269,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        transaction:
-          $ref: '#/components/schemas/TransactionDto'
+        transactionSK:
+          type: string
+          format: uuid
         rateTypeCode:
           type: string
           description: The rate type
@@ -2110,11 +2300,77 @@ components:
           type: string
           description: The date when the record was updated
           format: date-time
+    TransactionRuleDto:
+      required:
+      - ruleId
+      - ruleName
+      - rulePassed
+      type: object
+      properties:
+        transactionRuleSK:
+          type: string
+          description: Transaction Rule SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        ruleId:
+          type: string
+          description: The rule id
+          example: RWDGS534HGSV4
+        ruleName:
+          type: string
+          description: The rule name
+          example: SUBSCRIBER
+        rulePassed:
+          type: boolean
+          description: Boolean that identifies if the rule passed or failed
+          example: true
+        transactionMemberCode:
+          type: string
+          description: The member code
+          example: RWDGS534HGSV4
+        exchangeMemberId:
+          type: string
+          description: The exchange member id of the member
+          example: "32353235"
+        transactionRuleMessages:
+          type: array
+          description: The list of message created by the rule
+          items:
+            $ref: '#/components/schemas/TransactionRuleMessageDto'
+    TransactionRuleMessageDto:
+      required:
+      - messageCode
+      - messageDesc
+      - messageTypeCode
+      type: object
+      properties:
+        transactionRuleMessageSK:
+          type: string
+          description: Transaction Rule Message SK - This is a UUID value
+          format: uuid
+          readOnly: true
+          example: 657cfd75-634e-49f1-9556-4d79f79848ec
+        messageCode:
+          type: string
+          description: The message code
+          readOnly: true
+          example: "15000001"
+        messageTypeCode:
+          type: string
+          description: The type of message
+          readOnly: true
+          example: CRITICAL
+        messageDesc:
+          type: string
+          description: Short message description
+          readOnly: true
+          example: Subscriber not present
+      description: The list of message created by the rule
     TransactionSponsorDto:
       required:
       - sponsorId
       - sponsorName
-      - transaction
       type: object
       properties:
         sponsorSK:
@@ -2123,8 +2379,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        transaction:
-          $ref: '#/components/schemas/TransactionDto'
+        transactionSK:
+          type: string
+          format: uuid
         sponsorName:
           type: string
           description: The sponsor name received in the transaction
@@ -2147,8 +2404,6 @@ components:
           description: The date when the sponsor was updated
           format: date-time
     TransactionStatusDto:
-      required:
-      - transaction
       type: object
       properties:
         transactionStatusSK:
@@ -2157,8 +2412,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        transaction:
-          $ref: '#/components/schemas/TransactionDto'
+        transactionSK:
+          type: string
+          format: uuid
         statusSequence:
           type: integer
           description: Sequence of the status
@@ -2190,7 +2446,6 @@ components:
       - marketplaceTypeCode
       - stateTypeCode
       - tradingPartnerId
-      - transaction
       type: object
       properties:
         tradingPartnerSK:
@@ -2199,8 +2454,9 @@ components:
           format: uuid
           readOnly: true
           example: 657cfd75-634e-49f1-9556-4d79f79848ec
-        transaction:
-          $ref: '#/components/schemas/TransactionDto'
+        transactionSK:
+          type: string
+          format: uuid
         tradingPartnerId:
           type: string
           description: The trading partner id associated with the transaction
@@ -2229,6 +2485,17 @@ components:
           type: string
           description: The date when the record was updated
           format: date-time
+    AccountProcessingResponse:
+      type: object
+      properties:
+        responseId:
+          type: string
+        requestPayloadId:
+          type: string
+        accountNumber:
+          type: string
+        ztcn:
+          type: string
     ApiException:
       type: object
       properties:
@@ -2243,19 +2510,97 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApiException'
-    AccountProcessingResponse:
-      type: object
-      properties:
-        responseId:
-          type: string
-        requestPayloadId:
-          type: string
-        accountNumber:
-          type: string
-        ztcn:
-          type: string
     WelcomeDto:
       type: object
       properties:
         welcomeMessage:
           type: string
+    ZeusApiResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        statusCode:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum:
+          - 100 CONTINUE
+          - 101 SWITCHING_PROTOCOLS
+          - 102 PROCESSING
+          - 103 EARLY_HINTS
+          - 103 CHECKPOINT
+          - 200 OK
+          - 201 CREATED
+          - 202 ACCEPTED
+          - 203 NON_AUTHORITATIVE_INFORMATION
+          - 204 NO_CONTENT
+          - 205 RESET_CONTENT
+          - 206 PARTIAL_CONTENT
+          - 207 MULTI_STATUS
+          - 208 ALREADY_REPORTED
+          - 226 IM_USED
+          - 300 MULTIPLE_CHOICES
+          - 301 MOVED_PERMANENTLY
+          - 302 FOUND
+          - 302 MOVED_TEMPORARILY
+          - 303 SEE_OTHER
+          - 304 NOT_MODIFIED
+          - 305 USE_PROXY
+          - 307 TEMPORARY_REDIRECT
+          - 308 PERMANENT_REDIRECT
+          - 400 BAD_REQUEST
+          - 401 UNAUTHORIZED
+          - 402 PAYMENT_REQUIRED
+          - 403 FORBIDDEN
+          - 404 NOT_FOUND
+          - 405 METHOD_NOT_ALLOWED
+          - 406 NOT_ACCEPTABLE
+          - 407 PROXY_AUTHENTICATION_REQUIRED
+          - 408 REQUEST_TIMEOUT
+          - 409 CONFLICT
+          - 410 GONE
+          - 411 LENGTH_REQUIRED
+          - 412 PRECONDITION_FAILED
+          - 413 PAYLOAD_TOO_LARGE
+          - 413 REQUEST_ENTITY_TOO_LARGE
+          - 414 URI_TOO_LONG
+          - 414 REQUEST_URI_TOO_LONG
+          - 415 UNSUPPORTED_MEDIA_TYPE
+          - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+          - 417 EXPECTATION_FAILED
+          - 418 I_AM_A_TEAPOT
+          - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+          - 420 METHOD_FAILURE
+          - 421 DESTINATION_LOCKED
+          - 422 UNPROCESSABLE_ENTITY
+          - 423 LOCKED
+          - 424 FAILED_DEPENDENCY
+          - 425 TOO_EARLY
+          - 426 UPGRADE_REQUIRED
+          - 428 PRECONDITION_REQUIRED
+          - 429 TOO_MANY_REQUESTS
+          - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+          - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+          - 500 INTERNAL_SERVER_ERROR
+          - 501 NOT_IMPLEMENTED
+          - 502 BAD_GATEWAY
+          - 503 SERVICE_UNAVAILABLE
+          - 504 GATEWAY_TIMEOUT
+          - 505 HTTP_VERSION_NOT_SUPPORTED
+          - 506 VARIANT_ALSO_NEGOTIATES
+          - 507 INSUFFICIENT_STORAGE
+          - 508 LOOP_DETECTED
+          - 509 BANDWIDTH_LIMIT_EXCEEDED
+          - 510 NOT_EXTENDED
+          - 511 NETWORK_AUTHENTICATION_REQUIRED
+        reason:
+          type: string
+        message:
+          type: string
+        developerMessage:
+          type: string
+        response:
+          type: object

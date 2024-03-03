@@ -4,6 +4,7 @@ import com.brihaspathee.zeus.domain.entity.ProcessingRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -17,4 +18,11 @@ import java.util.UUID;
  */
 @Repository
 public interface ProcessingRequestRepository extends JpaRepository<ProcessingRequest, UUID> {
+
+    /**
+     * Find processing request by ZRCN
+     * @param zrcn
+     * @return
+     */
+    Optional<ProcessingRequest> findByZrcn(String zrcn);
 }

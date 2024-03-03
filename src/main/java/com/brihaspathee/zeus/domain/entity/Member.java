@@ -1,5 +1,6 @@
 package com.brihaspathee.zeus.domain.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -140,43 +141,43 @@ public class Member {
     /**
      * List of member address associated with the member
      */
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberAddress> memberAddresses;
 
     /**
      * List of member emails associated with the member
      */
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberEmail> memberEmails;
 
     /**
      * List of member languages associated with the member
      */
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberLanguage> memberLanguages;
 
     /**
      * List of member identifiers associated with the member
      */
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberIdentifier> memberIdentifiers;
 
     /**
      * List of member phone numbers associated with the member
      */
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberPhone> memberPhones;
 
     /**
      * List of alternate contacts associated with the member
      */
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<AlternateContact> alternateContacts;
 
     /**
      * List of member premiums
      */
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberPremium> memberPremiums;
 
     /**

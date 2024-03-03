@@ -1,5 +1,6 @@
 package com.brihaspathee.zeus.domain.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -179,7 +180,7 @@ public class EnrollmentSpan {
     /**
      * The list of premium spans that are associated with the enrollment span
      */
-    @OneToMany(mappedBy = "enrollmentSpan", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "enrollmentSpan", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<PremiumSpan> premiumSpans;
 
     /**

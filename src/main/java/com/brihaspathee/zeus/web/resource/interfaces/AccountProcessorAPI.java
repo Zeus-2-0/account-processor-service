@@ -16,10 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
@@ -70,6 +67,54 @@ public interface AccountProcessorAPI {
             @RequestBody @Valid AccountProcessingRequest accountProcessingRequest,
             @PathVariable("sendToMMS") boolean sendToMMS) throws JsonProcessingException;
 
+    /**
+     * Get enrollment span status
+     * @param spanStatusDto
+     * @return
+     */
     @PostMapping(path =  "/span-status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ZeusApiResponse<String>> getEnrollmentSpanStatus(@RequestBody EnrollmentSpanStatusDto spanStatusDto);
+
+    /**
+     * Delete the processing request
+     * @param zrcn
+     * @return
+     */
+    @Operation(
+            operationId = "Delete the data by ZRCN",
+            method = "DELETE",
+            description = "Delete the data by ZRCN",
+            tags = {"account"}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Data deleted successfully",
+                    content = {
+                            @Content(mediaType = "application/json",schema = @Schema(implementation = ZeusApiResponse.class))
+                    })
+    })
+    @DeleteMapping("/delete/{zrcn}")
+    ResponseEntity<ZeusApiResponse<String>> cleanUp(@PathVariable("zrcn") String zrcn);
+
+    /**
+     * Clean up the entire db
+     * @return
+     */
+    @Operation(
+            operationId = "Delete all data",
+            method = "DELETE",
+            description = "Delete all data",
+            tags = {"account"}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Data deleted successfully",
+                    content = {
+                            @Content(mediaType = "application/json",schema = @Schema(implementation = ZeusApiResponse.class))
+                    })
+    })
+    @DeleteMapping("/delete")
+    ResponseEntity<ZeusApiResponse<String>> cleanUp();
+
+
 }
