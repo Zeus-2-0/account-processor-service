@@ -38,4 +38,6 @@ public interface TransactionProcessor {
      */
     AccountDto processTransaction(AccountProcessingRequest accountProcessingRequest,
                                   boolean sendToMMS) throws JsonProcessingException;
+
+
 }

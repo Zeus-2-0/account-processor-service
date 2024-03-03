@@ -66,7 +66,7 @@ public class ProcessingRequest {
     /**
      * The account that was created or matched for the transaction
      */
-    @OneToOne(mappedBy = "processRequest")
+    @OneToOne(mappedBy = "processRequest", cascade = CascadeType.REMOVE)
     private Account account;
 
     /**

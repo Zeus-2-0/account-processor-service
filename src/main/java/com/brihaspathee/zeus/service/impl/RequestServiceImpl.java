@@ -1,6 +1,7 @@
 package com.brihaspathee.zeus.service.impl;
 
 import com.brihaspathee.zeus.domain.entity.ProcessingRequest;
+import com.brihaspathee.zeus.domain.repository.PayloadTrackerRepository;
 import com.brihaspathee.zeus.domain.repository.ProcessingRequestRepository;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.service.interfaces.RequestService;
@@ -28,6 +29,11 @@ public class RequestServiceImpl implements RequestService {
     private final ProcessingRequestRepository requestRepository;
 
     /**
+     * Payload tracker repository instance
+     */
+    private final PayloadTrackerRepository payloadTrackerRepository;
+
+    /**
      * Saves the request received to process the transaction
      * @param transactionDto
      * @return
@@ -42,4 +48,25 @@ public class RequestServiceImpl implements RequestService {
                 .build();
         return requestRepository.save(request);
     }
+
+    /**
+     * Delete request by ZRCN
+     * @param zrcn
+     */
+    @Override
+    public void deleteByZrcn(String zrcn) {
+        ProcessingRequest processingRequest = requestRepository.findByZrcn(zrcn).orElseThrow();
+        requestRepository.delete(processingRequest);
+    }
+
+    /**
+     * Clean up the entire database
+     */
+    @Override
+    public void deleteAll() {
+        requestRepository.deleteAll();;
+        payloadTrackerRepository.deleteAll();
+    }
+
+
 }

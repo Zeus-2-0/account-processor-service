@@ -1,5 +1,6 @@
 package com.brihaspathee.zeus.domain.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -88,31 +89,31 @@ public class Account {
     /**
      * The enrollment spans that are associated with the account
      */
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<EnrollmentSpan> enrollmentSpan;
 
     /**
      * The list of members that are associated with the account
      */
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Member> members;
 
     /**
      * The list of brokers that are associated with the account
      */
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Broker> brokers;
 
     /**
      * The list of payers that are associated with the account
      */
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Payer> payers;
 
     /**
      * The list of sponsors that are associated with the account
      */
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Sponsor> sponsors;
 
     /**
