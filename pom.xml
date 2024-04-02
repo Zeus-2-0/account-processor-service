@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.brihaspathee.zeus</groupId>
     <artifactId>account-processor</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>Account Processor</name>
     <description>Account Processor</description>
     <properties>
@@ -30,7 +30,7 @@
         <!--        <developerConnection>scm:git:ssh://github.com:Zeus-2-0/account-processor-service.git</developerConnection>-->
         <developerConnection>scm:git:git@github.com:Zeus-2-0/account-processor-service.git</developerConnection>
         <url>scm:git:http://github.com/Zeus-2-0/account-processor</url>
-        <tag>account-processor-1.0.3</tag>
+        <tag>1.0.0</tag>
     </scm>
 
     <developers>
