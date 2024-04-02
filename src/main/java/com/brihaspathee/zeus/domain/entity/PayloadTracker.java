@@ -48,6 +48,12 @@ public class PayloadTracker {
     private String payloadId;
 
     /**
+     * Payload id of the parent paylaod if one exists
+     */
+    @Column(name = "parent_payload_id", length = 45, nullable = true)
+    private String parentPayloadId;
+
+    /**
      * The key for the type of payload, like account number for account payload and
      * zeus transaction control number for transaction payload
      */

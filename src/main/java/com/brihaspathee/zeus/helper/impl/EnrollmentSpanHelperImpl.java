@@ -1,6 +1,8 @@
 package com.brihaspathee.zeus.helper.impl;
 
+import com.brihaspathee.zeus.constants.AdditionalMaintenanceReasonCode;
 import com.brihaspathee.zeus.constants.EnrollmentSpanStatus;
+import com.brihaspathee.zeus.constants.EnrollmentType;
 import com.brihaspathee.zeus.constants.PremiumSpanStatus;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
@@ -10,10 +12,7 @@ import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.account.MemberPremiumDto;
 import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
-import com.brihaspathee.zeus.dto.transaction.TransactionDto;
-import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
-import com.brihaspathee.zeus.dto.transaction.TransactionMemberIdentifierDto;
-import com.brihaspathee.zeus.dto.transaction.TransactionRateDto;
+import com.brihaspathee.zeus.dto.transaction.*;
 import com.brihaspathee.zeus.exception.NoMatchingEnrollmentSpanException;
 import com.brihaspathee.zeus.helper.interfaces.EnrollmentSpanHelper;
 import com.brihaspathee.zeus.helper.interfaces.PremiumSpanHelper;
@@ -101,6 +100,8 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
                 .exchangeSubscriberId(getExchangeSubscriberId(primarySubscriber))
                 // determine the effectuation date
                 .effectuationDate(determineEffectuationDate(transactionDto, priorEnrollmentSpans))
+                // determine the enrollment type
+                .enrollmentType(determineEnrollmentType(transactionDto.getTransactionAttributes()))
                 .planId(transactionDto.getTransactionDetail().getPlanId())
                 .productTypeCode("HMO")
                 .groupPolicyId(transactionDto.getTransactionDetail().getGroupPolicyId())
@@ -658,18 +659,24 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
     private LocalDate determineEffectuationDate(TransactionDto transactionDto,
                                                 List<EnrollmentSpanDto> priorEnrollmentSpans){
 //        log.info("Prior Enrollment Spans - effectuation date determination:{}", priorEnrollmentSpans);
-        Optional<TransactionRateDto> optionalTotResAmt = transactionDto.getTransactionRates().stream().filter(rateDto -> {
-            return rateDto.getRateTypeCode().equals("TOTRESAMT");
-        }).findFirst();
+//        Optional<TransactionRateDto> optionalTotResAmt = transactionDto.getTransactionRates().stream().filter(rateDto -> {
+//            return rateDto.getRateTypeCode().equals("TOTRESAMT");
+//        }).findFirst();
 
-        if(optionalTotResAmt.isPresent()){
-            TransactionRateDto rateDto = optionalTotResAmt.get();
-            BigDecimal totResAmt = rateDto.getTransactionRate();
-            if(totResAmt.compareTo(BigDecimal.valueOf(0)) == 0){
+        // Determine the member total responsibility amount
+        BigDecimal totalResponsibilityAmount = determineMemberResponsibility(transactionDto.getTransactionRates());
+        if(totalResponsibilityAmount.compareTo(BigDecimal.valueOf(0)) == 0){
 //                return LocalDate.now();
-                return transactionDto.getTransactionReceivedDate().toLocalDate();
-            }
+            return transactionDto.getTransactionReceivedDate().toLocalDate();
         }
+//        if(optionalTotResAmt.isPresent()){
+//            TransactionRateDto rateDto = optionalTotResAmt.get();
+//            BigDecimal totResAmt = rateDto.getTransactionRate();
+//            if(totResAmt.compareTo(BigDecimal.valueOf(0)) == 0){
+////                return LocalDate.now();
+//                return transactionDto.getTransactionReceivedDate().toLocalDate();
+//            }
+//        }
         if(priorEnrollmentSpans!=null){
             Optional<EnrollmentSpanDto> optionalPriorEnrollmentSpan = priorEnrollmentSpans.stream()
                     .filter(
@@ -687,6 +694,24 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
             }
         }
         return null;
+    }
+
+    /**
+     * Determine the members total responsibility amount
+     * @param rateDtos
+     * @return
+     */
+    private BigDecimal determineMemberResponsibility(List<TransactionRateDto> rateDtos){
+        List<TransactionRateDto> resAmtRates = rateDtos.stream().filter(rateDto -> {
+            return rateDto.getRateTypeCode().equals("TOTRESAMT");
+        }).toList();
+        Optional<TransactionRateDto> optionalResAmt = resAmtRates.stream()
+                .min(Comparator.comparing(TransactionRateDto::getRateStartDate));
+        if(optionalResAmt.isPresent()){
+            return optionalResAmt.get().getTransactionRate();
+        }else{
+            return BigDecimal.ZERO;
+        }
     }
 
     /**
@@ -905,5 +930,25 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
             });
             accountEnrollmentSpans.addAll(overlappingEnrollmentSpans);
         }
+    }
+
+    /**
+     * Determine the enrollment type of the enrollment span
+     * @param transactionAttributeDtos
+     * @return
+     */
+    private String determineEnrollmentType(List<TransactionAttributeDto> transactionAttributeDtos){
+        Optional<TransactionAttributeDto> optionalAMRC = transactionAttributeDtos.stream().filter(
+                transactionAttribute -> transactionAttribute.getTransactionAttributeTypeCode().equals("AMRC")
+        ).findFirst();
+        if(optionalAMRC.isPresent()){
+            TransactionAttributeDto transactionAttributeDto = optionalAMRC.get();
+            String attributeValue = transactionAttributeDto.getTransactionAttributeValue();
+            if(attributeValue.equals(AdditionalMaintenanceReasonCode.PASSIVE_ENROLLMENT.toString()) ||
+                    attributeValue.equals(AdditionalMaintenanceReasonCode.PASSIVE.toString())){
+                return EnrollmentType.PASSIVE.toString();
+            }
+        }
+        return EnrollmentType.ACTIVE.toString();
     }
 }

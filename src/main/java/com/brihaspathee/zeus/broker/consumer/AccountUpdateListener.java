@@ -1,11 +1,15 @@
 package com.brihaspathee.zeus.broker.consumer;
 
+import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
+import com.brihaspathee.zeus.broker.producer.AccountProcessingResponseProducer;
+import com.brihaspathee.zeus.domain.entity.PayloadTracker;
 import com.brihaspathee.zeus.domain.entity.PayloadTrackerDetail;
 import com.brihaspathee.zeus.helper.interfaces.PayloadTrackerDetailHelper;
 import com.brihaspathee.zeus.helper.interfaces.PayloadTrackerHelper;
 import com.brihaspathee.zeus.message.Acknowledgement;
 import com.brihaspathee.zeus.message.ZeusMessagePayload;
 import com.brihaspathee.zeus.broker.message.AccountUpdateResponse;
+import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,6 +47,11 @@ public class AccountUpdateListener {
      * To perform operations on the payload tracker detail
      */
     private final PayloadTrackerDetailHelper payloadTrackerDetailHelper;
+
+    /**
+     * Processing response producer instance to send the response back to TMS
+     */
+    private final AccountProcessingResponseProducer accountProcessingResponseProducer;
 
     /**
      * Kafka consumer to consume the acknowledgment messages from MMS
@@ -103,8 +112,9 @@ public class AccountUpdateListener {
     private void createPayloadTrackerRespDetail(
             ZeusMessagePayload<AccountUpdateResponse> payload) throws JsonProcessingException {
         String payloadAsString = objectMapper.writeValueAsString(payload);
+        PayloadTracker payloadTracker = payloadTrackerHelper.getPayloadTracker(payload.getPayload().getRequestPayloadId());
         PayloadTrackerDetail payloadTrackerDetail = PayloadTrackerDetail.builder()
-                .payloadTracker(payloadTrackerHelper.getPayloadTracker(payload.getPayload().getRequestPayloadId()))
+                .payloadTracker(payloadTracker)
                 .responsePayload(payloadAsString)
                 .responseTypeCode("ACCOUNT-UPDATE-RESPONSE")
                 .responsePayloadId(payload.getPayload().getResponseId())
@@ -112,5 +122,22 @@ public class AccountUpdateListener {
                 .sourceDestinations(payload.getMessageMetadata().getMessageSource())
                 .build();
         payloadTrackerDetailHelper.createPayloadTrackerDetail(payloadTrackerDetail);
+        if(payloadTracker.getParentPayloadId() != null){
+            log.info("Parent Payload is not null - Hence sending the response back to TMS");
+            PayloadTracker parentPayloadTracker = payloadTrackerHelper.getPayloadTracker(
+                    payloadTracker.getParentPayloadId());
+            AccountProcessingResponse accountProcessingResponse = AccountProcessingResponse.builder()
+                    .responseId(ZeusRandomStringGenerator.randomString(15))
+                    .requestPayloadId(parentPayloadTracker.getPayloadId())
+                    .accountNumber(payloadTracker.getPayload_key())
+                    .ztcn(parentPayloadTracker.getPayload_key())
+                    .responseCode("8000003")
+                    .responseMessage("Account Update Confirmation received from MMS")
+                    .build();
+            log.info("Account Processing response to be sent after mms response:{}", accountProcessingResponse);
+            accountProcessingResponseProducer.sendAccountProcessingResponse(accountProcessingResponse);
+        }
+
+
     }
 }

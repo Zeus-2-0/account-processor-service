@@ -58,8 +58,9 @@ public class AccountUpdateProducer {
     /**
      * The method that publishes the messages to the kafka topic
      * @param accountUpdateRequest
+     * @param parentPayloadId
      */
-    public void updateAccount(AccountUpdateRequest accountUpdateRequest) throws JsonProcessingException {
+    public void updateAccount(AccountUpdateRequest accountUpdateRequest, String parentPayloadId) throws JsonProcessingException {
         log.info("About to publish the account to MMS;{}", accountUpdateRequest.getAccountDto().getAccountNumber());
         String[] messageDestinations = {ZeusServiceNames.MEMBER_MGMT_SERVICE};
         ZeusMessagePayload<AccountUpdateRequest> messagePayload = ZeusMessagePayload.<AccountUpdateRequest>builder()
@@ -72,7 +73,7 @@ public class AccountUpdateProducer {
                 .payloadId(ZeusRandomStringGenerator.randomString(15))
                 .build();
         accountUpdateCallback.setAccountUpdateRequest(accountUpdateRequest);
-        PayloadTracker payloadTracker = createPayloadTracker(messagePayload);
+        PayloadTracker payloadTracker = createPayloadTracker(messagePayload, parentPayloadId);
         log.info("Payload tracker created to send the account {} to account processor service is {}",
                 accountUpdateRequest.getAccountDto().getAccountNumber(),
                 payloadTracker.getPayloadId());
@@ -101,9 +102,11 @@ public class AccountUpdateProducer {
     /**
      * Create the payload tracker record
      * @param messagePayload
+     * @param parentPayloadId
      * @throws JsonProcessingException
      */
-    private PayloadTracker createPayloadTracker(ZeusMessagePayload<AccountUpdateRequest> messagePayload)
+    private PayloadTracker createPayloadTracker(ZeusMessagePayload<AccountUpdateRequest> messagePayload,
+                                                String parentPayloadId)
             throws JsonProcessingException {
         String payloadAsString = objectMapper.writeValueAsString(messagePayload);
         PayloadTracker payloadTracker = PayloadTracker.builder()
@@ -112,6 +115,7 @@ public class AccountUpdateProducer {
                 .payload_key_type_code("ACCOUNT")
                 .payload(payloadAsString)
                 .payloadId(messagePayload.getPayloadId())
+                .parentPayloadId(parentPayloadId)
                 .sourceDestinations(StringUtils.join(
                         messagePayload.getMessageMetadata().getMessageDestination()))
                 .build();

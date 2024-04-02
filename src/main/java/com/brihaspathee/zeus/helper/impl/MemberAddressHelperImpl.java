@@ -73,6 +73,9 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
                 // Since this will be a new address create a new member code
                 String memberAddressCode = accountProcessorUtil.generateUniqueCode(transactionMemberDto.getEntityCodes(),
                         "memberAddressCode");
+                log.info("Member Address Code to be inserted:{}", memberAddressCode);
+                log.info("Member Code for whom the address is to be inserted:{}", member.getMemberCode());
+                log.info("Member SK for whom the address is to be inserted:{}", member.getMemberSK());
                 MemberAddress memberAddress = createMemberAddress(member, addressDto, memberAddressCode, ztcn, source);
                 addresses.add(memberAddress);
             });

@@ -39,7 +39,20 @@ public class AccountProcessingResponse {
     private String ztcn;
 
     /**
-     * toString methos
+     * Response code that indicates if the response is for one of the below
+     * 1. Validations Completed
+     * 2. Processing Completed
+     * 3. Account Update Completed
+     */
+    private String responseCode;
+
+    /**
+     * Response message corresponding to the response code
+     */
+    private String responseMessage;
+
+    /**
+     * toString method
      * @return
      */
     @Override
@@ -49,6 +62,8 @@ public class AccountProcessingResponse {
                 ", requestPayloadId='" + requestPayloadId + '\'' +
                 ", accountNumber='" + accountNumber + '\'' +
                 ", ztcn='" + ztcn + '\'' +
+                ", responseCode='" + responseCode + '\'' +
+                ", responseMessage='" + responseMessage + '\'' +
                 '}';
     }
 }

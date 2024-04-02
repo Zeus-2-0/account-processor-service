@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `accountprocessordb`.`enrollment_span` (
     `acct_enrollment_span_sk` VARCHAR(36) NULL COMMENT 'This will be populated only for enrollment span that were already present for the account before the transaction was received.',
     `enrollment_span_code` VARCHAR(50) NOT NULL COMMENT 'The enrollment span code associated with the enrollment span',
     `ztcn` VARCHAR(50) NULL COMMENT 'The transaction control number that created the enrollment span',
+    `enrollment_type` VARCHAR(50) NOT NULL COMMENT 'Indicates if the enrollment was a passive or active enrollment',
     `account_sk` VARCHAR(36) NOT NULL COMMENT 'The account for which the enrollment span is associated',
     `state_type_code` VARCHAR(50) NOT NULL COMMENT 'The state for which the enrollment span is created',
     `marketplace_type_code` VARCHAR(45) NOT NULL COMMENT 'The marketplace for which the enrollment span is created',
@@ -395,6 +396,7 @@ CREATE TABLE IF NOT EXISTS `accountprocessordb`.`alternate_contact` (
 CREATE TABLE IF NOT EXISTS `accountprocessordb`.`payload_tracker` (
     `payload_tracker_sk` VARCHAR(36) NOT NULL,
     `payload_id` VARCHAR(45) NOT NULL COMMENT 'A unique id assigned for the payload',
+    `parent_payload_id` VARCHAR(45) NULL COMMENT 'The id of the parent payload if one exists',
     `payload_key` VARCHAR(50) NOT NULL COMMENT 'The key for the type of payload, like account number for account payload and zeus transaction control number for transaction payload.',
     `payload_key_type_code` VARCHAR(45) NOT NULL COMMENT 'Identifies the type of payload like ACCOUNT, TRANSACTION, FILE etc',
     `payload` LONGTEXT NOT NULL COMMENT 'The payload as a string',
