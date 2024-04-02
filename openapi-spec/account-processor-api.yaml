@@ -50,6 +50,12 @@ paths:
               $ref: '#/components/schemas/AccountProcessingRequest'
         required: true
       responses:
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiExceptionList'
         "201":
           description: Transaction successfully processed for the account
           content:
@@ -58,12 +64,6 @@ paths:
                 $ref: '#/components/schemas/AccountProcessingResponse'
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiExceptionList'
-        "409":
-          description: Conflict
           content:
             application/json:
               schema:
@@ -2485,17 +2485,6 @@ components:
           type: string
           description: The date when the record was updated
           format: date-time
-    AccountProcessingResponse:
-      type: object
-      properties:
-        responseId:
-          type: string
-        requestPayloadId:
-          type: string
-        accountNumber:
-          type: string
-        ztcn:
-          type: string
     ApiException:
       type: object
       properties:
@@ -2510,6 +2499,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApiException'
+    AccountProcessingResponse:
+      type: object
+      properties:
+        responseId:
+          type: string
+        requestPayloadId:
+          type: string
+        accountNumber:
+          type: string
+        ztcn:
+          type: string
     WelcomeDto:
       type: object
       properties:

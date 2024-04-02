@@ -70,6 +70,12 @@ public class EnrollmentSpan {
     private String ztcn;
 
     /**
+     * The enrollment type of the enrollment span
+     */
+    @Column(name = "enrollment_type", length = 20, columnDefinition = "varchar", nullable = true)
+    private String enrollmentType;
+
+    /**
      * The source of the data
      */
     @Column(name = "source", length = 50, columnDefinition = "varchar", nullable = false)

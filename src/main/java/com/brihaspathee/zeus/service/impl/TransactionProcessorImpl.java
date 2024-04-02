@@ -60,16 +60,22 @@ public class TransactionProcessorImpl implements TransactionProcessor {
      */
     @Override
     public Mono<AccountProcessingResponse> processTransaction(AccountProcessingRequest accountProcessingRequest, PayloadTracker payloadTracker) throws JsonProcessingException {
-        processTransactionByAccountNumber(accountProcessingRequest.getTransactionDto(),
-                accountProcessingRequest.getAccountNumber(), true);
-
+        // Process the transaction that was received
+        AccountDto accountDto = processTransactionByAccountNumber(accountProcessingRequest.getTransactionDto(),
+                accountProcessingRequest.getAccountNumber());
+        // Send information to MMS to update the account
+        sendUpdateToMMS(accountDto, payloadTracker.getPayloadId());
+        // Create the processing response to send to TMS
         AccountProcessingResponse accountProcessingResponse = AccountProcessingResponse.builder()
                 .responseId(ZeusRandomStringGenerator.randomString(15))
                 .requestPayloadId(payloadTracker.getPayloadId())
                 .accountNumber(accountProcessingRequest.getAccountNumber())
                 .ztcn(accountProcessingRequest.getTransactionDto().getZtcn())
+                .responseCode("8000002")
+                .responseMessage("Processing Completed - Sent to MMS For Update")
                 .build();
-        return Mono.just(accountProcessingResponse).delayElement(Duration.ofSeconds(30));
+        return Mono.just(accountProcessingResponse);
+//        return Mono.just(accountProcessingResponse).delayElement(Duration.ofSeconds(30));
     }
 
     /**
@@ -83,9 +89,14 @@ public class TransactionProcessorImpl implements TransactionProcessor {
     public AccountDto processTransaction(AccountProcessingRequest accountProcessingRequest, boolean sendToMMS) throws JsonProcessingException {
         AccountDto accountDto = null;
         if(accountProcessingRequest.getAccountDto() == null){
-            accountDto = processTransactionByAccountNumber(accountProcessingRequest.getTransactionDto(), accountProcessingRequest.getAccountNumber(), sendToMMS);
+            accountDto = processTransactionByAccountNumber(accountProcessingRequest.getTransactionDto(),
+                    accountProcessingRequest.getAccountNumber());
         }else{
-            accountDto = processTransactionByAccountDto(accountProcessingRequest.getTransactionDto(), accountProcessingRequest.getAccountDto(), sendToMMS);
+            accountDto = processTransactionByAccountDto(accountProcessingRequest.getTransactionDto(),
+                    accountProcessingRequest.getAccountDto());
+        }
+        if(sendToMMS){
+            sendUpdateToMMS(accountDto, null);
         }
         return accountDto;
     }
@@ -95,13 +106,11 @@ public class TransactionProcessorImpl implements TransactionProcessor {
      * Process the transaction received to update/create an account in MMS
      * @param transactionDto
      * @param accountNumber
-     * @param sendToMMS
      * @return
      * @throws JsonProcessingException
      */
     private AccountDto processTransactionByAccountNumber(TransactionDto transactionDto,
-                                          String accountNumber,
-                                          boolean sendToMMS) throws JsonProcessingException {
+                                          String accountNumber) throws JsonProcessingException {
         ProcessingRequest processingRequest =
                 requestService.saveRequest(transactionDto);
         AccountDto accountDto = null;
@@ -112,26 +121,35 @@ public class TransactionProcessorImpl implements TransactionProcessor {
             // If the account number is not null then update the account
             accountDto = accountService.updateAccount(accountNumber, transactionDto, processingRequest);
         }
+
+//        if(sendToMMS){
+//            accountUpdateProducer.updateAccount(accountUpdateRequest);
+//        }
+        return accountDto;
+    }
+
+    /**
+     * Send request to MMS service to update account
+     * @param accountDto
+     * @param parentPayloadId
+     * @throws JsonProcessingException
+     */
+    private void sendUpdateToMMS(AccountDto accountDto, String parentPayloadId) throws JsonProcessingException {
         AccountUpdateRequest accountUpdateRequest = AccountUpdateRequest.builder()
                 .accountDto(accountDto)
                 .build();
-        if(sendToMMS){
-            accountUpdateProducer.updateAccount(accountUpdateRequest);
-        }
-        return accountDto;
+        accountUpdateProducer.updateAccount(accountUpdateRequest, parentPayloadId);
     }
 
     /**
      * Process the transaction received to update/create an account in MMS
      * @param transactionDto
      * @param accountDto
-     * @param sendToMMS
      * @return
      * @throws JsonProcessingException
      */
     private AccountDto processTransactionByAccountDto(TransactionDto transactionDto,
-                                          AccountDto accountDto,
-                                          boolean sendToMMS) throws JsonProcessingException {
+                                          AccountDto accountDto) throws JsonProcessingException {
         ProcessingRequest processingRequest =
                 requestService.saveRequest(transactionDto);
         return accountService.updateAccount(accountDto, transactionDto, processingRequest);
