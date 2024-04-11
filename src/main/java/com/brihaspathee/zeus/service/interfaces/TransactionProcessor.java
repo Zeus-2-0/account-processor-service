@@ -5,6 +5,7 @@ import com.brihaspathee.zeus.domain.entity.PayloadTracker;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
+import com.brihaspathee.zeus.validator.result.ProcessingValidationResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import reactor.core.publisher.Mono;
 
@@ -38,6 +39,14 @@ public interface TransactionProcessor {
      */
     AccountDto processTransaction(AccountProcessingRequest accountProcessingRequest,
                                   boolean sendToMMS) throws JsonProcessingException;
+
+    /**
+     * Continue to process the transaction once the validations are completed
+     * @param processingValidationResult
+     */
+
+    void postValidationProcessing(ProcessingValidationResult processingValidationResult)
+            throws JsonProcessingException;
 
 
 }

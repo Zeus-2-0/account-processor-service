@@ -52,12 +52,14 @@ public class MemberPremium {
      * The key of the premium span record in MMS
      */
     @Column(name = "acct_prem_span_sk", length = 36, columnDefinition = "varchar", updatable = true, nullable = true)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID acctPremSpanSK;
 
     /**
      * The key of the member record in MMS
      */
     @Column(name = "acct_member_sk", length = 36, columnDefinition = "varchar", updatable = true, nullable = true)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID acctMemberSK;
 
     /**

@@ -1,5 +1,6 @@
 package com.brihaspathee.zeus.helper.impl;
 
+import com.brihaspathee.zeus.constants.TransactionTypes;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.Member;
 import com.brihaspathee.zeus.domain.entity.MemberPremium;
@@ -169,9 +170,12 @@ public class MemberPremiumHelperImpl implements MemberPremiumHelper {
 //                        transactionMemberDto.getTransactionTypeCode().equals("CANCEL"))){
                 if (! isMemberTermedOrCanceled(transactionMemberDto, premiumSpan.getStartDate().minusDays(1))){
                     // The member should be added to the premium span only if they are not termed or canceled
+                    log.info("Member Premium Dto:{}", memberPremiumDto);
+                    log.info("Member Account SK in the member premium dto:{}", memberPremiumDto.getMemberSK());
                     MemberPremium memberPremium = memberPremiumMapper.memberPremiumDtoToMemberPremium(memberPremiumDto);
                     memberPremium.setPremiumSpan(premiumSpan);
                     memberPremium.setMember(member);
+                    log.info("Member Account SK in the member premium entity:{}", member.getAcctMemberSK());
                     memberPremium = memberPremiumRepository.save(memberPremium);
                     memberPremiums.add(memberPremium);
                 }
@@ -223,19 +227,28 @@ public class MemberPremiumHelperImpl implements MemberPremiumHelper {
      * @return
      */
     private boolean isMemberTermedOrCanceled(TransactionMemberDto transactionMemberDto, LocalDate effectiveDate){
-        // Return true if the member is being canceled
-        if (transactionMemberDto.getTransactionTypeCode().equals("CANCEL")){
+        log.info("Member termination effective date:{}", transactionMemberDto.getEffectiveDate());
+        log.info("Matched premium span start date - 1:{}", effectiveDate);
+        // Return true if the member is being canceled or termed
+        // and the effective date of the termination of the member in the transaction
+        // is equal to the effective date in the input
+        if (transactionMemberDto.getTransactionTypeCode().equals(TransactionTypes.CANCELORTERM.toString()) &&
+                (transactionMemberDto.getEffectiveDate().equals(effectiveDate) ||
+                transactionMemberDto.getEffectiveDate().isBefore(effectiveDate) ||
+                        transactionMemberDto.getEffectiveDate().equals(effectiveDate.plusDays(1)))){
             return true;
-        }
-        // If the member is being termed
-        // Return True if they are being termed same date as the effective date
-        // else return false
-        if (transactionMemberDto.getTransactionTypeCode().equals("TERM")){
-            return transactionMemberDto.getEffectiveDate().equals(effectiveDate) || transactionMemberDto.getEffectiveDate().isBefore(effectiveDate);
-        } else {
-            // If they are not being termed or canceled then return false
+        }else{
             return false;
         }
+//        // If the member is being termed
+//        // Return True if they are being termed same date as the effective date
+//        // else return false
+//        if (transactionMemberDto.getTransactionTypeCode().equals("TERM")){
+//            return transactionMemberDto.getEffectiveDate().equals(effectiveDate) || transactionMemberDto.getEffectiveDate().isBefore(effectiveDate);
+//        } else {
+//            // If they are not being termed or canceled then return false
+//            return false;
+//        }
     }
 
     /**

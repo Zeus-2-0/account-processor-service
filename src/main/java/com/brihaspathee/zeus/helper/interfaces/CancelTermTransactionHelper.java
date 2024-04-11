@@ -3,18 +3,19 @@ package com.brihaspathee.zeus.helper.interfaces;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.validator.result.ProcessingValidationResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * Created in Intellij IDEA
  * User: Balaji Varadharajan
- * Date: 04, December 2023
- * Time: 2:19 PM
+ * Date: 05, April 2024
+ * Time: 1:28 PM
  * Project: Zeus
  * Package Name: com.brihaspathee.zeus.helper.interfaces
  * To change this template use File | Settings | File and Code Template
  */
-public interface CancelTransactionHelper {
+public interface CancelTermTransactionHelper {
 
     /**
      * Update the account based on the transaction details
@@ -23,6 +24,15 @@ public interface CancelTransactionHelper {
      * @param transactionDto the dto object that was received for processing the account
      */
     void updateAccount(AccountDto accountDto,
-                          Account account,
-                          TransactionDto transactionDto) throws JsonProcessingException;
+                       Account account,
+                       TransactionDto transactionDto) throws JsonProcessingException;
+
+    /**
+     * Continue to process the transaction once the validations are completed
+     * @param processingValidationResult
+     * @return account
+     */
+
+    Account postValidationProcessing(ProcessingValidationResult processingValidationResult)
+            throws JsonProcessingException;
 }

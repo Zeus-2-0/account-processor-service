@@ -17,9 +17,10 @@ public interface RequestService {
     /**
      * Save the request
      * @param transactionDto
+     * @param requestPayloadId
      * @return
      */
-    ProcessingRequest saveRequest(TransactionDto transactionDto);
+    ProcessingRequest saveRequest(TransactionDto transactionDto, String requestPayloadId);
 
     /**
      * Delete data by ZRCN

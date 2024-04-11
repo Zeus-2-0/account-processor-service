@@ -1,7 +1,13 @@
 package com.brihaspathee.zeus.helper.impl;
 
+import com.brihaspathee.zeus.broker.producer.AccountProcessingValidationProducer;
 import com.brihaspathee.zeus.constants.PremiumSpanStatus;
+import com.brihaspathee.zeus.constants.ProcessFlowType;
+import com.brihaspathee.zeus.constants.RateType;
+import com.brihaspathee.zeus.constants.TransactionTypes;
 import com.brihaspathee.zeus.domain.entity.Account;
+import com.brihaspathee.zeus.domain.entity.ProcessingRequest;
+import com.brihaspathee.zeus.domain.repository.AccountRepository;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
@@ -13,9 +19,13 @@ import com.brihaspathee.zeus.helper.interfaces.EnrollmentSpanHelper;
 import com.brihaspathee.zeus.helper.interfaces.MemberHelper;
 import com.brihaspathee.zeus.info.ChangeTransactionInfo;
 import com.brihaspathee.zeus.info.PremiumSpanUpdateInfo;
+import com.brihaspathee.zeus.service.interfaces.MemberManagementService;
+import com.brihaspathee.zeus.validator.request.ProcessingValidationRequest;
+import com.brihaspathee.zeus.validator.result.ProcessingValidationResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -47,6 +57,26 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
     private final EnrollmentSpanHelper enrollmentSpanHelper;
 
     /**
+     * Processing validation producer to send the transaction for validation
+     */
+    private final AccountProcessingValidationProducer accountProcessingValidationProducer;
+
+    /**
+     * Instance of the account repository
+     */
+    private final AccountRepository accountRepository;
+
+    /**
+     * Member management service instance to get information from MMS
+     */
+    private final MemberManagementService memberManagementService;
+
+    /**
+     * The spring environment instance
+     */
+    private final Environment environment;
+
+    /**
      * Update the account based on the transaction details
      * @param accountDto account information that was retrieved from MMS
      * @param account Account that needs to be updated
@@ -56,6 +86,62 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
     public void updateAccount(AccountDto accountDto,
                                  Account account,
                                  TransactionDto transactionDto) throws JsonProcessingException {
+        // Get the enrollment span that matches the group policy id received in the transaction
+        EnrollmentSpanDto matchedEnrollmentSpan = enrollmentSpanHelper.getMatchedEnrollmentSpan(
+                accountDto.getEnrollmentSpans(),
+                transactionDto.getTransactionDetail().getGroupPolicyId());
+        // Send transaction for validation -- Do not do this when running unit tests
+        if(!Arrays.asList(environment.getActiveProfiles()).contains("test")){
+            ProcessingRequest processingRequest = account.getProcessRequest();
+            ProcessingValidationRequest validationRequest = ProcessingValidationRequest.builder()
+                    .processFlowType(ProcessFlowType.CHANGE)
+                    .transactionDto(transactionDto)
+                    .accountDto(AccountDto.builder()
+                            .accountNumber(accountDto.getAccountNumber())
+                            .enrollmentSpans(Set.copyOf(Optional.of(
+                                            Collections.singletonList(matchedEnrollmentSpan))
+                                    .orElse(Collections.emptyList())))
+                            .build())
+                    .accountSK(account.getAccountSK())
+                    .processRequestSK(processingRequest.getProcessRequestSK())
+                    .zrcnTypeCode(processingRequest.getZrcnTypeCode())
+                    .zrcn(processingRequest.getZrcn())
+                    .build();
+            accountProcessingValidationProducer.sendAccountProcessingValidationRequest(validationRequest,
+                    processingRequest.getRequestPayloadId());
+        }else{
+            // in a unit test environment continue to process the change from the transaction
+            updateChanges(accountDto, account, transactionDto);
+        }
+    }
+
+    /**
+     * Continue to process the transaction once the validations are completed
+     * @param processingValidationResult
+     */
+    @Override
+    public Account postValidationProcessing(ProcessingValidationResult processingValidationResult) throws
+            JsonProcessingException {
+        // todo check if all the rules have passed
+        // if all the rules have passed then continue to process the transaction
+        ProcessingValidationRequest request = processingValidationResult.getValidationRequest();
+        TransactionDto transactionDto = request.getTransactionDto();
+        Account account = accountRepository.getReferenceById(request.getAccountSK());
+        // get the account dto from member management service
+        AccountDto accountDto = memberManagementService.getAccountByAccountNumber(request.getAccountDto().getAccountNumber());
+        updateChanges(accountDto, account, transactionDto);
+        return account;
+    }
+
+    /**
+     * This method continues to process the changes received for the account from the transaction
+     * @param accountDto
+     * @param account
+     * @param transactionDto
+     */
+    private void updateChanges(AccountDto accountDto,
+                               Account account,
+                               TransactionDto transactionDto){
         // Identify if there are any member level changes (Demographic, Addresses, Communication etc.) to the account
         memberHelper.matchMember(accountDto, transactionDto, account);
         // Identify if the change transaction is a financial or non-financial change
@@ -77,6 +163,8 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
 
         }
     }
+
+
 
 
     /**
@@ -230,8 +318,8 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
         }else{
             List<BigDecimal> otherPayRates = transactionRateDtos.stream()
                     .filter(transactionRateDto ->
-                            transactionRateDto.getRateTypeCode().equals("OTHERPAYAMT1") ||
-                                    transactionRateDto.getRateTypeCode().equals("OTHERPAYAMT2")).map(
+                            transactionRateDto.getRateTypeCode().equals(RateType.OTHERPAYAMT1.toString()) ||
+                                    transactionRateDto.getRateTypeCode().equals(RateType.OTHERPAYAMT2.toString())).map(
                             TransactionRateDto::getTransactionRate
                     ).toList();
 //            log.info("other pay rates:{}", otherPayRates);
@@ -386,6 +474,7 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
      */
     private void setAmounts(PremiumSpanUpdateInfo premiumSpanUpdateInfo, List<TransactionRateDto> transactionRateDtos){
         transactionRateDtos.forEach(transactionRateDto -> {
+
             String rateTypeCode = transactionRateDto.getRateTypeCode();
             switch (rateTypeCode) {
                 case "TOTRESAMT" -> premiumSpanUpdateInfo.setTotResAmt(transactionRateDto.getTransactionRate());
@@ -419,28 +508,28 @@ public class ChangeTransactionHelperImpl implements ChangeTransactionHelper {
      */
     private boolean isDepAddedOrCanceled(TransactionDto transactionDto){
         return transactionDto.getMembers().stream().anyMatch(transactionMemberDto ->
-                transactionMemberDto.getTransactionTypeCode().equals("CANCEL") ||
-                transactionMemberDto.getTransactionTypeCode().equals("TERM") ||
-                transactionMemberDto.getTransactionTypeCode().equals("ADD"));
+                transactionMemberDto.getTransactionTypeCode().equals(TransactionTypes.CANCELORTERM.toString()) ||
+//                transactionMemberDto.getTransactionTypeCode().equals("TERM") ||
+                transactionMemberDto.getTransactionTypeCode().equals(TransactionTypes.ADD.toString()));
     }
 
     private boolean isDepAddedOrCanceled(TransactionDto transactionDto, LocalDate startDate, LocalDate endDate){
         boolean isMemberAddedCanceledOrTermed = transactionDto.getMembers().stream().anyMatch(transactionMemberDto ->
-                transactionMemberDto.getTransactionTypeCode().equals("CANCEL") ||
-                        transactionMemberDto.getTransactionTypeCode().equals("TERM") ||
-                        transactionMemberDto.getTransactionTypeCode().equals("ADD"));
+                transactionMemberDto.getTransactionTypeCode().equals(TransactionTypes.CANCELORTERM.toString()) ||
+//                        transactionMemberDto.getTransactionTypeCode().equals("TERM") ||
+                        transactionMemberDto.getTransactionTypeCode().equals(TransactionTypes.ADD.toString()));
         if(!isMemberAddedCanceledOrTermed){
             return false;
         }else{
             List<TransactionMemberDto> memberDtos = transactionDto.getMembers().stream().filter(transactionMemberDto ->
-                    transactionMemberDto.getTransactionTypeCode().equals("CANCEL") ||
-                            transactionMemberDto.getTransactionTypeCode().equals("TERM") ||
-                            transactionMemberDto.getTransactionTypeCode().equals("ADD")).toList();
+                    transactionMemberDto.getTransactionTypeCode().equals(TransactionTypes.CANCELORTERM.toString()) ||
+//                            transactionMemberDto.getTransactionTypeCode().equals("TERM") ||
+                            transactionMemberDto.getTransactionTypeCode().equals(TransactionTypes.ADD.toString())).toList();
             // retrieve all members who are being added or termed or canceled
             return memberDtos.stream().anyMatch(transactionMemberDto -> {
                String transactionTypeCode = transactionMemberDto.getTransactionTypeCode();
                 LocalDate effectiveDate = transactionMemberDto.getEffectiveDate();
-               if(transactionTypeCode.equals("ADD")){
+               if(transactionTypeCode.equals(TransactionTypes.ADD.toString())){
                    return effectiveDate.isBefore(startDate) ||
                            effectiveDate.isEqual(startDate) ||
                            effectiveDate.isEqual(endDate) ||

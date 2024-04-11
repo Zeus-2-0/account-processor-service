@@ -8,8 +8,8 @@ import com.brihaspathee.zeus.domain.repository.AccountRepository;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.helper.interfaces.CancelTermTransactionHelper;
 import com.brihaspathee.zeus.helper.interfaces.EnrollmentSpanHelper;
-import com.brihaspathee.zeus.helper.interfaces.ReinstatementTransactionHelper;
 import com.brihaspathee.zeus.service.interfaces.MemberManagementService;
 import com.brihaspathee.zeus.validator.request.ProcessingValidationRequest;
 import com.brihaspathee.zeus.validator.result.ProcessingValidationResult;
@@ -27,8 +27,8 @@ import java.util.Set;
 /**
  * Created in Intellij IDEA
  * User: Balaji Varadharajan
- * Date: 04, December 2023
- * Time: 2:24 PM
+ * Date: 05, April 2024
+ * Time: 1:28 PM
  * Project: Zeus
  * Package Name: com.brihaspathee.zeus.helper.impl
  * To change this template use File | Settings | File and Code Template
@@ -36,7 +36,7 @@ import java.util.Set;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ReinstatementTransactionHelperImpl implements ReinstatementTransactionHelper {
+public class CancelTermTransactionHelperImpl implements CancelTermTransactionHelper {
 
     /**
      * Enrollment span helper to perform tasks that are associated with the enrollment span
@@ -59,19 +59,15 @@ public class ReinstatementTransactionHelperImpl implements ReinstatementTransact
     private final AccountRepository accountRepository;
 
     /**
-     * Member management service instance to get information from MMS
-     */
-    private final MemberManagementService memberManagementService;
-
-    /**
      * Update the account based on the transaction details
      * @param accountDto account information that was retrieved from MMS
      * @param account Account that needs to be updated
      * @param transactionDto the dto object that was received for processing the account
      */
     @Override
-    public void updateAccount(AccountDto accountDto, Account account, TransactionDto transactionDto)
-            throws JsonProcessingException {
+    public void updateAccount(AccountDto accountDto,
+                              Account account,
+                              TransactionDto transactionDto) throws JsonProcessingException {
         EnrollmentSpanDto matchedEnrollmentSpan = enrollmentSpanHelper.getMatchedEnrollmentSpan(
                 accountDto.getEnrollmentSpans(),
                 transactionDto.getTransactionDetail().getGroupPolicyId());
@@ -79,7 +75,7 @@ public class ReinstatementTransactionHelperImpl implements ReinstatementTransact
         if(!Arrays.asList(environment.getActiveProfiles()).contains("test")){
             ProcessingRequest processingRequest = account.getProcessRequest();
             ProcessingValidationRequest validationRequest = ProcessingValidationRequest.builder()
-                    .processFlowType(ProcessFlowType.REINSTATEMENT)
+                    .processFlowType(ProcessFlowType.CANCEL_TERM)
                     .transactionDto(transactionDto)
                     .accountDto(AccountDto.builder()
                             .accountNumber(accountDto.getAccountNumber())
@@ -95,8 +91,14 @@ public class ReinstatementTransactionHelperImpl implements ReinstatementTransact
             accountProcessingValidationProducer.sendAccountProcessingValidationRequest(validationRequest
                     , processingRequest.getRequestPayloadId());
         }else{
-            reinstateEnrollmentSpan(accountDto, transactionDto, account);
+            // if this is unit testing, continue to cancel or term the enrollment span
+            cancelTermEnrollmentSpan(matchedEnrollmentSpan,
+                    transactionDto,
+                    account);
         }
+//        enrollmentSpanHelper.cancelTermEnrollmentSpan(matchedEnrollmentSpan,
+//                transactionDto,
+//                account);
 
     }
 
@@ -109,24 +111,27 @@ public class ReinstatementTransactionHelperImpl implements ReinstatementTransact
         ProcessingValidationRequest request = processingValidationResult.getValidationRequest();
         TransactionDto transactionDto = request.getTransactionDto();
         Account account = accountRepository.getReferenceById(request.getAccountSK());
-        // get the account dto from member management service
-        AccountDto accountDto = memberManagementService.getAccountByAccountNumber(request.getAccountDto().getAccountNumber());
-        reinstateEnrollmentSpan(accountDto, transactionDto, account);
+        // retrieve the matched enrollment span that was sent in the validation request
+        EnrollmentSpanDto matchedEnrollmentSpan = request.getAccountDto()
+                .getEnrollmentSpans()
+                .stream()
+                .findFirst()
+                .orElseThrow();
+        cancelTermEnrollmentSpan(matchedEnrollmentSpan, transactionDto, account);
         return account;
     }
 
     /**
-     * Reinstate the enrollment span
-     * @param accountDto
+     * Continue to cancel or term the enrollment span
+     * @param matchedEnrollmentSpan
      * @param transactionDto
      * @param account
      */
-    private void reinstateEnrollmentSpan(AccountDto accountDto,
-                                         TransactionDto transactionDto,
-                                         Account account){
-        log.info("about to reinstate the enrollment span");
-        enrollmentSpanHelper.reinstateEnrollmentSpan(accountDto, transactionDto, account);
+    private void cancelTermEnrollmentSpan(EnrollmentSpanDto matchedEnrollmentSpan,
+                                          TransactionDto transactionDto,
+                                          Account account){
+        enrollmentSpanHelper.cancelTermEnrollmentSpan(matchedEnrollmentSpan,
+                transactionDto,
+                account);
     }
-
-
 }

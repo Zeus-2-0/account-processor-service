@@ -36,14 +36,16 @@ public class RequestServiceImpl implements RequestService {
     /**
      * Saves the request received to process the transaction
      * @param transactionDto
+     * @param requestPayloadId
      * @return
      */
     @Override
-    public ProcessingRequest saveRequest(TransactionDto transactionDto) {
+    public ProcessingRequest saveRequest(TransactionDto transactionDto, String requestPayloadId) {
         ProcessingRequest request = ProcessingRequest.builder()
                 .zrcnTypeCode("TRANSACTION")
                 .zrcn(transactionDto.getZtcn())
                 .source(transactionDto.getSource())
+                .requestPayloadId(requestPayloadId)
                 .requestReceivedDate(transactionDto.getTransactionReceivedDate())
                 .build();
         return requestRepository.save(request);

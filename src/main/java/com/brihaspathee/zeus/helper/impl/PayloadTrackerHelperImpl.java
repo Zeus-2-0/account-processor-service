@@ -6,6 +6,8 @@ import com.brihaspathee.zeus.helper.interfaces.PayloadTrackerHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created in Intellij IDEA
@@ -34,7 +36,9 @@ public class PayloadTrackerHelperImpl implements PayloadTrackerHelper {
     @Override
     public PayloadTracker createPayloadTracker(PayloadTracker payloadTracker) {
         log.info("Payload tracker about to be inserted: {}", payloadTracker);
-        return payloadTrackerRepository.save(payloadTracker);
+        PayloadTracker payloadTracker1 = payloadTrackerRepository.save(payloadTracker);
+        log.info("Payload tracker that was inserted: {}", payloadTracker1);
+        return payloadTracker1;
     }
 
     /**
@@ -44,6 +48,7 @@ public class PayloadTrackerHelperImpl implements PayloadTrackerHelper {
      */
     @Override
     public PayloadTracker getPayloadTracker(String payloadId) {
+        log.info("Request Payload id:{}", payloadId);
         return payloadTrackerRepository.findPayloadTrackerByPayloadId(payloadId).orElseThrow();
     }
 }

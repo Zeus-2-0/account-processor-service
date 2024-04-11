@@ -105,6 +105,9 @@ public class ProcessTransactionAPIIntTest {
     @RepeatedTest(75)
     @Order(1)
       void testProcessTransaction(RepetitionInfo repetitionInfo) throws JsonProcessingException {
+//        if(repetitionInfo.getCurrentRepetition() != 67){
+//            return;
+//        }
         log.info("Current Repetition:{}", repetitionInfo.getCurrentRepetition());
 
         // Retrieve the accounting processing request for the repetition

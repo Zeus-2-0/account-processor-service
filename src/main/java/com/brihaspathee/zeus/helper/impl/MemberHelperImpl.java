@@ -140,13 +140,14 @@ public class MemberHelperImpl implements MemberHelper {
     }
 
     private boolean isMemberChanged(Member member){
-        return (member.getMemberAddresses() != null && !member.getMemberAddresses().isEmpty()) ||
+        boolean isMemberChanged = (member.getMemberAddresses() != null && !member.getMemberAddresses().isEmpty()) ||
                 (member.getMemberIdentifiers() != null && !member.getMemberIdentifiers().isEmpty()) ||
                 (member.getMemberLanguages() != null && !member.getMemberLanguages().isEmpty()) ||
                 (member.getMemberEmails() != null && !member.getMemberEmails().isEmpty()) ||
                 (member.getMemberPhones() != null && !member.getMemberPhones().isEmpty()) ||
                 (member.getAlternateContacts() != null && !member.getAlternateContacts().isEmpty()) ||
                 member.isChanged();
+        return isMemberChanged;
     }
 
     /**

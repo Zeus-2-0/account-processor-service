@@ -1,26 +1,30 @@
 package com.brihaspathee.zeus.service.impl;
 
+import com.brihaspathee.zeus.broker.producer.AccountProcessingValidationProducer;
+import com.brihaspathee.zeus.constants.ProcessFlowType;
 import com.brihaspathee.zeus.domain.entity.*;
 import com.brihaspathee.zeus.domain.repository.AccountRepository;
 import com.brihaspathee.zeus.dto.account.AccountDto;
-import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.*;
 import com.brihaspathee.zeus.mapper.interfaces.AccountMapper;
+import com.brihaspathee.zeus.mapper.interfaces.ProcessingRequestMapper;
 import com.brihaspathee.zeus.service.interfaces.AccountService;
 import com.brihaspathee.zeus.service.interfaces.MemberManagementService;
 import com.brihaspathee.zeus.util.AccountProcessorUtil;
-import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
+import com.brihaspathee.zeus.validator.result.ProcessingValidationResult;
+import com.brihaspathee.zeus.broker.message.AccountProcessingResult;
 import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
+import com.brihaspathee.zeus.web.model.ProcessingRequestDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.UUID;
 
 /**
  * Created in Intellij IDEA
@@ -47,6 +51,11 @@ public class AccountServiceImpl implements AccountService {
      * Account mapper instance for mapping the account
      */
     private final AccountMapper accountMapper;
+
+    /**
+     * Processing Request mapper instance for mapping the request
+     */
+    private final ProcessingRequestMapper processingRequestMapper;
 
     /**
      * The member helper instance
@@ -89,14 +98,9 @@ public class AccountServiceImpl implements AccountService {
     private final ChangeTransactionHelper changeTransactionHelper;
 
     /**
-     * Cancel Transaction helper instance to process CANCEL transactions
+     * Cancel/Term Transaction helper instance to cancel or term enrollment spans
      */
-    private final CancelTransactionHelper cancelTransactionHelper;
-
-    /**
-     * Term Transaction helper instance to process TERM transactions
-     */
-    private final TermTransactionHelper termTransactionHelper;
+    private final CancelTermTransactionHelper cancelTermTransactionHelper;
 
     /**
      * Reinstatement Transaction helper instance to process REINSTATEMENT transactions
@@ -107,6 +111,16 @@ public class AccountServiceImpl implements AccountService {
      * The utility class for account processor service
      */
     private final AccountProcessorUtil accountProcessorUtil;
+
+    /**
+     * Processing validation producer to send the transaction for validation
+     */
+    private final AccountProcessingValidationProducer accountProcessingValidationProducer;
+
+    /**
+     * The spring environment instance
+     */
+    private final Environment environment;
 
     /**
      * This method should be invoked if a new account should be created
@@ -130,25 +144,11 @@ public class AccountServiceImpl implements AccountService {
                 .source(transactionDto.getSource())
                 .build();
         account = accountRepository.save(account);
-        // Create the members. Members are created first before creating the enrollment spans so that the created
-        // members can be passed to create the member premium records
-        List<Member> members = memberHelper.createMembers(transactionDto.getMembers(), account);
-        // Set the created members in the account object
-        account.setMembers(members);
-        // Create the enrollment span
-        EnrollmentSpan enrollmentSpan =
-                enrollmentSpanHelper.createEnrollmentSpan(transactionDto, account, null);
-        account.setEnrollmentSpan(Arrays.asList(enrollmentSpan));
-        // Create the sponsors from the transaction
-        sponsorHelper.createSponsor(transactionDto, account);
-        // Create the brokers from the transaction
-        brokerHelper.createBroker(transactionDto, account);
-        // Create the payers from the transaction
-        payerHelper.createPayer(transactionDto, account);
-        AccountDto accountDto = createAccountDto(account, processingRequest.getZrcn());
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.findAndRegisterModules();
-        log.info("Account to be set to MMS:{}", objectMapper.writeValueAsString(accountDto));
+        AccountDto accountDto = addTransactionHelper.updateAccount(null, account, transactionDto);
+//        AccountDto accountDto = createAccountDto(account, processingRequest.getZrcn());
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.findAndRegisterModules();
+//        log.info("Account to be sent to MMS:{}", objectMapper.writeValueAsString(accountDto));
         return accountDto;
     }
 
@@ -188,18 +188,19 @@ public class AccountServiceImpl implements AccountService {
                 .source(accountDto.getSource())
                 .lineOfBusinessTypeCode(transactionDto.getTradingPartnerDto().getLineOfBusinessTypeCode())
                 .build();
-        log.info("Account match sk before before insert:{}", account.getMatchAccountSK());
+        log.info("Account match sk before insert:{}", account.getMatchAccountSK());
         account = accountRepository.save(account);
+        log.info("Account sk for account created in APS:{}", account.getAccountSK());
         // Check for the transaction type of the transaction and invoke the appropriate helper class
         String transactionTypeCode = transactionDto.getTransactionDetail().getTransactionTypeCode();
         if (transactionTypeCode.equals("ADD")){
             addTransactionHelper.updateAccount(accountDto, account, transactionDto);
         } else if (transactionTypeCode.equals("CHANGE")){
             changeTransactionHelper.updateAccount(accountDto, account, transactionDto);
-        } else if (transactionTypeCode.equals("CANCEL")){
-            cancelTransactionHelper.updateAccount(accountDto, account, transactionDto);
-        }else if (transactionTypeCode.equals("TERM")){
-            termTransactionHelper.updateAccount(accountDto, account, transactionDto);
+        } else if (transactionTypeCode.equals("CANCELORTERM")){
+            cancelTermTransactionHelper.updateAccount(accountDto, account, transactionDto);
+//        }else if (transactionTypeCode.equals("TERM")){
+//            termTransactionHelper.updateAccount(accountDto, account, transactionDto);
         }else if (transactionTypeCode.equals("REINSTATEMENT")){
             reinstatementTransactionHelper.updateAccount(accountDto, account, transactionDto);
         }
@@ -215,6 +216,47 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String determineEnrollmentSpanStatus(EnrollmentSpanStatusDto enrollmentSpanStatusDto) {
         return enrollmentSpanHelper.determineStatus(enrollmentSpanStatusDto);
+    }
+
+    /**
+     * Get account using account SK
+     * @param accountSK
+     * @return
+     */
+    @Override
+    public Account getAccount(UUID accountSK) {
+        return accountRepository.findById(accountSK).orElseThrow();
+    }
+
+    /**
+     * Continue to process the transaction once the validations are completed
+     * @param processingValidationResult
+     * @return accountDto
+     */
+    @Transactional(propagation= Propagation.REQUIRED, readOnly=false, noRollbackFor=Exception.class)
+    @Override
+    public AccountProcessingResult postValidationProcessing(ProcessingValidationResult processingValidationResult)
+            throws JsonProcessingException {
+        ProcessFlowType processFlowType = processingValidationResult.getValidationRequest().getProcessFlowType();
+        log.info("Process flow type is: {}", processFlowType);
+        Account account = null;
+        if(processFlowType.equals(ProcessFlowType.NEW_ACCOUNT) ||
+                processFlowType.equals(ProcessFlowType.PLAN_CHANGE)){
+            account = addTransactionHelper.postValidationProcessing(processingValidationResult);
+        }else if(processFlowType.equals(ProcessFlowType.CHANGE)){
+            account = changeTransactionHelper.postValidationProcessing(processingValidationResult);
+        }else if(processFlowType.equals(ProcessFlowType.CANCEL_TERM)){
+            account = cancelTermTransactionHelper .postValidationProcessing(processingValidationResult);
+        }else if(processFlowType.equals(ProcessFlowType.REINSTATEMENT)){
+            account = reinstatementTransactionHelper.postValidationProcessing(processingValidationResult);
+        }
+        AccountDto accountDto = createAccountDto(account, account.getProcessRequest().getZrcn());
+        ProcessingRequestDto processingRequestDto = processingRequestMapper.
+                processingRequestToProcessingRequestDto(account.getProcessRequest());
+        return AccountProcessingResult.builder()
+                .accountDto(accountDto)
+                .processingRequestDto(processingRequestDto)
+                .build();
     }
 
     /**

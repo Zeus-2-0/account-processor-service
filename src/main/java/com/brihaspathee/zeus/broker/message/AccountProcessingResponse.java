@@ -34,7 +34,7 @@ public class AccountProcessingResponse {
     private String accountNumber;
 
     /**
-     * Transacton for which the response is created
+     * Transaction for which the response is created
      */
     private String ztcn;
 

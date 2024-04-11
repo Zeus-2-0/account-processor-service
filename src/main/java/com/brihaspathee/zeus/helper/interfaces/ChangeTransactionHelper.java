@@ -3,6 +3,7 @@ package com.brihaspathee.zeus.helper.interfaces;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.validator.result.ProcessingValidationResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
@@ -25,4 +26,13 @@ public interface ChangeTransactionHelper {
     void updateAccount(AccountDto accountDto,
                           Account account,
                           TransactionDto transactionDto) throws JsonProcessingException;
+
+    /**
+     * Continue to process the transaction once the validations are completed
+     * @param processingValidationResult
+     * @return account
+     */
+
+    Account postValidationProcessing(ProcessingValidationResult processingValidationResult)
+            throws JsonProcessingException;
 }

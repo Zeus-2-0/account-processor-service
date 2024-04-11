@@ -11,10 +11,10 @@ spring:
     enabled: false
   jpa:
     defer-datasource-initialization: true
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
   profiles:
     active: test
   kafka:
