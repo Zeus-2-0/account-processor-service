@@ -116,10 +116,12 @@ public class PayloadTracker {
         return "PayloadTracker{" +
                 "payloadTrackerSK=" + payloadTrackerSK +
                 ", payloadId='" + payloadId + '\'' +
-                ", payload='" + payload + '\'' +
+                ", parentPayloadId='" + parentPayloadId + '\'' +
+                ", payload_key='" + payload_key + '\'' +
+                ", payload_key_type_code='" + payload_key_type_code + '\'' +
                 ", payloadDirectionTypeCode='" + payloadDirectionTypeCode + '\'' +
                 ", sourceDestinations='" + sourceDestinations + '\'' +
-                ", payloadTrackerDetails=" + payloadTrackerDetails +
+                ", payload='" + payload + '\'' +
                 ", createdDate=" + createdDate +
                 ", updatedDate=" + updatedDate +
                 '}';

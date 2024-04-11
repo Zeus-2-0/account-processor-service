@@ -10,6 +10,7 @@ import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.info.ChangeTransactionInfo;
 import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -64,8 +65,12 @@ public interface EnrollmentSpanHelper {
      * @param accountDto
      * @param transactionDto
      * @param account
+     * @param overlappingEnrollmentSpans
      */
-    void updateEnrollmentSpans(AccountDto accountDto, TransactionDto transactionDto, Account account);
+    void updateEnrollmentSpans(AccountDto accountDto,
+                               TransactionDto transactionDto,
+                               Account account,
+                               List<EnrollmentSpanDto> overlappingEnrollmentSpans) throws JsonProcessingException;
 
     /**
      * Process the financial change for the enrollment span
@@ -83,19 +88,12 @@ public interface EnrollmentSpanHelper {
 
     /**
      * Cancel the enrollment span that is received in the transaction
-     * @param accountDto
+     * @param matchedEnrollmentSpanDto
      * @param transactionDto
      * @param account
      */
-    void cancelEnrollmentSpan(AccountDto accountDto, TransactionDto transactionDto, Account account);
-
-    /**
-     * Term the enrollment span that is received in the transaction
-     * @param accountDto
-     * @param transactionDto
-     * @param account
-     */
-    void termEnrollmentSpan(AccountDto accountDto, TransactionDto transactionDto, Account account);
+    void cancelTermEnrollmentSpan(EnrollmentSpanDto matchedEnrollmentSpanDto,
+                                  TransactionDto transactionDto, Account account);
 
     /**
      * Reinstate the enrollment span that is received in the transaction
@@ -104,4 +102,21 @@ public interface EnrollmentSpanHelper {
      * @param account
      */
     void reinstateEnrollmentSpan(AccountDto accountDto, TransactionDto transactionDto, Account account);
+
+    /**
+     * Get enrollment span that matches the group policy id
+     * @param enrollmentSpanDtos
+     * @param groupPolicyId
+     * @return
+     */
+    EnrollmentSpanDto getMatchedEnrollmentSpan(Set<EnrollmentSpanDto> enrollmentSpanDtos, String groupPolicyId);
+
+    /**
+     * Get enrollment spans that are overlapping
+     * @param accountDto The account from which the overlapping enrollment spans are to be identified
+     * @param transactionDto the transaction that is being processed
+     * @return return the enrollment spans that are overlapping with the dates that are passed
+     */
+    List<EnrollmentSpanDto> getOverlappingEnrollmentSpans(AccountDto accountDto,
+                                                                  TransactionDto transactionDto);
 }

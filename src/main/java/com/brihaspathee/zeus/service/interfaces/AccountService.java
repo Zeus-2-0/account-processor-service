@@ -1,10 +1,15 @@
 package com.brihaspathee.zeus.service.interfaces;
 
+import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.ProcessingRequest;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.validator.result.ProcessingValidationResult;
+import com.brihaspathee.zeus.broker.message.AccountProcessingResult;
 import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.util.UUID;
 
 /**
  * Created in Intellij IDEA
@@ -54,5 +59,21 @@ public interface AccountService {
      * @return the status of the enrollment span
      */
     String determineEnrollmentSpanStatus(EnrollmentSpanStatusDto enrollmentSpanStatusDto);
+
+    /**
+     * Get account using account SK
+     * @param accountSK
+     * @return
+     */
+    Account getAccount(UUID accountSK);
+
+    /**
+     * Continue to process the transaction once the validations are completed
+     * @param processingValidationResult
+     * @return AccountProcessingResult
+     */
+
+    AccountProcessingResult postValidationProcessing(ProcessingValidationResult processingValidationResult)
+            throws JsonProcessingException;
 
 }

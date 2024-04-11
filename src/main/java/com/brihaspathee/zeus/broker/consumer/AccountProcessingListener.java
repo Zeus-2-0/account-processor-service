@@ -103,7 +103,7 @@ public class AccountProcessingListener {
                 .payload_key_type_code("TRANSACTION")
                 .payloadId(payload.getPayloadId())
                 .payloadDirectionTypeCode("INBOUND")
-                .sourceDestinations(StringUtils.join(payload.getMessageMetadata().getMessageDestination()))
+                .sourceDestinations(StringUtils.join(payload.getMessageMetadata().getMessageSource()))
                 .payload(payloadAsString)
                 .build();
         return payloadTrackerHelper.createPayloadTracker(payloadTracker);

@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `accountprocessordb`.`process_request` (
     `zrcn` VARCHAR(50) NULL COMMENT 'The request control number',
     `source` VARCHAR(50) NOT NULL COMMENT 'The source of the transaction',
     `request_received_date` DATETIME NOT NULL COMMENT 'The date when the request was received',
+    `request_payload_id` VARCHAR(45) NULL COMMENT 'The payload id from which the request was received',
     `created_date` DATETIME NULL COMMENT 'The date when the record was created',
     `updated_date` DATETIME NULL COMMENT 'The date when the record was updated',
     PRIMARY KEY (`process_request_sk`))

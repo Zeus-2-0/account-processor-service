@@ -10,10 +10,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+#        debug: true
   profiles:
     active: clean, local
   datasource:
@@ -48,3 +49,6 @@ logging:
         type:
           descriptor:
             sql: trace
+      springframework:
+        data:
+          jpa: INFO

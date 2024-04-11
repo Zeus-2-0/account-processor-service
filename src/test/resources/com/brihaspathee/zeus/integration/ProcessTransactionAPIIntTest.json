@@ -19145,7 +19145,7 @@
                   },
                   {
                     "transactionMemberCode": "E2ES3I8S3W6VDJI",
-                    "transactionTypeCode": "TERM",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-04-30",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "MBS",
@@ -19974,7 +19974,7 @@
                   },
                   {
                     "transactionMemberCode": "M4HQQJ6QGQMUGEO",
-                    "transactionTypeCode": "CANCEL",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-01-01",
                     "relationshipTypeCode": "SPE",
                     "reasonTypeCode": "MBS",
@@ -24132,7 +24132,7 @@
                   },
                   {
                     "transactionMemberCode": "WQR0747M8KCXNGO",
-                    "transactionTypeCode": "TERM",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-03-31",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "MBS",
@@ -24157,7 +24157,7 @@
                   },
                   {
                     "transactionMemberCode": "HS1XNGOWTU457M0",
-                    "transactionTypeCode": "TERM",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-07-31",
                     "relationshipTypeCode": "SPE",
                     "reasonTypeCode": "MBS",
@@ -25290,7 +25290,7 @@
                   },
                   {
                     "transactionMemberCode": "SVARJK9PZWTIOWJ",
-                    "transactionTypeCode": "TERM",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-07-31",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "MBS",
@@ -26901,7 +26901,7 @@
                 "transactionReceivedDate": "2023-02-07T06:27:25.470Z",
                 "source": "MARKETPLACE",
                 "transactionDetail": {
-                  "transactionTypeCode": "CANCEL",
+                  "transactionTypeCode": "CANCELORTERM",
                   "coverageTypeCode": "FAM",
                   "planId": "09643FL0603235",
                   "groupPolicyId": "25485910",
@@ -26954,7 +26954,7 @@
                 "members": [
                   {
                     "transactionMemberCode": "439F41Y5L0JBQAH",
-                    "transactionTypeCode": "CANCEL",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-01-01",
                     "relationshipTypeCode": "HOH",
                     "reasonTypeCode": "MBS",
@@ -27662,7 +27662,7 @@
                 "transactionReceivedDate": "2023-02-07T06:27:25.470Z",
                 "source": "MARKETPLACE",
                 "transactionDetail": {
-                  "transactionTypeCode": "TERM",
+                  "transactionTypeCode": "CANCELORTERM",
                   "coverageTypeCode": "FAM",
                   "planId": "09643FL0255434",
                   "groupPolicyId": "75716821",
@@ -27719,7 +27719,7 @@
                 "members": [
                   {
                     "transactionMemberCode": "658XKFCZE4OBU49",
-                    "transactionTypeCode": "TERM",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-04-30",
                     "relationshipTypeCode": "HOH",
                     "reasonTypeCode": "MBS",
@@ -34012,7 +34012,7 @@
                   },
                   {
                     "transactionMemberCode": "JGJT5TUXWHDR1F1",
-                    "transactionTypeCode": "TERM",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-04-30",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "MBS",
@@ -36224,7 +36224,7 @@
                   },
                   {
                     "transactionMemberCode": "U16CWB547T6U7RF",
-                    "transactionTypeCode": "TERM",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-07-31",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "PD",
@@ -38553,7 +38553,7 @@
                 "transactionReceivedDate": "2023-10-12T06:27:25.562Z",
                 "source": "MARKETPLACE",
                 "transactionDetail": {
-                  "transactionTypeCode": "TERM",
+                  "transactionTypeCode": "CANCELORTERM",
                   "coverageTypeCode": "DEP",
                   "planId": "09643FL0376483",
                   "groupPolicyId": "49914699",
@@ -38606,7 +38606,7 @@
                 "members": [
                   {
                     "transactionMemberCode": "X6CGA47269XZ1NA",
-                    "transactionTypeCode": "TERM",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-11-30",
                     "relationshipTypeCode": "HOH",
                     "reasonTypeCode": "PD",
@@ -50506,7 +50506,7 @@
                   },
                   {
                     "transactionMemberCode": "H1FHIV8JIB2CBIX",
-                    "transactionTypeCode": "CANCEL",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2024-01-01",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "PD",
@@ -54109,7 +54109,7 @@
                   },
                   {
                     "transactionMemberCode": "Q2G0JEZLK35894G",
-                    "transactionTypeCode": "CANCEL",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-05-01",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "MBS",
@@ -55131,7 +55131,7 @@
                   },
                   {
                     "transactionMemberCode": "7TUL7IZ124B7VGO",
-                    "transactionTypeCode": "CANCEL",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-01-01",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "MBS",
@@ -58639,7 +58639,7 @@
                   },
                   {
                     "transactionMemberCode": "VMB6R31YX2QORN2",
-                    "transactionTypeCode": "CANCEL",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-01-01",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "MBS",
@@ -58665,7 +58665,7 @@
                   },
                   {
                     "transactionMemberCode": "27DPGPU9N90WALY",
-                    "transactionTypeCode": "CANCEL",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2023-05-01",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "MBS",
@@ -63937,7 +63937,7 @@
                   },
                   {
                     "transactionMemberCode": "PLUGYJS8ZN4AS3Z",
-                    "transactionTypeCode": "CANCEL",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2024-01-01",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "MBS",
@@ -65961,7 +65961,7 @@
                   },
                   {
                     "transactionMemberCode": "7FCFSZG87O9ZAH2",
-                    "transactionTypeCode": "CANCEL",
+                    "transactionTypeCode": "CANCELORTERM",
                     "effectiveDate": "2024-06-01",
                     "relationshipTypeCode": "CHD",
                     "reasonTypeCode": "MBS",

@@ -70,6 +70,12 @@ public class ProcessingRequest {
     private Account account;
 
     /**
+     * The id of the payload from which the request was received
+     */
+    @Column(name = "request_payload_id", length = 45, columnDefinition = "varchar", nullable = true)
+    private String requestPayloadId;
+
+    /**
      * The date when the record was created
      */
     @CreationTimestamp
