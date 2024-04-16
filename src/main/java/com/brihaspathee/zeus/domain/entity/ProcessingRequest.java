@@ -1,5 +1,6 @@
 package com.brihaspathee.zeus.domain.entity;
 
+import com.brihaspathee.zeus.domain.ProcessingState;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,6 +39,9 @@ public class ProcessingRequest {
     @GenericGenerator(name="UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "process_request_sk", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID processRequestSK;
+
+//    @Enumerated(EnumType.STRING)
+//    private ProcessingState state;
 
     /**
      * Identifies the request control number type code
