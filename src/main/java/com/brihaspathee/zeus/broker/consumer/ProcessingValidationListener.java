@@ -55,7 +55,7 @@ public class ProcessingValidationListener {
     private final TransactionProcessor transactionProcessor;
 
     /**
-     * kafka consumer to consume the acknowledgement messages from member management service
+     * kafka consumer to consume the acknowledgement messages from validation
      * @param consumerRecord
      * @throws JsonProcessingException
      */
