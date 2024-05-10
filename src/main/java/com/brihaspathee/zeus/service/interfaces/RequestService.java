@@ -3,6 +3,8 @@ package com.brihaspathee.zeus.service.interfaces;
 import com.brihaspathee.zeus.domain.entity.ProcessingRequest;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 
+import java.util.Optional;
+
 /**
  * Created in Intellij IDEA
  * User: Balaji Varadharajan
@@ -21,6 +23,13 @@ public interface RequestService {
      * @return
      */
     ProcessingRequest saveRequest(TransactionDto transactionDto, String requestPayloadId);
+
+    /**
+     * Find processing request by payload id
+     * @param requestPayloadId
+     * @return
+     */
+    ProcessingRequest getProcessingRequest(String requestPayloadId);
 
     /**
      * Delete data by ZRCN

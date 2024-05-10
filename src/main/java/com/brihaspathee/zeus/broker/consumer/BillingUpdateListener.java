@@ -1,15 +1,13 @@
 package com.brihaspathee.zeus.broker.consumer;
 
-import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
-import com.brihaspathee.zeus.constants.ProcessFlowType;
+import com.brihaspathee.zeus.broker.message.response.BillingUpdateResponse;
+import com.brihaspathee.zeus.constants.ZeusTopics;
 import com.brihaspathee.zeus.domain.entity.PayloadTrackerDetail;
-import com.brihaspathee.zeus.helper.interfaces.AddTransactionHelper;
 import com.brihaspathee.zeus.helper.interfaces.PayloadTrackerDetailHelper;
 import com.brihaspathee.zeus.helper.interfaces.PayloadTrackerHelper;
 import com.brihaspathee.zeus.message.Acknowledgement;
 import com.brihaspathee.zeus.message.ZeusMessagePayload;
 import com.brihaspathee.zeus.service.interfaces.TransactionProcessor;
-import com.brihaspathee.zeus.validator.TransactionValidationResult;
 import com.brihaspathee.zeus.validator.result.ProcessingValidationResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -23,8 +21,8 @@ import org.springframework.stereotype.Service;
 /**
  * Created in Intellij IDEA
  * User: Balaji Varadharajan
- * Date: 03, April 2024
- * Time: 12:22 PM
+ * Date: 24, April 2024
+ * Time: 10:48 AM
  * Project: Zeus
  * Package Name: com.brihaspathee.zeus.broker.consumer
  * To change this template use File | Settings | File and Code Template
@@ -32,7 +30,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProcessingValidationListener {
+public class BillingUpdateListener {
 
     /**
      * Object mapper instance to convert the JSON to object
@@ -59,11 +57,11 @@ public class ProcessingValidationListener {
      * @param consumerRecord
      * @throws JsonProcessingException
      */
-    @KafkaListener(topics = "ZEUS.VALIDATOR.PROCESSING.ACK")
+    @KafkaListener(topics = ZeusTopics.BILLING_UPDATE_ACK)
     public void listenForAcks(
-            ConsumerRecord<String, ZeusMessagePayload<Acknowledgement>> consumerRecord
-    ) throws JsonProcessingException {
-        log.info("ACK received from validation service for the processing validation request");
+            ConsumerRecord<String, ZeusMessagePayload<Acknowledgement>> consumerRecord)
+            throws JsonProcessingException{
+        log.info("ACK received from premium billing for the billing update request");
         String valueAsString = objectMapper.writeValueAsString(consumerRecord.value());
         ZeusMessagePayload<Acknowledgement> ackZeusMessagePayload =
                 objectMapper.readValue(valueAsString,
@@ -73,32 +71,23 @@ public class ProcessingValidationListener {
         log.info("Ack id:{}",ackZeusMessagePayload.getPayload().getAckId());
     }
 
-
     /**
-     * Kafka listener to consume the validation service responses
+     * Kafka listener to consume the premium billing update responses
      * @param consumerRecord
      * @throws JsonProcessingException
      */
-    @KafkaListener(topics = "ZEUS.VALIDATOR.PROCESSING.RESP")
-    public void listenForAccountProcessingResponse(
-            ConsumerRecord<String, ZeusMessagePayload<ProcessingValidationResult>> consumerRecord
-    ) throws JsonProcessingException {
-        log.info("Processing Validation Response received:{}", consumerRecord.value().getPayload());
+    @KafkaListener(topics = ZeusTopics.BILLING_UPDATE_RESP)
+    public void listenForBillingUpdateResponse(
+            ConsumerRecord<String, ZeusMessagePayload<BillingUpdateResponse>> consumerRecord)
+            throws JsonProcessingException {
+        log.info("Billing Update response received:{}", consumerRecord.value().getPayload());
         String valueAsString = objectMapper.writeValueAsString(consumerRecord.value());
         log.info("Value received as response:{}", valueAsString);
-        ZeusMessagePayload<ProcessingValidationResult> processingValidationResultPayload =
+        ZeusMessagePayload<BillingUpdateResponse> billingUpdateResponse =
                 objectMapper.readValue(valueAsString,
-                        new TypeReference<ZeusMessagePayload<ProcessingValidationResult>>() {});
-        createPayloadTrackerRespDetail(processingValidationResultPayload);
-        log.info("About to continue processing the transaction");
-        ProcessingValidationResult processingValidationResult = processingValidationResultPayload.getPayload();
-        transactionProcessor.postValidationProcessing(processingValidationResult);
-//        ProcessFlowType processFlowType = processingValidationResult.getValidationRequest().getProcessFlowType();
-//        log.info("Process flow type is: {}", processFlowType);
-//        if(processFlowType.equals(ProcessFlowType.NEW_ACCOUNT) ||
-//                processFlowType.equals(ProcessFlowType.PLAN_CHANGE)){
-//            addTransactionHelper.postValidationProcessing(processingValidationResult);
-//        }
+                        new TypeReference<ZeusMessagePayload<BillingUpdateResponse>>() {});
+        createPayloadTrackerRespDetail(billingUpdateResponse);
+        transactionProcessor.postPBUpdate(billingUpdateResponse.getPayload());
     }
 
     /**
@@ -124,18 +113,18 @@ public class ProcessingValidationListener {
      * @param payload
      */
     private void createPayloadTrackerRespDetail(
-            ZeusMessagePayload<ProcessingValidationResult> payload) throws JsonProcessingException {
+            ZeusMessagePayload<BillingUpdateResponse> payload) throws JsonProcessingException {
         log.info("Payload tracker detail to be created for validation response");
         log.info("Processing Validation Response:{}", payload.getPayload());
-        ProcessingValidationResult processingValidationResult = payload.getPayload();
-        log.info("Processing Validation Result:{}", processingValidationResult.isValidationPassed());
+        BillingUpdateResponse billingUpdateResponse = payload.getPayload();
+        log.info("Billing Update Response:{}", billingUpdateResponse);
         String payloadAsString = objectMapper.writeValueAsString(payload);
         log.info("Payload string:{}", payloadAsString);
         PayloadTrackerDetail payloadTrackerDetail = PayloadTrackerDetail.builder()
-                .payloadTracker(payloadTrackerHelper.getPayloadTracker(processingValidationResult.getRequestPayloadId()))
+                .payloadTracker(payloadTrackerHelper.getPayloadTracker(billingUpdateResponse.getRequestPayloadId()))
                 .responsePayload(payloadAsString)
-                .responseTypeCode("RESULT")
-                .responsePayloadId(processingValidationResult.getResponseId())
+                .responseTypeCode("BILLING-UPDATE-RESPONSE")
+                .responsePayloadId(billingUpdateResponse.getResponseId())
                 .payloadDirectionTypeCode("INBOUND")
                 .sourceDestinations(payload.getMessageMetadata().getMessageSource())
                 .build();

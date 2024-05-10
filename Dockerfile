@@ -1,4 +1,4 @@
-FROM openjdk:17.0
+FROM openjdk:21
 EXPOSE 8099
 # ADD target/*.jar *.jar
 #ENTRYPOINT ["sh", "-c", "java -jar /*.jar"]

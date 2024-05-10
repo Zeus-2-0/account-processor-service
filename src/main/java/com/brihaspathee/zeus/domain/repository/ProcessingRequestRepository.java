@@ -25,4 +25,11 @@ public interface ProcessingRequestRepository extends JpaRepository<ProcessingReq
      * @return
      */
     Optional<ProcessingRequest> findByZrcn(String zrcn);
+
+    /**
+     * Find processing request by request payload id
+     * @param requestPayloadId
+     * @return
+     */
+    Optional<ProcessingRequest> findProcessingRequestByRequestPayloadId(String requestPayloadId);
 }

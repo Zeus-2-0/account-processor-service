@@ -1,5 +1,7 @@
 package com.brihaspathee.zeus.service.interfaces;
 
+import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
+import com.brihaspathee.zeus.broker.message.AccountUpdateResponse;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.ProcessingRequest;
 import com.brihaspathee.zeus.dto.account.AccountDto;
@@ -75,5 +77,11 @@ public interface AccountService {
 
     AccountProcessingResult postValidationProcessing(ProcessingValidationResult processingValidationResult)
             throws JsonProcessingException;
+
+    /**
+     * Continue to process the transaction once the MMS update is completed
+     * @param processingRequest
+     */
+    AccountProcessingResult postMMSUpdate(ProcessingRequest processingRequest);
 
 }

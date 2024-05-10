@@ -92,4 +92,16 @@ public class ProcessingRequest {
     @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
+
+    @Override
+    public String toString() {
+        return "ProcessingRequest{" +
+                "processRequestSK=" + processRequestSK +
+                ", zrcnTypeCode='" + zrcnTypeCode + '\'' +
+                ", zrcn='" + zrcn + '\'' +
+                ", source='" + source + '\'' +
+                ", requestReceivedDate=" + requestReceivedDate +
+                ", requestPayloadId='" + requestPayloadId + '\'' +
+                '}';
+    }
 }

@@ -157,14 +157,14 @@ public class AccountProcessingListener {
         log.info("Inside process account method for the transaction:{}", accountProcessingRequest.getAccountNumber() );
         log.info("The payload tracker is:{}", payloadTracker.getPayloadId());
 
-        PayloadTracker finalPayloadTracker = payloadTracker;
+//        PayloadTracker finalPayloadTracker = payloadTracker;
         // Process the transaction
-        // Once processed send the results back to transaction manager
+//        transactionProcessor.processTransaction(accountProcessingRequest, payloadTracker).;
         transactionProcessor.processTransaction(accountProcessingRequest, payloadTracker)
                 .subscribe(accountProcessingResponse -> {
                     try {
-                        log.info("About to call the producer for the account:{}", accountProcessingResponse.getAccountNumber());
-                        accountProcessingResponseProducer.sendAccountProcessingResponse(accountProcessingResponse);
+                        log.info("Initial processing of the transaction is completed");
+                        //accountProcessingResponseProducer.sendAccountProcessingResponse(accountProcessingResponse);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

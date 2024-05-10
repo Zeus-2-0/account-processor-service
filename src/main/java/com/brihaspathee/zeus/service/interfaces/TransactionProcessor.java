@@ -1,6 +1,8 @@
 package com.brihaspathee.zeus.service.interfaces;
 
 import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
+import com.brihaspathee.zeus.broker.message.AccountUpdateResponse;
+import com.brihaspathee.zeus.broker.message.response.BillingUpdateResponse;
 import com.brihaspathee.zeus.domain.entity.PayloadTracker;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
@@ -27,7 +29,7 @@ public interface TransactionProcessor {
      * @return returns the account processing response
      * @throws JsonProcessingException generates json processing exception
      */
-    Mono<AccountProcessingResponse> processTransaction(AccountProcessingRequest accountProcessingRequest,
+    Mono<String> processTransaction(AccountProcessingRequest accountProcessingRequest,
                                                        PayloadTracker payloadTracker) throws JsonProcessingException;
 
     /**
@@ -47,6 +49,18 @@ public interface TransactionProcessor {
 
     void postValidationProcessing(ProcessingValidationResult processingValidationResult)
             throws JsonProcessingException;
+
+    /**
+     * Continue to process the transaction once the update to MMS is completed
+     * @param accountUpdateResponse
+     */
+    void postMMSUpdate(AccountUpdateResponse accountUpdateResponse) throws JsonProcessingException;
+
+    /**
+     * Continue to process the transaction once the update to PB is completed
+     * @param billingUpdateResponse
+     */
+    void postPBUpdate(BillingUpdateResponse billingUpdateResponse) throws JsonProcessingException;
 
 
 }
