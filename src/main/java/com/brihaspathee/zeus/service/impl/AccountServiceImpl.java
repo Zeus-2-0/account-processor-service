@@ -1,5 +1,7 @@
 package com.brihaspathee.zeus.service.impl;
 
+import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
+import com.brihaspathee.zeus.broker.message.AccountUpdateResponse;
 import com.brihaspathee.zeus.broker.producer.AccountProcessingValidationProducer;
 import com.brihaspathee.zeus.constants.ProcessFlowType;
 import com.brihaspathee.zeus.domain.entity.*;
@@ -251,6 +253,25 @@ public class AccountServiceImpl implements AccountService {
             account = reinstatementTransactionHelper.postValidationProcessing(processingValidationResult);
         }
         AccountDto accountDto = createAccountDto(account, account.getProcessRequest().getZrcn());
+        ProcessingRequestDto processingRequestDto = processingRequestMapper.
+                processingRequestToProcessingRequestDto(account.getProcessRequest());
+        return AccountProcessingResult.builder()
+                .accountDto(accountDto)
+                .processingRequestDto(processingRequestDto)
+                .build();
+    }
+
+    /**
+     * Continue to process the transaction once the MMS update is completed
+     * @param processingRequest
+     */
+//    @Transactional(propagation= Propagation.REQUIRED, readOnly=false, noRollbackFor=Exception.class)
+    @Override
+    public AccountProcessingResult postMMSUpdate(ProcessingRequest processingRequest) {
+        log.info("Inside account service to continue processing post mms update");
+        Account account = processingRequest.getAccount();
+        log.info("The account is:{}", account.getAccountNumber());
+        AccountDto accountDto = createAccountDto(account, processingRequest.getZrcn());
         ProcessingRequestDto processingRequestDto = processingRequestMapper.
                 processingRequestToProcessingRequestDto(account.getProcessRequest());
         return AccountProcessingResult.builder()

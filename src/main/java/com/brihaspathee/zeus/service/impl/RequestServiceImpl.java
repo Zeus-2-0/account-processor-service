@@ -1,13 +1,18 @@
 package com.brihaspathee.zeus.service.impl;
 
+import com.brihaspathee.zeus.domain.entity.PayloadTracker;
 import com.brihaspathee.zeus.domain.entity.ProcessingRequest;
 import com.brihaspathee.zeus.domain.repository.PayloadTrackerRepository;
 import com.brihaspathee.zeus.domain.repository.ProcessingRequestRepository;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
+import com.brihaspathee.zeus.exception.PayloadTrackerNotFoundException;
+import com.brihaspathee.zeus.exception.ProcessingRequestNotFoundException;
 import com.brihaspathee.zeus.service.interfaces.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * Created in Intellij IDEA
@@ -49,6 +54,30 @@ public class RequestServiceImpl implements RequestService {
                 .requestReceivedDate(transactionDto.getTransactionReceivedDate())
                 .build();
         return requestRepository.save(request);
+    }
+
+    /**
+     * Find processing request by payload id
+     * @param requestPayloadId
+     * @return
+     */
+    @Override
+    public ProcessingRequest getProcessingRequest(String requestPayloadId) {
+        PayloadTracker payloadTracker = payloadTrackerRepository
+                .findPayloadTrackerByPayloadId(requestPayloadId)
+                .orElseThrow((() -> new PayloadTrackerNotFoundException(
+                        "Payload tracker with payload id " + requestPayloadId + " not found")));
+        String originalRequestPayloadId = null;
+        if(payloadTracker.getParentPayloadId()!=null){
+            originalRequestPayloadId = payloadTracker.getParentPayloadId();
+        }else{
+            originalRequestPayloadId = requestPayloadId;
+        }
+        ProcessingRequest processingRequest = requestRepository
+                .findProcessingRequestByRequestPayloadId(originalRequestPayloadId)
+                .orElseThrow((() -> new ProcessingRequestNotFoundException(
+                        "Processing request associated with payload id " + requestPayloadId + " not found")));;
+        return processingRequest;
     }
 
     /**

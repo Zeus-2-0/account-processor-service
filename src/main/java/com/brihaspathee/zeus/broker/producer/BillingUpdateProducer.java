@@ -1,8 +1,9 @@
 package com.brihaspathee.zeus.broker.producer;
 
+import com.brihaspathee.zeus.broker.message.request.BillingUpdateRequest;
 import com.brihaspathee.zeus.constants.ZeusServiceNames;
+import com.brihaspathee.zeus.constants.ZeusTopics;
 import com.brihaspathee.zeus.domain.entity.PayloadTracker;
-import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.PayloadTrackerDetailHelper;
 import com.brihaspathee.zeus.helper.interfaces.PayloadTrackerHelper;
 import com.brihaspathee.zeus.message.MessageMetadata;
@@ -25,8 +26,8 @@ import java.util.Arrays;
 /**
  * Created in Intellij IDEA
  * User: Balaji Varadharajan
- * Date: 03, April 2024
- * Time: 9:32 AM
+ * Date: 21, April 2024
+ * Time: 7:44 AM
  * Project: Zeus
  * Package Name: com.brihaspathee.zeus.broker.producer
  * To change this template use File | Settings | File and Code Template
@@ -34,12 +35,12 @@ import java.util.Arrays;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AccountProcessingValidationProducer {
+public class BillingUpdateProducer {
 
     /**
      * Kafka template to produce and send messages
      */
-    private final KafkaTemplate<String, ZeusMessagePayload<ProcessingValidationRequest>> kafkaTemplate;
+    private final KafkaTemplate<String, ZeusMessagePayload<BillingUpdateRequest>> kafkaTemplate;
 
     /**
      * Object mapper that can covert the object into a string
@@ -59,41 +60,41 @@ public class AccountProcessingValidationProducer {
     /**
      * ListenableFutureCallback class that is used after success or failure of publishing the message
      */
-    private final AccountProcessingValidationCallback accountProcessingValidationCallback;
+    private final BillingUpdateCallback billingUpdateCallback;
 
     /**
-     * Send the request to validation service to validation the transaction data
-     * @param accountProcessingValidationRequest
+     * Send the request to premium billing service for premium update
+     * @param billingUpdateRequest
      * @param requestPayloadId
      * @throws JsonProcessingException
      */
-    public void sendAccountProcessingValidationRequest(ProcessingValidationRequest accountProcessingValidationRequest,
-                                                       String requestPayloadId) throws JsonProcessingException{
-        log.info("Inside the account processing validation producer.");
-        String ztcn = accountProcessingValidationRequest.getTransactionDto().getZtcn();
-        log.info("Transaction's ZTCN:{}", ztcn);
-        // Create the result payload that is to be sent to the Validation
-        String[] messageDestinations = {ZeusServiceNames.VALIDATION_SERVICE};
-        ZeusMessagePayload<ProcessingValidationRequest> messagePayload = ZeusMessagePayload.<ProcessingValidationRequest>builder()
+    public void sendBillingUpdateValidationRequest(BillingUpdateRequest billingUpdateRequest,
+                                                   String requestPayloadId) throws JsonProcessingException{
+        log.info("Inside the billing update producer.");
+        String zrcn = billingUpdateRequest.getZrcn();
+        log.info("Zeus Request Control Number:{}", zrcn);
+        // Create the result payload that is to be sent to the Premium Billing
+        String[] messageDestinations = {ZeusServiceNames.PREMIUM_BILLING};
+        ZeusMessagePayload<BillingUpdateRequest> messagePayload = ZeusMessagePayload.<BillingUpdateRequest>builder()
                 .messageMetadata(MessageMetadata.builder()
                         .messageSource(ZeusServiceNames.ACCOUNT_PROCESSOR_SERVICE)
                         .messageDestination(messageDestinations)
                         .messageCreationTimestamp(LocalDateTime.now())
                         .build())
-                .payload(accountProcessingValidationRequest)
+                .payload(billingUpdateRequest)
                 .payloadId(ZeusRandomStringGenerator.randomString(15))
                 .build();
         // Create the payload tracker detail record for the validation request payload
         PayloadTracker payloadTracker = createPayloadTracker(messagePayload, requestPayloadId);
-        accountProcessingValidationCallback.setAccountProcessingValidationRequest(accountProcessingValidationRequest);
+        billingUpdateCallback.setBillingUpdateRequest(billingUpdateRequest);
         // Build the producer record
-        ProducerRecord<String, ZeusMessagePayload<ProcessingValidationRequest>> producerRecord =
+        ProducerRecord<String, ZeusMessagePayload<BillingUpdateRequest>> producerRecord =
                 buildProducerRecord(ZeusRandomStringGenerator.randomString(15), messagePayload);
         log.info("The payload tracker created for sending the transaction {} from APS to validation service {}",
                 messagePayload.getPayload().getZrcn(),
                 payloadTracker.getPayloadId());
         kafkaTemplate.send(producerRecord);//.addCallback(transactionValidationCallback);
-        log.info("After sending the transaction {} to validation", ztcn);
+        log.info("After sending the transaction {} to validation", zrcn);
     }
 
     /**
@@ -101,12 +102,12 @@ public class AccountProcessingValidationProducer {
      * @param payloadId
      * @param messagePayload
      */
-    private ProducerRecord<String, ZeusMessagePayload<ProcessingValidationRequest>> buildProducerRecord(
+    private ProducerRecord<String, ZeusMessagePayload<BillingUpdateRequest>> buildProducerRecord(
             String payloadId,
-            ZeusMessagePayload<ProcessingValidationRequest> messagePayload){
+            ZeusMessagePayload<BillingUpdateRequest> messagePayload){
         RecordHeader messageHeader = new RecordHeader("APS Validation payload id",
                 "APS Validation payload id".getBytes());
-        return new ProducerRecord<>("ZEUS.VALIDATOR.PROCESSING.REQ",
+        return new ProducerRecord<>(ZeusTopics.BILLING_UPDATE_REQ,
                 null,
                 payloadId,
                 messagePayload,
@@ -119,7 +120,7 @@ public class AccountProcessingValidationProducer {
      * @param requestPayloadId
      * @throws JsonProcessingException
      */
-    private PayloadTracker createPayloadTracker(ZeusMessagePayload<ProcessingValidationRequest> messagePayload,
+    private PayloadTracker createPayloadTracker(ZeusMessagePayload<BillingUpdateRequest> messagePayload,
                                                 String requestPayloadId)
             throws JsonProcessingException {
         String payloadAsString = objectMapper.writeValueAsString(messagePayload);

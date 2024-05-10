@@ -317,6 +317,7 @@ CREATE TABLE IF NOT EXISTS `accountprocessordb`.`member_address` (
     `address_line_2` VARCHAR(50) NULL COMMENT 'The address line 2 of the address',
     `city` VARCHAR(50) NULL COMMENT 'The city of the address',
     `state_type_code` VARCHAR(50) NULL COMMENT 'The state of the address',
+    `fips_code` VARCHAR(20) NULL COMMENT 'The county code of the address',
     `zip_code` VARCHAR(20) NULL COMMENT 'The zip code of the address',
     `county_code` VARCHAR(20) NULL COMMENT 'The county code of the address',
     `ztcn` VARCHAR(50) NULL COMMENT 'The transaction control number that created the address',

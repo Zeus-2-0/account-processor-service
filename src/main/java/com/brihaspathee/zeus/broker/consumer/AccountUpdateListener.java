@@ -9,6 +9,7 @@ import com.brihaspathee.zeus.helper.interfaces.PayloadTrackerHelper;
 import com.brihaspathee.zeus.message.Acknowledgement;
 import com.brihaspathee.zeus.message.ZeusMessagePayload;
 import com.brihaspathee.zeus.broker.message.AccountUpdateResponse;
+import com.brihaspathee.zeus.service.interfaces.TransactionProcessor;
 import com.brihaspathee.zeus.util.ZeusRandomStringGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -54,6 +55,11 @@ public class AccountUpdateListener {
     private final AccountProcessingResponseProducer accountProcessingResponseProducer;
 
     /**
+     * Transaction processor instance to continue processing the transaction
+     */
+    private final TransactionProcessor transactionProcessor;
+
+    /**
      * Kafka consumer to consume the acknowledgment messages from MMS
      * @param consumerRecord
      * @throws JsonProcessingException
@@ -85,6 +91,7 @@ public class AccountUpdateListener {
                 objectMapper.readValue(valueAsString,
                         new TypeReference<ZeusMessagePayload<AccountUpdateResponse>>() {});
         createPayloadTrackerRespDetail(accountValidationResultPayload);
+        transactionProcessor.postMMSUpdate(accountValidationResultPayload.getPayload());
     }
 
     /**
@@ -122,22 +129,22 @@ public class AccountUpdateListener {
                 .sourceDestinations(payload.getMessageMetadata().getMessageSource())
                 .build();
         payloadTrackerDetailHelper.createPayloadTrackerDetail(payloadTrackerDetail);
-        if(payloadTracker.getParentPayloadId() != null){
-            log.info("Parent Payload is not null - Hence sending the response back to TMS");
-            PayloadTracker parentPayloadTracker = payloadTrackerHelper.getPayloadTracker(
-                    payloadTracker.getParentPayloadId());
-            AccountProcessingResponse accountProcessingResponse = AccountProcessingResponse.builder()
-                    .responseId(ZeusRandomStringGenerator.randomString(15))
-                    .requestPayloadId(parentPayloadTracker.getPayloadId())
-                    .accountNumber(payloadTracker.getPayload_key())
-                    .ztcn(parentPayloadTracker.getPayload_key())
-                    .responseCode("8000003")
-                    .responseMessage("Account Update Confirmation received from MMS")
-                    .build();
-            log.info("Account Processing response to be sent after mms response:{}", accountProcessingResponse);
-            accountProcessingResponseProducer.sendAccountProcessingResponse(accountProcessingResponse);
-        }
-
+//        if(payloadTracker.getParentPayloadId() != null){
+//            log.info("Parent Payload is not null - Hence sending the response back to TMS");
+//            PayloadTracker parentPayloadTracker = payloadTrackerHelper.getPayloadTracker(
+//                    payloadTracker.getParentPayloadId());
+//            AccountProcessingResponse accountProcessingResponse = AccountProcessingResponse.builder()
+//                    .responseId(ZeusRandomStringGenerator.randomString(15))
+//                    .requestPayloadId(parentPayloadTracker.getPayloadId())
+//                    .accountNumber(payloadTracker.getPayload_key())
+//                    .ztcn(parentPayloadTracker.getPayload_key())
+//                    .responseCode("8000003")
+//                    .responseMessage("Account Update Confirmation received from MMS")
+//                    .build();
+//            log.info("Account Processing response to be sent after mms response:{}", accountProcessingResponse);
+//            transactionProcessor.postMMSUpdate(payload.getPayload());
+//            accountProcessingResponseProducer.sendAccountProcessingResponse(accountProcessingResponse);
+//        }
 
     }
 }

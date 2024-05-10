@@ -231,6 +231,7 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
                 .addressLine2(transactionMemberAddressDto.getAddressLine2())
                 .city(transactionMemberAddressDto.getCity())
                 .stateTypeCode(transactionMemberAddressDto.getStateTypeCode())
+                .fipsCode(transactionMemberAddressDto.getCountyCode())
                 .zipCode(transactionMemberAddressDto.getZipCode())
                 .countyCode(transactionMemberAddressDto.getCountyCode())
                 .ztcn(ztcn)
@@ -263,6 +264,9 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
         if(!transactionMemberAddressDto.getStateTypeCode().equals(memberAddressDto.getStateTypeCode())){
             return true;
         }
+        if(!transactionMemberAddressDto.getCountyCode().equals(memberAddressDto.getFipsCode())){
+            return true;
+        }
         if(!transactionMemberAddressDto.getZipCode().equals(memberAddressDto.getZipCode())){
             return true;
         }
@@ -281,6 +285,7 @@ public class MemberAddressHelperImpl implements MemberAddressHelper {
                 .addressLine1(transactionMemberAddressDto.getAddressLine2())
                 .city(transactionMemberAddressDto.getCity())
                 .stateTypeCode(transactionMemberAddressDto.getStateTypeCode())
+                .fipsCode(transactionMemberAddressDto.getCountyCode())
                 .zipCode(transactionMemberAddressDto.getZipCode())
                 .build();
     }

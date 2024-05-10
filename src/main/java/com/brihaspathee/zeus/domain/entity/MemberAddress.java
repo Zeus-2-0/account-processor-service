@@ -94,6 +94,12 @@ public class MemberAddress {
     private String stateTypeCode;
 
     /**
+     * FIPS code of the address
+     */
+    @Column(name = "fips_code", columnDefinition = "varchar", length = 20, nullable = true)
+    private String fipsCode;
+
+    /**
      * Zip code of the address
      */
     @Column(name = "zip_code", columnDefinition = "varchar", length = 20, nullable = true)
