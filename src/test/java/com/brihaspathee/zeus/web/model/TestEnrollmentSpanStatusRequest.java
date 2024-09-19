@@ -1,5 +1,6 @@
 package com.brihaspathee.zeus.web.model;
 
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanStatusDto;
 import lombok.*;
 
 /**

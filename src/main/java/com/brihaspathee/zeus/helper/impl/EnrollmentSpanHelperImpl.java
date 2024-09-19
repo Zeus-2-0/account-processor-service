@@ -8,12 +8,8 @@ import com.brihaspathee.zeus.constants.PremiumSpanStatus;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
 import com.brihaspathee.zeus.domain.entity.PremiumSpan;
-import com.brihaspathee.zeus.domain.entity.ProcessingRequest;
 import com.brihaspathee.zeus.domain.repository.EnrollmentSpanRepository;
-import com.brihaspathee.zeus.dto.account.AccountDto;
-import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
-import com.brihaspathee.zeus.dto.account.MemberPremiumDto;
-import com.brihaspathee.zeus.dto.account.PremiumSpanDto;
+import com.brihaspathee.zeus.dto.account.*;
 import com.brihaspathee.zeus.dto.transaction.*;
 import com.brihaspathee.zeus.exception.NoMatchingEnrollmentSpanException;
 import com.brihaspathee.zeus.helper.interfaces.EnrollmentSpanHelper;
@@ -21,12 +17,9 @@ import com.brihaspathee.zeus.helper.interfaces.PremiumSpanHelper;
 import com.brihaspathee.zeus.info.ChangeTransactionInfo;
 import com.brihaspathee.zeus.mapper.interfaces.EnrollmentSpanMapper;
 import com.brihaspathee.zeus.util.AccountProcessorUtil;
-import com.brihaspathee.zeus.validator.request.ProcessingValidationRequest;
-import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -902,7 +895,7 @@ public class EnrollmentSpanHelperImpl implements EnrollmentSpanHelper {
      */
     private boolean isThereGapInCoverage(LocalDate effectiveStartDate,
                                          EnrollmentSpanDto priorEnrollmentSpan){
-        if(priorEnrollmentSpan.getStatusTypeCode().equals(EnrollmentSpanStatus.CANCELED)){
+        if(priorEnrollmentSpan.getStatusTypeCode().equals(EnrollmentSpanStatus.CANCELED.toString())){
             return true;
         }else{
             long numOfDays = ChronoUnit.DAYS.between(priorEnrollmentSpan.getEndDate(),

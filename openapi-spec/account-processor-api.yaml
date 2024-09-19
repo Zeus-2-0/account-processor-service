@@ -50,24 +50,24 @@ paths:
               $ref: '#/components/schemas/AccountProcessingRequest'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiExceptionList'
-        "409":
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiExceptionList'
         "201":
           description: Transaction successfully processed for the account
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountProcessingResponse'
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiExceptionList'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiExceptionList'
   /api/v1/zeus/account-processor/welcome:
     get:
       tags:
@@ -839,6 +839,7 @@ components:
       - addressTypeCode
       - changed
       - city
+      - fipsCode
       - memberAddressCode
       - source
       - startDate
@@ -885,6 +886,10 @@ components:
           type: string
           description: The zipcode of the address
           example: "33556"
+        fipsCode:
+          type: string
+          description: The fips code of the address
+          example: "12003"
         ztcn:
           type: string
           description: The zeus transaction control number of the transaction that
@@ -2490,20 +2495,6 @@ components:
           type: string
           description: The date when the record was updated
           format: date-time
-    ApiException:
-      type: object
-      properties:
-        exceptionCode:
-          type: string
-        exceptionMessage:
-          type: string
-    ApiExceptionList:
-      type: object
-      properties:
-        exceptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiException'
     AccountProcessingResponse:
       type: object
       properties:
@@ -2519,6 +2510,20 @@ components:
           type: string
         responseMessage:
           type: string
+    ApiException:
+      type: object
+      properties:
+        exceptionCode:
+          type: string
+        exceptionMessage:
+          type: string
+    ApiExceptionList:
+      type: object
+      properties:
+        exceptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiException'
     WelcomeDto:
       type: object
       properties:

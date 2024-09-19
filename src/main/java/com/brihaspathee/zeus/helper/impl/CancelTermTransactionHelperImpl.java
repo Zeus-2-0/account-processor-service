@@ -73,6 +73,8 @@ public class CancelTermTransactionHelperImpl implements CancelTermTransactionHel
                 transactionDto.getTransactionDetail().getGroupPolicyId());
         // Send transaction for validation -- Do not do this when running unit tests
         if(!Arrays.asList(environment.getActiveProfiles()).contains("test")){
+            // If this is not unit testing then first perform validations
+            // by sending the transaction to rules service
             ProcessingRequest processingRequest = account.getProcessRequest();
             ProcessingValidationRequest validationRequest = ProcessingValidationRequest.builder()
                     .processFlowType(ProcessFlowType.CANCEL_TERM)

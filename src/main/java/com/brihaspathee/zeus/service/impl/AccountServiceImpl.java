@@ -1,12 +1,11 @@
 package com.brihaspathee.zeus.service.impl;
 
-import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
-import com.brihaspathee.zeus.broker.message.AccountUpdateResponse;
 import com.brihaspathee.zeus.broker.producer.AccountProcessingValidationProducer;
 import com.brihaspathee.zeus.constants.ProcessFlowType;
 import com.brihaspathee.zeus.domain.entity.*;
 import com.brihaspathee.zeus.domain.repository.AccountRepository;
 import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanStatusDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.helper.interfaces.*;
 import com.brihaspathee.zeus.mapper.interfaces.AccountMapper;
@@ -16,7 +15,6 @@ import com.brihaspathee.zeus.service.interfaces.MemberManagementService;
 import com.brihaspathee.zeus.util.AccountProcessorUtil;
 import com.brihaspathee.zeus.validator.result.ProcessingValidationResult;
 import com.brihaspathee.zeus.broker.message.AccountProcessingResult;
-import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.brihaspathee.zeus.web.model.ProcessingRequestDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
