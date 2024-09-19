@@ -2,12 +2,11 @@ package com.brihaspathee.zeus.web.resource.impl;
 
 import com.brihaspathee.zeus.constants.ApiResponseConstants;
 import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanStatusDto;
 import com.brihaspathee.zeus.service.interfaces.AccountService;
 import com.brihaspathee.zeus.service.interfaces.RequestService;
 import com.brihaspathee.zeus.service.interfaces.TransactionProcessor;
 import com.brihaspathee.zeus.broker.message.AccountProcessingRequest;
-import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
-import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.brihaspathee.zeus.web.resource.interfaces.AccountProcessorAPI;
 import com.brihaspathee.zeus.web.response.ZeusApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Created in Intellij IDEA

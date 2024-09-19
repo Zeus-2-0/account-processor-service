@@ -2,17 +2,13 @@ package com.brihaspathee.zeus.helper.interfaces;
 
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.EnrollmentSpan;
-import com.brihaspathee.zeus.domain.entity.Member;
-import com.brihaspathee.zeus.domain.repository.MemberEmailRepository;
 import com.brihaspathee.zeus.dto.account.AccountDto;
 import com.brihaspathee.zeus.dto.account.EnrollmentSpanDto;
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanStatusDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
-import com.brihaspathee.zeus.dto.transaction.TransactionMemberDto;
 import com.brihaspathee.zeus.info.ChangeTransactionInfo;
-import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 

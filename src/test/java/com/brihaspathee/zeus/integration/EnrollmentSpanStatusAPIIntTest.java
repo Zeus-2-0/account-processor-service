@@ -1,9 +1,8 @@
 package com.brihaspathee.zeus.integration;
 
-import com.brihaspathee.zeus.security.model.UserDto;
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanStatusDto;
 import com.brihaspathee.zeus.test.BuildTestData;
 import com.brihaspathee.zeus.test.TestClass;
-import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.brihaspathee.zeus.web.model.TestEnrollmentSpanStatusRequest;
 import com.brihaspathee.zeus.web.response.ZeusApiResponse;
 import com.fasterxml.jackson.core.type.TypeReference;

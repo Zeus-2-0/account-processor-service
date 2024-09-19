@@ -1,14 +1,12 @@
 package com.brihaspathee.zeus.service.interfaces;
 
-import com.brihaspathee.zeus.broker.message.AccountProcessingResponse;
-import com.brihaspathee.zeus.broker.message.AccountUpdateResponse;
 import com.brihaspathee.zeus.domain.entity.Account;
 import com.brihaspathee.zeus.domain.entity.ProcessingRequest;
 import com.brihaspathee.zeus.dto.account.AccountDto;
+import com.brihaspathee.zeus.dto.account.EnrollmentSpanStatusDto;
 import com.brihaspathee.zeus.dto.transaction.TransactionDto;
 import com.brihaspathee.zeus.validator.result.ProcessingValidationResult;
 import com.brihaspathee.zeus.broker.message.AccountProcessingResult;
-import com.brihaspathee.zeus.web.model.EnrollmentSpanStatusDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.UUID;
