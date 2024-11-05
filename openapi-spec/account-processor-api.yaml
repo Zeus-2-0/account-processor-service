@@ -22,7 +22,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EnrollmentSpanStatusDto'
+              $ref: "#/components/schemas/EnrollmentSpanStatusDto"
         required: true
       responses:
         "200":
@@ -30,7 +30,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ZeusApiResponseString'
+                $ref: "#/components/schemas/ZeusApiResponseString"
   /api/v1/zeus/account-processor/process/{sendToMMS}:
     post:
       tags:
@@ -47,7 +47,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccountProcessingRequest'
+              $ref: "#/components/schemas/AccountProcessingRequest"
         required: true
       responses:
         "201":
@@ -55,19 +55,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountProcessingResponse'
-        "409":
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiExceptionList'
+                $ref: "#/components/schemas/AccountProcessingResponse"
         "400":
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiExceptionList'
+                $ref: "#/components/schemas/ApiExceptionList"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiExceptionList"
   /api/v1/zeus/account-processor/welcome:
     get:
       tags:
@@ -80,7 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WelcomeDto'
+                $ref: "#/components/schemas/WelcomeDto"
   /api/v1/zeus/account-processor/delete:
     delete:
       tags:
@@ -93,7 +93,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ZeusApiResponse'
+                $ref: "#/components/schemas/ZeusApiResponse"
   /api/v1/zeus/account-processor/delete/{zrcn}:
     delete:
       tags:
@@ -112,7 +112,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ZeusApiResponse'
+                $ref: "#/components/schemas/ZeusApiResponse"
 components:
   schemas:
     EnrollmentSpanDto:
@@ -255,16 +255,21 @@ components:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/PremiumSpanDto'
+            $ref: "#/components/schemas/PremiumSpanDto"
+        premiumPayments:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: "#/components/schemas/PremiumPaymentDto"
     EnrollmentSpanStatusDto:
       type: object
       properties:
         currentEnrollmentSpan:
-          $ref: '#/components/schemas/EnrollmentSpanDto'
+          $ref: "#/components/schemas/EnrollmentSpanDto"
         priorEnrollmentSpans:
           type: array
           items:
-            $ref: '#/components/schemas/EnrollmentSpanDto'
+            $ref: "#/components/schemas/EnrollmentSpanDto"
     MemberPremiumDto:
       required:
       - exchangeMemberId
@@ -303,6 +308,25 @@ components:
           type: string
           description: The date when the premium span was updated
           format: date-time
+    PremiumPaymentDto:
+      required:
+      - enrollmentSpanCode
+      - paymentAmount
+      - paymentDate
+      type: object
+      properties:
+        enrollmentSpanCode:
+          type: string
+          description: Enrollment Span Code
+          example: IDNTD4VNLJK9VL3
+        paymentAmount:
+          type: number
+          description: Premium Amount being paid
+          example: 350.0
+        paymentDate:
+          type: string
+          description: The payment date of the premium span
+          format: date
     PremiumSpanDto:
       required:
       - changed
@@ -412,7 +436,7 @@ components:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/MemberPremiumDto'
+            $ref: "#/components/schemas/MemberPremiumDto"
     ZeusApiResponseString:
       type: object
       properties:
@@ -579,32 +603,32 @@ components:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/EnrollmentSpanDto'
+            $ref: "#/components/schemas/EnrollmentSpanDto"
         members:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/MemberDto'
+            $ref: "#/components/schemas/MemberDto"
         brokers:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/BrokerDto'
+            $ref: "#/components/schemas/BrokerDto"
         sponsors:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/SponsorDto'
+            $ref: "#/components/schemas/SponsorDto"
         payers:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/PayerDto'
+            $ref: "#/components/schemas/PayerDto"
         accountAttributes:
           uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/AccountAttributeDto'
+            $ref: "#/components/schemas/AccountAttributeDto"
         createdDate:
           type: string
           description: The date when the account was created
@@ -619,9 +643,9 @@ components:
         accountNumber:
           type: string
         accountDto:
-          $ref: '#/components/schemas/AccountDto'
+          $ref: "#/components/schemas/AccountDto"
         transactionDto:
-          $ref: '#/components/schemas/TransactionDto'
+          $ref: "#/components/schemas/TransactionDto"
     AlternateContactDto:
       required:
       - addressLine2
@@ -1074,49 +1098,49 @@ components:
           type: array
           description: The list of member attributes associated with the member
           items:
-            $ref: '#/components/schemas/MemberAttributeDto'
+            $ref: "#/components/schemas/MemberAttributeDto"
         memberAddresses:
           uniqueItems: true
           type: array
           description: The list of member addresses associated with the member
           items:
-            $ref: '#/components/schemas/MemberAddressDto'
+            $ref: "#/components/schemas/MemberAddressDto"
         memberIdentifiers:
           uniqueItems: true
           type: array
           description: The list of member identifiers associated with the member
           items:
-            $ref: '#/components/schemas/MemberIdentifierDto'
+            $ref: "#/components/schemas/MemberIdentifierDto"
         memberLanguages:
           uniqueItems: true
           type: array
           description: The list of member languages associated with the member
           items:
-            $ref: '#/components/schemas/MemberLanguageDto'
+            $ref: "#/components/schemas/MemberLanguageDto"
         memberPhones:
           uniqueItems: true
           type: array
           description: The list of member phone numbers associated with the member
           items:
-            $ref: '#/components/schemas/MemberPhoneDto'
+            $ref: "#/components/schemas/MemberPhoneDto"
         memberEmails:
           uniqueItems: true
           type: array
           description: The list of member emails associated with the member
           items:
-            $ref: '#/components/schemas/MemberEmailDto'
+            $ref: "#/components/schemas/MemberEmailDto"
         alternateContacts:
           uniqueItems: true
           type: array
           description: The list of alternate contacts associated with the member
           items:
-            $ref: '#/components/schemas/AlternateContactDto'
+            $ref: "#/components/schemas/AlternateContactDto"
         memberPremiums:
           uniqueItems: true
           type: array
           description: The list of premiums associated with the member
           items:
-            $ref: '#/components/schemas/MemberPremiumDto'
+            $ref: "#/components/schemas/MemberPremiumDto"
         createdDate:
           type: string
           description: The date when the member was created
@@ -1844,33 +1868,33 @@ components:
           format: date-time
           readOnly: true
         transactionDetail:
-          $ref: '#/components/schemas/TransactionDetailDto'
+          $ref: "#/components/schemas/TransactionDetailDto"
         transactionStatus:
-          $ref: '#/components/schemas/TransactionStatusDto'
+          $ref: "#/components/schemas/TransactionStatusDto"
         transactionAttributes:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionAttributeDto'
+            $ref: "#/components/schemas/TransactionAttributeDto"
         transactionRates:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionRateDto'
+            $ref: "#/components/schemas/TransactionRateDto"
         tradingPartnerDto:
-          $ref: '#/components/schemas/TransactionTradingPartnerDto'
+          $ref: "#/components/schemas/TransactionTradingPartnerDto"
         sponsor:
-          $ref: '#/components/schemas/TransactionSponsorDto'
+          $ref: "#/components/schemas/TransactionSponsorDto"
         broker:
-          $ref: '#/components/schemas/TransactionBrokerDto'
+          $ref: "#/components/schemas/TransactionBrokerDto"
         payer:
-          $ref: '#/components/schemas/TransactionPayerDto'
+          $ref: "#/components/schemas/TransactionPayerDto"
         members:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionMemberDto'
+            $ref: "#/components/schemas/TransactionMemberDto"
         transactionRules:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionRuleDto'
+            $ref: "#/components/schemas/TransactionRuleDto"
         createdDate:
           type: string
           description: The date when the transaction was created
@@ -2049,27 +2073,27 @@ components:
         memberPhones:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionMemberPhoneDto'
+            $ref: "#/components/schemas/TransactionMemberPhoneDto"
         memberAddresses:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionMemberAddressDto'
+            $ref: "#/components/schemas/TransactionMemberAddressDto"
         identifiers:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionMemberIdentifierDto'
+            $ref: "#/components/schemas/TransactionMemberIdentifierDto"
         emails:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionMemberEmailDto'
+            $ref: "#/components/schemas/TransactionMemberEmailDto"
         languages:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionMemberLanguageDto'
+            $ref: "#/components/schemas/TransactionMemberLanguageDto"
         alternateContacts:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionAlternateContactDto'
+            $ref: "#/components/schemas/TransactionAlternateContactDto"
         createdDate:
           type: string
           description: The date when the transaction was created
@@ -2347,7 +2371,7 @@ components:
           type: array
           description: The list of message created by the rule
           items:
-            $ref: '#/components/schemas/TransactionRuleMessageDto'
+            $ref: "#/components/schemas/TransactionRuleMessageDto"
     TransactionRuleMessageDto:
       required:
       - messageCode
@@ -2523,7 +2547,7 @@ components:
         exceptions:
           type: array
           items:
-            $ref: '#/components/schemas/ApiException'
+            $ref: "#/components/schemas/ApiException"
     WelcomeDto:
       type: object
       properties:
