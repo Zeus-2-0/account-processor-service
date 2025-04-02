@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -370,18 +371,42 @@ public class PremiumSpanHelperImpl implements PremiumSpanHelper {
         // reinstated and hence will not be included in the list
         // Initially this is set to False
         AtomicBoolean reachedStartDate = new AtomicBoolean(false);
+        AtomicReference<LocalDate> previousPremiumSpanStartDate = new AtomicReference<>();
         // Loop through all the premium spans that are sorted by the descending order of the sequence
-        spansToReinstate = premiumSpansSortedBySequence.stream().takeWhile(premiumSpanDto -> {
+        spansToReinstate = premiumSpansSortedBySequence.stream().filter(premiumSpanDto -> {
             // Retrieve the start date of the premium span
             LocalDate premiumStartDate = premiumSpanDto.getStartDate();
-            // Check if we have already reached the enrollment span start date in the previous iteration
-            // If it is the first iteration, then we have not yet reached the start date of the enrollment span
-           if(!reachedStartDate.get()){
+//            log.info("Current Premium span start date: {}", premiumStartDate);
+//            log.info("Previous premium span start date: {}", previousPremiumSpanStartDate.get());
+//            log.info("Reached start date: {}", reachedStartDate.get());
+            /*
+             Check if we have already reached the enrollment span start date in the previous iteration
+             If it is the first iteration, then we have not yet reached the start date of the enrollment span
+            */
+            if(!reachedStartDate.get()){
                // Compare the start date of the premium span with the start date of the enrollment span
                if (premiumStartDate.isEqual(startDate)){
                    // if it is true then set the "reachedStartDate" flag to TRUE
                    reachedStartDate.set(true);
+               } else if (previousPremiumSpanStartDate.get() != null &&
+                       (previousPremiumSpanStartDate.get().isEqual(premiumStartDate) ||
+                               previousPremiumSpanStartDate.get().isBefore(premiumStartDate))) {
+                   /*
+                        If the current premium span start date is greater than or equal to the previous
+                        premium span that was included to be reinstated, then this premium span should
+                        not be included for reinstatement and it should remain in canceled state
+                        E.g. If premium span with start date 7/1/2024 has the sequence 2 and the prior premium span
+                        with start date 6/1/2024 with sequence 3 was already included to be reinstated, then this
+                        premium span with start date 7/1/2024 should remain canceled and not reinstated
+                    */
+                   return false;
                }
+               previousPremiumSpanStartDate.set(premiumStartDate);
+//               log.info("Premium Span to be included for reinstatement:");
+//               log.info("Span Code: {}", premiumSpanDto.getPremiumSpanCode());
+//               log.info("Start Date: {}", premiumStartDate);
+//               log.info("Span Sequence: {}", premiumSpanDto.getSequence());
+//               log.info("Previous premium span start date after reset : {}", previousPremiumSpanStartDate.get());
                // Return the value true so that the premium span will be included for reinstatement
                return true;
            }else{
